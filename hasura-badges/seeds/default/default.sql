@@ -94,15 +94,9 @@ SELECT * FROM create_badge_version('{"x-hasura-tenant-id":"1"}', 2);
 SELECT * FROM _create_badge_version(1, 1, (SELECT now() AT TIME ZONE 'UTC' + '1ms'::interval));
 
 -- -- Insert data into engineer_badge_candidature_proposals
--- TRUNCATE engineer_badge_candidature_proposals RESTART IDENTITY CASCADE;
--- INSERT INTO engineer_badge_candidature_proposals (engineer, badge_id, badge_version, proposal_description, created_by)
--- VALUES
---   (1, 1, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 1, version 1', 1),
---   (1, 2, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 2, version 1', 1),
---   (2, 1, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 1, version 1', 2),
---   (2, 2, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 4, version 1', 2),
---   (3, 1, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 1, version 1', 3),
---   (3, 2, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 2, version 1', 3),
---   (4, 2, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 2, version 1', 4),
---   (4, 2, '2023-07-04 18:11:39.966445', 'Proposal for badge ID 3, version 1', 4);
+TRUNCATE engineer_badge_candidature_proposals RESTART IDENTITY CASCADE;
+INSERT INTO engineer_badge_candidature_proposals (engineer, badge_id, badge_version, proposal_description, created_by)
+VALUES
+    (1, 1, (_create_badge_version(1, 1, (SELECT now() AT TIME ZONE 'UTC' + '2ms'::interval))).created_at, 'Proposal for badge ID 1, version 1', 2);
+
 
