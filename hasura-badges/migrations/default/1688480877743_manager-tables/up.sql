@@ -10,14 +10,29 @@ CREATE TABLE engineer_badge_candidature_proposals (
   FOREIGN KEY (badge_id, badge_version) REFERENCES badges_versions(id, created_at)
 );
 
+
+
 CREATE TABLE engineer_badge_candidature_response (
   response_id SERIAL PRIMARY KEY,
   is_approved BOOLEAN NOT NULL,
   disapproval_motivation VARCHAR(255) DEFAULT NULL,
   proposal_id INTEGER NOT NULL REFERENCES engineer_badge_candidature_proposals(id) ON DELETE RESTRICT,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
-  created_at INTEGER REFERENCES users(id) ON DELETE RESTRICT
+  created_by INTEGER REFERENCES users(id) ON DELETE RESTRICT
 );
+
+
+CREATE OR REPLACE FUNCTION get_approved_responses_by_manager(manager_id INTEGER)
+RETURNS SETOF engineer_badge_candidature_response
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT *
+  FROM engineer_badge_candidature_response
+  WHERE created_by = manager_id AND is_approved = TRUE;
+END;
+$$ LANGUAGE PLPGSQL;
+
 
 
 CREATE OR REPLACE FUNCTION get_engineers_by_manager(manager_id INTEGER)
@@ -32,3 +47,5 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+
