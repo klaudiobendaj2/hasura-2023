@@ -97,6 +97,7 @@ SELECT * FROM _create_badge_version(1, 1, (SELECT now() AT TIME ZONE 'UTC' + '1m
 TRUNCATE engineer_badge_candidature_proposals RESTART IDENTITY CASCADE;
 INSERT INTO engineer_badge_candidature_proposals (engineer, badge_id, badge_version, proposal_description, created_by)
 VALUES
-    (1, 1, (_create_badge_version(1, 1, (SELECT now() AT TIME ZONE 'UTC' + '2ms'::interval))).created_at, 'Proposal for badge ID 1, version 1', 2);
+    (1, 1, (SELECT created_at FROM badges_versions WHERE id = 1 LIMIT 1), 'Proposal for badge ID 1, version 1', 2),
+    (1, 2, (SELECT created_at FROM badges_versions WHERE id = 2 LIMIT 1), 'Proposal for badge ID 2, version 1', 2);
 
 

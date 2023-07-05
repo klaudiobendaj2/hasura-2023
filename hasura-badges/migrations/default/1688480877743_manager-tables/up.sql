@@ -1,12 +1,12 @@
 
 CREATE TABLE engineer_badge_candidature_proposals (
-  engineer INTEGER NOT NULL REFERENCES users(id),
+  proposal_id SERIAL PRIMARY KEY, 
+  engineer INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
   badge_id INTEGER NOT NULL,
   badge_version TIMESTAMP NOT NULL,
   proposal_description VARCHAR(255) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
-  created_by INTEGER REFERENCES users(id) ON DELETE RESTRICT,
-  PRIMARY KEY (engineer, badge_id, badge_version),
+  created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
   FOREIGN KEY (badge_id, badge_version) REFERENCES badges_versions(id, created_at)
 );
 

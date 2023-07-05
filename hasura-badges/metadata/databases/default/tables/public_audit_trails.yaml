@@ -1,0 +1,3 @@
+table:
+  name: audit_trails
+  schema: public

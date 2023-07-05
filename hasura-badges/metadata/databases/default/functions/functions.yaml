@@ -1,2 +1,3 @@
+- "!include public__create_badge_version.yaml"
 - "!include public_create_badge_version.yaml"
 - "!include public_get_engineers_by_manager.yaml"
