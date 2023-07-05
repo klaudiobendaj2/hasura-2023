@@ -37,6 +37,13 @@ array_relationships:
         table:
           name: engineer_badge_candidature_proposals
           schema: public
+  - name: engineer_badge_candidature_responses
+    using:
+      foreign_key_constraint_on:
+        column: created_by
+        table:
+          name: engineer_badge_candidature_response
+          schema: public
   - name: requirementsDefinitionsByModifiedBy
     using:
       foreign_key_constraint_on:

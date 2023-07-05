@@ -18,3 +18,11 @@ object_relationships:
   - name: userByEngineer
     using:
       foreign_key_constraint_on: engineer
+array_relationships:
+  - name: engineer_badge_candidature_responses
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: engineer_badge_candidature_response
+          schema: public

@@ -101,3 +101,10 @@ VALUES
     (1, 2, (SELECT created_at FROM badges_versions WHERE id = 2 LIMIT 1), 'Proposal for badge ID 2, version 1', 2);
 
 
+
+TRUNCATE engineer_badge_candidature_response RESTART IDENTITY CASCADE;
+INSERT INTO engineer_badge_candidature_response (is_approved, disapproval_motivation, proposal_id, created_by)
+VALUES
+    (TRUE, NULL, 1, 1),
+    (FALSE, 'Insufficient experience', 2, 1);
+

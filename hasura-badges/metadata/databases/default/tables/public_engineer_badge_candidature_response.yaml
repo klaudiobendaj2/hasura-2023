@@ -1,0 +1,10 @@
+table:
+  name: engineer_badge_candidature_response
+  schema: public
+object_relationships:
+  - name: engineer_badge_candidature_proposal
+    using:
+      foreign_key_constraint_on: proposal_id
+  - name: user
+    using:
+      foreign_key_constraint_on: created_by

@@ -1,6 +1,6 @@
 
 CREATE TABLE engineer_badge_candidature_proposals (
-  proposal_id SERIAL PRIMARY KEY, 
+  id SERIAL PRIMARY KEY, 
   engineer INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
   badge_id INTEGER NOT NULL,
   badge_version TIMESTAMP NOT NULL,
@@ -9,6 +9,16 @@ CREATE TABLE engineer_badge_candidature_proposals (
   created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
   FOREIGN KEY (badge_id, badge_version) REFERENCES badges_versions(id, created_at)
 );
+
+CREATE TABLE engineer_badge_candidature_response (
+  response_id SERIAL PRIMARY KEY,
+  is_approved BOOLEAN NOT NULL,
+  disapproval_motivation VARCHAR(255) DEFAULT NULL,
+  proposal_id INTEGER NOT NULL REFERENCES engineer_badge_candidature_proposals(id) ON DELETE RESTRICT,
+  created_at TIMESTAMP NOT NULL DEFAULT now(),
+  created_at INTEGER REFERENCES users(id) ON DELETE RESTRICT
+);
+
 
 CREATE OR REPLACE FUNCTION get_engineers_by_manager(manager_id INTEGER)
   RETURNS SETOF public.users AS
