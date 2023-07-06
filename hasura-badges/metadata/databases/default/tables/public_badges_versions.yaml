@@ -6,7 +6,7 @@ object_relationships:
     using:
       foreign_key_constraint_on: created_by
 array_relationships:
-  - name: engineer_badge_candidature_proposals
+  - name: engineer_to_manager_badge_candidature_proposals
     using:
       manual_configuration:
         column_mapping:
@@ -14,7 +14,17 @@ array_relationships:
           id: badge_id
         insertion_order: null
         remote_table:
-          name: engineer_badge_candidature_proposals
+          name: engineer_to_manager_badge_candidature_proposals
+          schema: public
+  - name: manager_to_engineer_badge_candidature_proposals
+    using:
+      manual_configuration:
+        column_mapping:
+          created_at: badge_version
+          id: badge_id
+        insertion_order: null
+        remote_table:
+          name: manager_to_engineer_badge_candidature_proposals
           schema: public
 select_permissions:
   - role: backoffice

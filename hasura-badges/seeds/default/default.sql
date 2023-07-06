@@ -105,7 +105,7 @@ VALUES
 TRUNCATE engineer_badge_candidature_proposal_response RESTART IDENTITY CASCADE;
 INSERT INTO engineer_badge_candidature_proposal_response (is_approved, disapproval_motivation, proposal_id, created_by)
 VALUES
-    (TRUE, NULL, 1, 1),
+    (False, NULL, 1, 1),
     (FALSE, NULL, 2, 1);
 
 
@@ -122,3 +122,5 @@ INSERT INTO manager_badge_candidature_proposal_response (is_approved, disapprova
 VALUES
     (TRUE, NULL, 1, 1),
     (FALSE, NULL, 2, 1);
+
+

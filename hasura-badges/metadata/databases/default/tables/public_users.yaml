@@ -23,26 +23,47 @@ array_relationships:
         table:
           name: badges_versions
           schema: public
-  - name: engineerBadgeCandidatureProposalsByEngineer
+  - name: engineerToManagerBadgeCandidatureProposalsByManager
+    using:
+      foreign_key_constraint_on:
+        column: manager
+        table:
+          name: engineer_to_manager_badge_candidature_proposals
+          schema: public
+  - name: engineer_badge_candidature_proposal_responses
+    using:
+      foreign_key_constraint_on:
+        column: created_by
+        table:
+          name: engineer_badge_candidature_proposal_response
+          schema: public
+  - name: engineer_to_manager_badge_candidature_proposals
+    using:
+      foreign_key_constraint_on:
+        column: created_by
+        table:
+          name: engineer_to_manager_badge_candidature_proposals
+          schema: public
+  - name: managerToEngineerBadgeCandidatureProposalsByEngineer
     using:
       foreign_key_constraint_on:
         column: engineer
         table:
-          name: engineer_badge_candidature_proposals
+          name: manager_to_engineer_badge_candidature_proposals
           schema: public
-  - name: engineer_badge_candidature_proposals
+  - name: manager_badge_candidature_proposal_responses
     using:
       foreign_key_constraint_on:
         column: created_by
         table:
-          name: engineer_badge_candidature_proposals
+          name: manager_badge_candidature_proposal_response
           schema: public
-  - name: engineer_badge_candidature_responses
+  - name: manager_to_engineer_badge_candidature_proposals
     using:
       foreign_key_constraint_on:
         column: created_by
         table:
-          name: engineer_badge_candidature_response
+          name: manager_to_engineer_badge_candidature_proposals
           schema: public
   - name: requirementsDefinitionsByModifiedBy
     using:

@@ -1,0 +1,28 @@
+table:
+  name: engineer_to_manager_badge_candidature_proposals
+  schema: public
+object_relationships:
+  - name: badges_version
+    using:
+      manual_configuration:
+        column_mapping:
+          badge_id: id
+          badge_version: created_at
+        insertion_order: null
+        remote_table:
+          name: badges_versions
+          schema: public
+  - name: user
+    using:
+      foreign_key_constraint_on: created_by
+  - name: userByManager
+    using:
+      foreign_key_constraint_on: manager
+array_relationships:
+  - name: manager_badge_candidature_proposal_responses
+    using:
+      foreign_key_constraint_on:
+        column: proposal_id
+        table:
+          name: manager_badge_candidature_proposal_response
+          schema: public
