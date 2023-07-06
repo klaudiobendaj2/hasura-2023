@@ -93,18 +93,32 @@ SELECT * FROM create_badge_version('{"x-hasura-tenant-id":"1"}', 1);
 SELECT * FROM create_badge_version('{"x-hasura-tenant-id":"1"}', 2);
 SELECT * FROM _create_badge_version(1, 1, (SELECT now() AT TIME ZONE 'UTC' + '1ms'::interval));
 
--- -- Insert data into engineer_badge_candidature_proposals
-TRUNCATE engineer_badge_candidature_proposals RESTART IDENTITY CASCADE;
-INSERT INTO engineer_badge_candidature_proposals (engineer, badge_id, badge_version, proposal_description, created_by)
+-- -- Insert data into manager_to_engineer_badge_candidature_proposals
+TRUNCATE manager_to_engineer_badge_candidature_proposals RESTART IDENTITY CASCADE;
+INSERT INTO manager_to_engineer_badge_candidature_proposals (engineer, badge_id, badge_version, proposal_description, created_by)
 VALUES
     (1, 1, (SELECT created_at FROM badges_versions WHERE id = 1 LIMIT 1), 'Proposal for badge ID 1, version 1', 2),
     (1, 2, (SELECT created_at FROM badges_versions WHERE id = 2 LIMIT 1), 'Proposal for badge ID 2, version 1', 2);
 
 
 
-TRUNCATE engineer_badge_candidature_response RESTART IDENTITY CASCADE;
-INSERT INTO engineer_badge_candidature_response (is_approved, disapproval_motivation, proposal_id, created_by)
+TRUNCATE engineer_badge_candidature_proposal_response RESTART IDENTITY CASCADE;
+INSERT INTO engineer_badge_candidature_proposal_response (is_approved, disapproval_motivation, proposal_id, created_by)
 VALUES
     (TRUE, NULL, 1, 1),
-    (FALSE, 'Insufficient experience', 2, 1);
+    (FALSE, NULL, 2, 1);
 
+
+TRUNCATE engineer_to_manager_badge_candidature_proposals RESTART IDENTITY CASCADE;
+INSERT INTO engineer_to_manager_badge_candidature_proposals (manager, badge_id, badge_version, proposal_description, created_by)
+VALUES
+    (1, 1, (SELECT created_at FROM badges_versions WHERE id = 1 LIMIT 1), 'Proposal for badge ID 1, version 1', 2),
+    (1, 2, (SELECT created_at FROM badges_versions WHERE id = 2 LIMIT 1), 'Proposal for badge ID 2, version 1', 2);
+
+
+
+TRUNCATE manager_badge_candidature_proposal_response RESTART IDENTITY CASCADE;
+INSERT INTO manager_badge_candidature_proposal_response (is_approved, disapproval_motivation, proposal_id, created_by)
+VALUES
+    (TRUE, NULL, 1, 1),
+    (FALSE, NULL, 2, 1);

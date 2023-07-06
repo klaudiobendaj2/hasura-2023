@@ -1,5 +1,5 @@
 
-CREATE TABLE engineer_badge_candidature_proposals (
+CREATE TABLE manager_to_engineer_badge_candidature_proposals (
   id SERIAL PRIMARY KEY, 
   engineer INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
   badge_id INTEGER NOT NULL,
@@ -12,23 +12,29 @@ CREATE TABLE engineer_badge_candidature_proposals (
 
 
 
-CREATE TABLE engineer_badge_candidature_response (
+CREATE TABLE engineer_badge_candidature_proposal_response (
   response_id SERIAL PRIMARY KEY,
   is_approved BOOLEAN NOT NULL,
   disapproval_motivation VARCHAR(255) DEFAULT NULL,
-  proposal_id INTEGER NOT NULL REFERENCES engineer_badge_candidature_proposals(id) ON DELETE RESTRICT,
+  proposal_id INTEGER NOT NULL REFERENCES manager_to_engineer_badge_candidature_proposals(id) ON DELETE RESTRICT,
   created_at TIMESTAMP NOT NULL DEFAULT now(),
   created_by INTEGER REFERENCES users(id) ON DELETE RESTRICT
 );
 
+-- CREATE TABLE issuing_requests (
+--   request_id SERIAL PRIMARY KEY,
+--   is_approved BOOLEAN DEFAULT NULL,
+--   disapproval_motivation VARCHAR(255) DEFAULT NULL;
+-- )
+
 
 CREATE OR REPLACE FUNCTION get_approved_responses_by_manager(manager_id INTEGER)
-RETURNS SETOF engineer_badge_candidature_response
+RETURNS SETOF engineer_badge_candidature_proposal_response
 AS $$
 BEGIN
   RETURN QUERY
   SELECT *
-  FROM engineer_badge_candidature_response
+  FROM engineer_badge_candidature_proposal_response
   WHERE created_by = manager_id AND is_approved = TRUE;
 END;
 $$ LANGUAGE PLPGSQL;
