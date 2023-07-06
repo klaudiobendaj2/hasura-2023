@@ -24,14 +24,38 @@ CREATE TABLE badge_candidature_request (
   is_issued BOOLEAN NOT NULL,
   badge_id INTEGER NOT NULL,
   badge_version TIMESTAMP NOT NULL,
-  badge_description TEXT NOT NULL,
-  badge_title TEXT NOT NULL,
-  badges_requirements JSONB NOT NULL,
   engineer_id INTEGER NOT NULL,
   manager_id INTEGER NOT NULL,
   candidature_evidences JSONB,
   created_at TIMESTAMP NOT NULL DEFAULT now()
 );
+
+CREATE TABLE issuing_requests (
+  id SERIAL PRIMARY KEY,
+  request_id INTEGER NOT NULL REFERENCES badge_candidature_request(id) ON DELETE RESTRICT,
+  is_approved BOOLEAN DEFAULT NULL,
+  disapproval_motivation VARCHAR(255) DEFAULT NULL
+);
+
+CREATE VIEW badge_candidature_view AS
+SELECT
+  bcr.id,
+  bcr.is_issued,
+  bcr.badge_id,
+  bcr.badge_version,
+  bv.title AS badge_title,
+  bv.description AS badge_description,
+  bv.requirements AS badge_requirements,
+  u.name AS engineer_name,
+  bcr.manager_id,
+  bcr.candidature_evidences,
+  bcr.created_at
+FROM
+  badge_candidature_request AS bcr
+  JOIN badges_versions AS bv ON bcr.badge_id = bv.id AND bcr.badge_version = bv.created_at
+  JOIN users AS u ON bcr.engineer_id = u.id;
+
+
 
 
 CREATE OR REPLACE FUNCTION get_pending_responses_for_engineer(engineer_id INTEGER)
@@ -61,9 +85,6 @@ BEGIN
       is_issued,
       badge_id,
       badge_version,
-      badge_description,
-      badge_title,
-      badges_requirements,
       engineer_id,
       manager_id,
       candidature_evidences
@@ -72,9 +93,6 @@ BEGIN
       FALSE AS is_issued,
       proposal_badge_id,
       proposal_badge_version,
-      bv.title AS badge_title,
-      bv.description AS badge_description,
-      bv.requirements AS badges_requirements,
       COALESCE(embc.created_by, mebc.engineer) AS engineer_id,
       COALESCE(embc.manager, mebc.created_by) AS manager_id,
       NULL AS candidature_evidences
@@ -126,6 +144,38 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION insert_issuing_request()
+  RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.is_issued = TRUE THEN
+    INSERT INTO issuing_requests (request_id)
+    VALUES (NEW.id);
+  END IF;
+
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+CREATE OR REPLACE FUNCTION get_issuing_requests_by_manager(managerId INTEGER)
+  RETURNS SETOF issuing_requests AS
+$$
+BEGIN
+  RETURN QUERY
+    SELECT ir.*
+    FROM issuing_requests ir
+    INNER JOIN badge_candidature_request bcr ON ir.request_id = bcr.id
+    WHERE bcr.manager_id = managerId;
+
+  RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 
 CREATE TRIGGER manager_badge_candidature_proposal_response_trigger
 AFTER INSERT ON manager_badge_candidature_proposal_response
@@ -136,3 +186,10 @@ CREATE TRIGGER engineer_badge_candidature_proposal_response_trigger
 AFTER INSERT ON engineer_badge_candidature_proposal_response
 FOR EACH ROW
 EXECUTE FUNCTION insert_badge_candidature_request();
+
+
+CREATE TRIGGER insert_issuing_request_trigger
+AFTER UPDATE ON badge_candidature_request
+FOR EACH ROW
+EXECUTE FUNCTION insert_issuing_request();
+

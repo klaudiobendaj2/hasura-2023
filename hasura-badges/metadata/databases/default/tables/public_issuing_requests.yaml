@@ -1,0 +1,7 @@
+table:
+  name: issuing_requests
+  schema: public
+object_relationships:
+  - name: badge_candidature_request
+    using:
+      foreign_key_constraint_on: request_id

@@ -21,11 +21,7 @@ CREATE TABLE engineer_badge_candidature_proposal_response (
   created_by INTEGER REFERENCES users(id) ON DELETE RESTRICT
 );
 
--- CREATE TABLE issuing_requests (
---   request_id SERIAL PRIMARY KEY,
---   is_approved BOOLEAN DEFAULT NULL,
---   disapproval_motivation VARCHAR(255) DEFAULT NULL;
--- )
+
 
 
 CREATE OR REPLACE FUNCTION get_approved_responses_by_manager(manager_id INTEGER)

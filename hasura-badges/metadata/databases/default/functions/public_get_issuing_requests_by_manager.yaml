@@ -1,0 +1,6 @@
+function:
+  name: get_issuing_requests_by_manager
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation
