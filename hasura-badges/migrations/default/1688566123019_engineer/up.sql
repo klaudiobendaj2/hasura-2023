@@ -83,6 +83,8 @@ WHERE
 
 
 
+--Fix this function should find the proposals that are in 
+
 CREATE OR REPLACE FUNCTION get_pending_responses_for_engineer(engineer_id INTEGER)
 RETURNS SETOF engineer_badge_candidature_proposal_response
 AS $$
