@@ -1,0 +1,3 @@
+table:
+  name: issuing_requests_view
+  schema: public

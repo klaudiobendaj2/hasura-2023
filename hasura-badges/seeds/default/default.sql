@@ -124,3 +124,10 @@ VALUES
     (FALSE, NULL, 2, 1);
 
 
+--seed for issuing_requests_view 
+UPDATE badge_candidature_request
+SET is_issued = true
+WHERE id = 1;
+
+
+

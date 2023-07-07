@@ -56,6 +56,31 @@ FROM
   JOIN users AS u ON bcr.engineer_id = u.id;
 
 
+CREATE VIEW issuing_requests_view AS
+SELECT
+  bcr.id,
+  bcr.is_issued,
+  bcr.badge_id,
+  bd.title AS badge_title,
+  bd.description AS badge_description,
+  bcr.badge_version,
+  bcr.engineer_id,
+  u.name AS engineer_name,
+  bcr.manager_id,
+  bcr.candidature_evidences,
+  bcr.created_at
+FROM
+  badge_candidature_request bcr
+  JOIN users u ON bcr.engineer_id = u.id
+  JOIN badges_definitions bd ON bcr.badge_id = bd.id AND bcr.badge_version = bd.created_at
+WHERE
+  EXISTS (
+    SELECT 1
+    FROM issuing_requests ir
+    WHERE ir.request_id = bcr.id
+  );
+
+
 
 
 CREATE OR REPLACE FUNCTION get_pending_responses_for_engineer(engineer_id INTEGER)
@@ -157,22 +182,18 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-
-CREATE OR REPLACE FUNCTION get_issuing_requests_by_manager(managerId INTEGER)
-  RETURNS SETOF issuing_requests AS
+CREATE OR REPLACE FUNCTION get_issuing_requests_for_manager(managerId INTEGER)
+  RETURNS SETOF issuing_requests_view AS
 $$
 BEGIN
   RETURN QUERY
-    SELECT ir.*
-    FROM issuing_requests ir
-    INNER JOIN badge_candidature_request bcr ON ir.request_id = bcr.id
-    WHERE bcr.manager_id = managerId;
+    SELECT *
+    FROM issuing_requests_view
+    WHERE manager_id = managerId;
 
   RETURN;
 END;
 $$ LANGUAGE plpgsql;
-
 
 
 
