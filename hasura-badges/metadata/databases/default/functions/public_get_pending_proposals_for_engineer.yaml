@@ -1,0 +1,6 @@
+function:
+  name: get_pending_proposals_for_engineer
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation

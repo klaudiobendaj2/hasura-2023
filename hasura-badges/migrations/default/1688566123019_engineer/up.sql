@@ -83,18 +83,23 @@ WHERE
 
 
 
---Fix this function should find the proposals that are in 
-
-CREATE OR REPLACE FUNCTION get_pending_responses_for_engineer(engineer_id INTEGER)
-RETURNS SETOF engineer_badge_candidature_proposal_response
-AS $$
+CREATE OR REPLACE FUNCTION get_pending_proposals_for_engineer(engineerId INTEGER)
+  RETURNS SETOF engineer_to_manager_badge_candidature_proposals AS
+$$
 BEGIN
   RETURN QUERY
-  SELECT response_id, is_approved, disapproval_motivation, proposal_id, created_at, created_by
-  FROM engineer_badge_candidature_proposal_response
-  WHERE created_by = engineer_id AND is_approved = NULL;
+    SELECT *
+    FROM engineer_to_manager_badge_candidature_proposals
+    WHERE id NOT IN (
+      SELECT proposal_id
+      FROM engineer_badge_candidature_proposal_response
+    )
+    AND created_by = engineerId;
+
+  RETURN;
 END;
-$$ LANGUAGE PLPGSQL;
+$$ LANGUAGE plpgsql;
+
 
 
 
