@@ -1,0 +1,6 @@
+function:
+  name: get_engineers_by_manager
+  schema: public
+configuration:
+  custom_root_fields: {}
+  exposed_as: mutation

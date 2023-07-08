@@ -1,0 +1,67 @@
+table:
+  name: requirements_definitions
+  schema: public
+object_relationships:
+  - name: badges_definition
+    using:
+      foreign_key_constraint_on: badge_id
+  - name: user
+    using:
+      foreign_key_constraint_on: created_by
+  - name: userByModifiedBy
+    using:
+      foreign_key_constraint_on: modified_by
+insert_permissions:
+  - role: backoffice
+    permission:
+      check: {}
+      set:
+        created_by: x-hasura-tenant-id
+        modified_by: x-hasura-tenant-id
+      columns:
+        - badge_id
+        - description
+        - title
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - created_at
+        - description
+        - id
+        - modified_at
+        - title
+      filter: {}
+      query_root_fields:
+        - select
+      subscription_root_fields: []
+  - role: backoffice
+    permission:
+      columns:
+        - title
+        - badge_id
+        - created_by
+        - id
+        - modified_by
+        - description
+        - created_at
+        - modified_at
+      filter: {}
+      limit: 10
+      query_root_fields:
+        - select
+      subscription_root_fields: []
+update_permissions:
+  - role: backoffice
+    permission:
+      columns:
+        - description
+        - title
+      filter: {}
+      check: null
+      set:
+        modified_by: x-hasura-tenant-id
+delete_permissions:
+  - role: backoffice
+    permission:
+      filter: {}

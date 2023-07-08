@@ -1,0 +1,22 @@
+table:
+  name: users
+  schema: public
+array_relationships:
+  - name: messages
+    using:
+      foreign_key_constraint_on:
+        column: receiver_id
+        table:
+          name: messages
+          schema: public
+  - name: messagesBySenderId
+    using:
+      foreign_key_constraint_on:
+        column: sender_id
+        table:
+          name: messages
+          schema: public
+delete_permissions:
+  - role: backoffice
+    permission:
+      filter: {}
