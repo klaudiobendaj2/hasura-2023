@@ -8,8 +8,8 @@ TRUNCATE TABLE messages CASCADE;
 
 -- Seed data for users table
 INSERT INTO users (username, password) VALUES
-  ('john.doe', 'password123'),
-  ('jane.smith', 'password456');
+  ('John Doe', 'password123'),
+  ('Jane Smith', 'password456');
 
 -- Seed data for messages table using the send_message_to_user function
 SELECT send_message_to_user(1, 2, 'Hello Jane!');
