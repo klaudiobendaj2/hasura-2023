@@ -14,11 +14,11 @@ const ChatAppBar = () => {
     <AppBar position="static" sx={{borderRadius: '10px 10px 0 0'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Tooltip title="John Doe">
+          <Tooltip title="Jane Smith">
             <IconButton sx={{ p: 0, mr: 2 }}>
               <Avatar
                 alt="Remy Sharp"
-                src="https://img.freepik.com/free-photo/handsome-young-man-with-new-stylish-haircut_176420-19636.jpg?w=2000"
+                src="https://images.pexels.com/photos/4946515/pexels-photo-4946515.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
               />
             </IconButton>
           </Tooltip>
@@ -35,7 +35,7 @@ const ChatAppBar = () => {
               textDecoration: "none"
             }}
           >
-            John Doe
+            Jane Smith
           </Typography>
         </Toolbar>
       </Container>

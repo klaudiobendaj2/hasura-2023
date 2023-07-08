@@ -39,7 +39,7 @@ const renderItem = ({ item }) => {
 
 const MessagesList = () => {
   const [fruitsInBasket, setFruitsInBasket] = React.useState([
-    { sender_id: 1, message: "AppleAppleAppleAppleAppleAppleApple" }
+    { sender_id: 1, message: "I'll be in the neighbourhood this week. Let's grab a bite to eat" }
   ]);
 
 

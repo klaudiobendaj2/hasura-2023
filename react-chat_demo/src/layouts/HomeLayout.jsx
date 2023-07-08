@@ -9,7 +9,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
-import { Container } from "@mui/material";
+import Container from "@mui/material/Container";
+import { useNavigate } from "react-router-dom";
 
 const messages = [
   {
@@ -23,9 +24,11 @@ const messages = [
 ];
 
 const HomeLayout = () => {
+  const navigate = useNavigate();
+
   return (
     <React.Fragment>
-      <Paper round>
+      <Paper round='true'>
         <AppBar position="static" sx={{ borderRadius: "10px 10px 0 0" }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -49,14 +52,7 @@ const HomeLayout = () => {
                   Today
                 </ListSubheader>
               )}
-
-              {id === 3 && (
-                <ListSubheader sx={{ bgcolor: "background.paper" }}>
-                  Yesterday
-                </ListSubheader>
-              )}
-
-              <ListItem button>
+              <ListItem button onClick={() => navigate(`/chat/${id}`)}>
                 <ListItemAvatar>
                   <Avatar alt="Profile Picture" src={person} />
                 </ListItemAvatar>
