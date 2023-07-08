@@ -42,20 +42,9 @@ const MessagesList = () => {
     { sender_id: 1, message: "AppleAppleAppleAppleAppleAppleApple" }
   ]);
 
-  const handleAddFruit = (ele) => {
-    setFruitsInBasket((prev) => [...prev, ele]);
-    console.log(fruitsInBasket);
-  };
-
-  const addFruitButton = (
-    <Button variant="contained" onClick={() => handleAddFruit(FRUITS[0])}>
-      Add fruit to basket
-    </Button>
-  );
 
   return (
     <div style={{ marginBottom: "3rem" }}>
-      {addFruitButton}
       <Box sx={{ mt: 1 }}>
         <List>
           <TransitionGroup>

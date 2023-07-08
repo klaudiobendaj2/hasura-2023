@@ -1,13 +1,10 @@
 import React from "react";
-import ChatAppBar from "./components/ChatAppBar";
-import ChatBox from "./components/ChatBox";
+import ChatLayout from "./layouts/ChatLayout";
+
 
 const App = () => {
   return (
-    <>
-      <ChatAppBar />
-      <ChatBox />
-    </>
+    <ChatLayout />
   );
 };
 

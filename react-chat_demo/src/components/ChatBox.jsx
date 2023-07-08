@@ -1,7 +1,6 @@
 import { Box, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import MessagesList from "./MessagesList";
-import TextInput from "./TextInput";
 
 const ScrollableBox = styled(Box)`
   /* Scrollbar styles */
@@ -21,7 +20,7 @@ const ScrollableBox = styled(Box)`
   }
 `;
 
-const ChatBox = () => (
+const ChatBox = ({ children }) => (
   <>
     <ScrollableBox
       component="main"
@@ -36,9 +35,8 @@ const ChatBox = () => (
       }}
     >
       <Toolbar />
-      <MessagesList />
+      {children}
     </ScrollableBox>
-    <TextInput />
   </>
 );
 

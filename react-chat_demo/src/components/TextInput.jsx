@@ -30,12 +30,28 @@ const TextInput = () => {
           border: "2px solid #1976d2"
         }}
       >
-        <InputBase sx={{ ml: 1, flex: 1, height: "50px" }} placeholder="Chat" />
+        <InputBase 
+          placeholder="Chat" 
+          sx={{ 
+            ml: 1,
+            flex: 1,
+            height: "50px"
+          }}
+        />
         <Divider
-          sx={{ height: 28, m: 0.5, backgroundColor: "#1976d2", width: " 2px" }}
+          sx={{ 
+            height: 28,
+            m: 0.5,
+            backgroundColor: "#1976d2",
+            width: " 2px"
+          }}
           orientation="vertical"
         />
-        <IconButton color="primary" sx={{ p: "10px" }} aria-label="directions">
+        <IconButton 
+          color="primary"
+          sx={{ p: "10px" }} 
+          aria-label="directions"
+        >
           <SendIcon />
         </IconButton>
       </Paper>
