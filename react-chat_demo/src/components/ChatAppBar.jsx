@@ -13,7 +13,7 @@ const ChatAppBar = ({ senderData }) => {
 
   const userInfo = senderData(id);
 
-  console.log(id);
+  console.log(userInfo);
 
   return (
     <AppBar position="static" sx={{ borderRadius: "10px 10px 0 0" }}>
@@ -37,7 +37,7 @@ const ChatAppBar = ({ senderData }) => {
               textDecoration: "none"
             }}
           >
-            Jane Smith
+            {userInfo.user_name}
           </Typography>
         </Toolbar>
       </Container>

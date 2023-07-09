@@ -11,9 +11,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
+import { useChatContext } from "../state/withContext";
 
 const HomeLayout = ({ data: { messages_with_user_data } }) => {
   const navigate = useNavigate();
+
+  const { currentUserId } = useChatContext();
 
   const latestMessages = useMemo(() => {
     const latestMessages = {};
@@ -33,6 +36,21 @@ const HomeLayout = ({ data: { messages_with_user_data } }) => {
 
     return result;
   }, [messages_with_user_data]);
+
+  const orderMessagesByCreatedAt = (messages) => {
+    const orderedMessages = [...messages];
+    return orderedMessages.sort((a, b) => {
+      const dateA = new Date(a.message_created_at);
+      const dateB = new Date(b.message_created_at);
+      return dateA - dateB;
+    });
+  };
+
+  const latestContent = orderMessagesByCreatedAt(messages_with_user_data)[
+    messages_with_user_data.length - 1
+  ].content;
+
+  console.log("heyyy", latestMessages);
 
   return (
     <React.Fragment>
@@ -59,17 +77,27 @@ const HomeLayout = ({ data: { messages_with_user_data } }) => {
               user_name,
               content,
               user_profile_picture,
-              sender_id
+              sender_id,
+              receiver_id
             }) => (
               <React.Fragment key={message_id}>
                 <ListSubheader sx={{ bgcolor: "background.paper" }}>
                   Today
                 </ListSubheader>
-                <ListItem button onClick={() => navigate(`/chat/${sender_id}`)}>
+                <ListItem
+                  button
+                  onClick={() =>
+                    navigate(
+                      `/chat/${
+                        sender_id === currentUserId ? receiver_id : sender_id
+                      }`
+                    )
+                  }
+                >
                   <ListItemAvatar>
                     <Avatar alt="Profile Picture" src={user_profile_picture} />
                   </ListItemAvatar>
-                  <ListItemText primary={user_name} secondary={content} />
+                  <ListItemText primary={user_name} secondary={latestContent} />
                 </ListItem>
               </React.Fragment>
             )
