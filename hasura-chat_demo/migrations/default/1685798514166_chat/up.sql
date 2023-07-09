@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS users  (
   id SERIAL PRIMARY KEY,
   user_name VARCHAR(50) NOT NULL,
   user_password VARCHAR(100) NOT NULL,
+  user_profile_picture VARCHAR(255) NOT NULL,
   is_typing BOOLEAN,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -16,6 +17,20 @@ CREATE TABLE IF NOT EXISTS messages (
   FOREIGN KEY (sender_id) REFERENCES users (id),
   FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
+
+CREATE OR REPLACE VIEW messages_with_user_data AS
+SELECT
+  messages.id AS message_id,
+  messages.sender_id,
+  messages.receiver_id,
+  messages.content,
+  messages.created_at AS message_created_at,
+  users.user_name,
+  users.user_profile_picture
+FROM
+  messages
+JOIN
+  users ON messages.sender_id = users.id;
 
 
 CREATE OR REPLACE FUNCTION sign_in(
