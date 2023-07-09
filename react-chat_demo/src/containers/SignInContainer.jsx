@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
+import { useChatContext } from "../state/withContext";
 import SignInLayout from "../layouts/SignInLayout";
 
 const SIGN_IN_MUTATION = gql`
@@ -20,6 +21,8 @@ const SignInContainer = () => {
 
   const navigate = useNavigate();
 
+  const { setCurrentUserId } = useChatContext();
+
   const [credentials, setCredentials] = useState({
     input_name: "",
     input_password: ""
@@ -33,6 +36,7 @@ const SignInContainer = () => {
   if (error) return <p>Error : {error.message}</p>;
 
   if (data && Boolean(data.sign_in.length)) {
+    setCurrentUserId(data.sign_in[0].id);
     navigate("/messages");
   }
 
