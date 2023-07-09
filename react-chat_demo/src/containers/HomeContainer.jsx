@@ -33,12 +33,6 @@ const HomeContainer = () => {
     if (!currentUserId) return navigate("/");
   }, []);
 
-  // useEffect(() => {
-  //   if (data && data.messages_with_user_data) {
-  //     setMessages(data.messages_with_user_data);
-  //   }
-  // }, [loading, data]);
-
   if (!currentUserId || loading) return <p>Loading....</p>;
 
   if (error) return <p>Error : {error.message}</p>;

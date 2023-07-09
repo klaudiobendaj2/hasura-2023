@@ -27,13 +27,15 @@ const renderItem = ({ content, message_created_at, sender_id }, currentId) => {
 
 const MessagesList = ({ messages }) => {
   const { currentUserId } = useChatContext();
+  const orderedMessages = [...messages].reverse();
+  // messages.reverse();
 
   return (
     <div style={{ marginBottom: "3rem" }}>
       <Box sx={{ mt: 1 }}>
         <List>
           <TransitionGroup>
-            {messages.map((item, index) => (
+            {orderedMessages.map((item, index) => (
               <Collapse key={index}>{renderItem(item, currentUserId)}</Collapse>
             ))}
           </TransitionGroup>

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useChatContext } from "../state/withContext";
 import ChatLayout from "../layouts/ChatLayout";
@@ -25,6 +25,26 @@ const GET_CURRENT_MESSAGES = gql`
   }
 `;
 
+const SEND_MESSAGE = gql`
+  mutation SendMessage(
+    $message_content: String!
+    $message_reciever: Int!
+    $message_sender: Int!
+  ) {
+    send_message_to_user(
+      args: {
+        p_content: $message_content
+        p_receiver_id: $message_reciever
+        p_sender_id: $message_sender
+      }
+    ) {
+      content
+      created_at
+      id
+    }
+  }
+`;
+
 const ChatContainer = () => {
   const navigate = useNavigate();
   const { currentUserId } = useChatContext();
@@ -36,6 +56,8 @@ const ChatContainer = () => {
     pollInterval: 500
   });
 
+  const [sendMessage, { loading: isLoading, error: hasError, data: sentData }] = useMutation(SEND_MESSAGE);
+
   useEffect(() => {
     if (!currentUserId) return navigate("/");
   }, []);
@@ -44,7 +66,7 @@ const ChatContainer = () => {
 
   if (error) return <p>Error : {error.message}</p>;
 
-  return <ChatLayout messages={data.messages_with_user_data} />;
+  return <ChatLayout messages={data.messages_with_user_data} sendMessage={sendMessage} />;
 };
 
 export default ChatContainer;
