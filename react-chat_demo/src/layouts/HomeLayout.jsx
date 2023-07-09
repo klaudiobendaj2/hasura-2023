@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,18 +11,29 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 
-const messages = [
-  {
-    id: 1,
-    primary: "Jane Smith",
-    secondary:
-      "I'll be in the neighbourhood this week. Let's grab a bite to eat",
-    person:
-      "https://images.pexels.com/photos/4946515/pexels-photo-4946515.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-  }
-];
 
-const HomeLayout = () => {
+const HomeLayout = ({ data: { messages_with_user_data } }) => {
+  console.log(messages_with_user_data);
+
+  const latestMessages = useMemo(() => {
+    const latestMessages = {};
+
+    for (const message of messages_with_user_data) {
+      const { sender_id, message_created_at } = message;
+
+      if (
+        !(sender_id in latestMessages) ||
+        message_created_at > latestMessages[sender_id].message_created_at
+      ) {
+        latestMessages[sender_id] = message;
+      }
+    }
+
+    const result = Object.values(latestMessages);
+
+    return result;
+  }, [messages_with_user_data]);
+
   return (
     <React.Fragment>
       <Paper round="true">
@@ -42,21 +53,21 @@ const HomeLayout = () => {
         </AppBar>
 
         <List sx={{ mb: 2 }}>
-          {messages.map(({ id, primary, secondary, person }) => (
-            <React.Fragment key={id}>
-              {id === 1 && (
+          {latestMessages.map(
+            ({ message_id, user_name, content, user_profile_picture, sender_id }) => (
+              <React.Fragment key={message_id}>
                 <ListSubheader sx={{ bgcolor: "background.paper" }}>
                   Today
                 </ListSubheader>
-              )}
-              <ListItem button onClick={() => navigate(`/chat/${id}`)}>
-                <ListItemAvatar>
-                  <Avatar alt="Profile Picture" src={person} />
-                </ListItemAvatar>
-                <ListItemText primary={primary} secondary={secondary} />
-              </ListItem>
-            </React.Fragment>
-          ))}
+                <ListItem button onClick={() => navigate(`/chat/${sender_id}`)}>
+                  <ListItemAvatar>
+                    <Avatar alt="Profile Picture" src={user_profile_picture} />
+                  </ListItemAvatar>
+                  <ListItemText primary={user_name} secondary={content} />
+                </ListItem>
+              </React.Fragment>
+            )
+          )}
         </List>
       </Paper>
     </React.Fragment>

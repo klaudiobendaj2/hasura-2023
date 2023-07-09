@@ -37,7 +37,7 @@ const HomeContainer = () => {
 
   if (error) return <p>Error : {error.message}</p>;
 
-  return <HomeLayout />;
+  return <HomeLayout data = {data}/>;
 };
 
 export default HomeContainer;
