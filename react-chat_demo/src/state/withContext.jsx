@@ -6,9 +6,14 @@ const AppContext = createContext();
 // Create a provider component for the AppContext
 const withContext = (Component) => (props) => {
   const [currentUserId, setCurrentUserId] = useState();
+  const [messages, setMessages] = useState();
+
+
 
   return (
-    <AppContext.Provider value={{ currentUserId, setCurrentUserId }}>
+    <AppContext.Provider
+      value={{ currentUserId, setCurrentUserId, messages, setMessages }}
+    >
       <Component {...props} />
     </AppContext.Provider>
   );

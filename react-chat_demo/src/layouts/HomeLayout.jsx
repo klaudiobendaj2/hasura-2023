@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,9 +12,8 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 
-
 const HomeLayout = ({ data: { messages_with_user_data } }) => {
-  console.log(messages_with_user_data);
+  const navigate = useNavigate();
 
   const latestMessages = useMemo(() => {
     const latestMessages = {};
@@ -54,7 +54,13 @@ const HomeLayout = ({ data: { messages_with_user_data } }) => {
 
         <List sx={{ mb: 2 }}>
           {latestMessages.map(
-            ({ message_id, user_name, content, user_profile_picture, sender_id }) => (
+            ({
+              message_id,
+              user_name,
+              content,
+              user_profile_picture,
+              sender_id
+            }) => (
               <React.Fragment key={message_id}>
                 <ListSubheader sx={{ bgcolor: "background.paper" }}>
                   Today
