@@ -1,6 +1,5 @@
 import { Box, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import MessagesList from "./MessagesList";
 
 const ScrollableBox = styled(Box)`
   /* Scrollbar styles */
@@ -20,24 +19,27 @@ const ScrollableBox = styled(Box)`
   }
 `;
 
-const ChatBox = ({ children }) => (
-  <>
-    <ScrollableBox
-      component="main"
-      sx={{
-        p: 3,
-        backgroundColor: "#b9d8f7",
-        height: "80vh",
-        overflowY: "scroll",
-        mt: -0.7,
-        borderRadius: "10px",
-        border: "2px solid #1976d2"
-      }}
-    >
-      <Toolbar />
-      {children}
-    </ScrollableBox>
-  </>
-);
+const ChatBox = ({ children, messagesEndRef }) => {
+  return (
+    <>
+      <ScrollableBox
+        component="main"
+        sx={{
+          p: 3,
+          backgroundColor: "#b9d8f7",
+          height: "80vh",
+          overflowY: "scroll",
+          mt: -0.7,
+          borderRadius: "10px",
+          border: "2px solid #1976d2"
+        }}
+      >
+        <Toolbar />
+        {children}
+        <div ref={messagesEndRef}></div>
+      </ScrollableBox>
+    </>
+  );
+};
 
 export default ChatBox;

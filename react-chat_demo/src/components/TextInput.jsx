@@ -1,15 +1,15 @@
 import * as React from "react";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
-import { useParams } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import Stack from "@mui/material/Stack";
 import { useChatContext } from "../state/withContext";
 
-const TextInput = ({ sendMessage }) => {
+const TextInput = ({ sendMessage, scrollToBottom }) => {
   const [message, setMessage] = useState();
 
   const { currentUserId } = useChatContext();
@@ -25,6 +25,7 @@ const TextInput = ({ sendMessage }) => {
       }
     });
     setMessage("");
+    setTimeout(() => scrollToBottom(), [680]);
   };
 
   return (

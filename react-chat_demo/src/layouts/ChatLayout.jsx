@@ -2,6 +2,7 @@ import ChatAppBar from "../components/ChatAppBar";
 import ChatBox from "../components/ChatBox";
 import TextInput from "../components/TextInput";
 import MessagesList from "../components/MessagesList";
+import { useEffect, useRef } from "react";
 
 const ChatLayout = ({ messages, sendMessage }) => {
   const latestMessageFromSender = (id) => {
@@ -9,13 +10,27 @@ const ChatLayout = ({ messages, sendMessage }) => {
     return clonedMessagges.reverse().find((message) => message.sender_id == id);
   };
 
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <ChatAppBar senderData={latestMessageFromSender} />
-      <ChatBox>
+      <ChatBox messagesEndRef={messagesEndRef}>
         <MessagesList messages={messages} />
       </ChatBox>
-      <TextInput sendMessage={sendMessage}/>
+      <TextInput
+        sendMessage={sendMessage}
+        ref={messagesEndRef}
+        scrollToBottom={scrollToBottom}
+      />
     </>
   );
 };
