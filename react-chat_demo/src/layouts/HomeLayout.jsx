@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -10,8 +10,6 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
-import { useChatContext } from "../state/withContext";
 
 const messages = [
   {
@@ -25,14 +23,6 @@ const messages = [
 ];
 
 const HomeLayout = () => {
-  const navigate = useNavigate();
-  const { currentUserId } = useChatContext();
-
-  useEffect(() => {
-    if (!currentUserId) return navigate("/");
-  }, []);
-
-  if (!currentUserId) return <p>Loading....</p>;
   return (
     <React.Fragment>
       <Paper round="true">

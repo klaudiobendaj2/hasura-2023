@@ -63,13 +63,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION get_messages_by_receiver(
-  p_receiver_id INT
-)
-RETURNS SETOF messages AS $$
-BEGIN
-  RETURN QUERY SELECT * FROM messages WHERE receiver_id = p_receiver_id;
-END;
-$$ LANGUAGE plpgsql;
+
 
 

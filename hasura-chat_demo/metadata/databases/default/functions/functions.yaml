@@ -1,3 +1,2 @@
-- "!include public_get_messages_by_receiver.yaml"
 - "!include public_send_message_to_user.yaml"
 - "!include public_sign_in.yaml"

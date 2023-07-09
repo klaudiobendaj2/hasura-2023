@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useChatContext } from "../state/withContext";
@@ -31,14 +31,16 @@ const SignInContainer = () => {
   const handleSignIn = (inputCredentials) =>
     signIn({ variables: inputCredentials });
 
+  useEffect(() => {
+    if (data && Boolean(data.sign_in.length)) {
+      setCurrentUserId(data.sign_in[0].id);
+      navigate("/messages");
+    }
+  }, [data]);
+
   if (loading) return <p>....LOADINGGGG</p>;
 
   if (error) return <p>Error : {error.message}</p>;
-
-  if (data && Boolean(data.sign_in.length)) {
-    setCurrentUserId(data.sign_in[0].id);
-    navigate("/messages");
-  }
 
   return (
     <SignInLayout

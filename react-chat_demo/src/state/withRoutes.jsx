@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ChatLayout from "../layouts/ChatLayout";
 import SignInContainer from "../containers/SignInContainer";
-import HomeLayout from "../layouts/HomeLayout";
+import HomeContainer from "../containers/HomeContainer";
 
 const withRoutes = (App) => (props) => {
   const routes = createBrowserRouter([
@@ -11,7 +11,7 @@ const withRoutes = (App) => (props) => {
     },
     {
       path: "/messages",
-      element: <HomeLayout />
+      element: <HomeContainer />
     },
     {
       path: "chat/:id",
@@ -21,7 +21,7 @@ const withRoutes = (App) => (props) => {
 
   return (
     <RouterProvider router={routes}>
-      <App {...props}/>
+      <App {...props} />
     </RouterProvider>
   );
 };
