@@ -1,13 +1,13 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ChatLayout from "../layouts/ChatLayout";
-import SignInLayout from "../layouts/SignInLayout";
+import SignInContainer from "../containers/SignInContainer";
 import HomeLayout from "../layouts/HomeLayout";
 
 const withRoutes = (App) => (props) => {
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: <SignInLayout />
+      element: <SignInContainer />
     },
     {
       path: "/messages",
