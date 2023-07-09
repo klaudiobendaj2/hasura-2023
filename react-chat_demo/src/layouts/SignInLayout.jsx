@@ -8,19 +8,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 
-const SignInLayout = () => {
-
-    const navigate = useNavigate()
-
-
-    const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password")
-    });
-  };
+const SignInLayout = ({ handleSignIn, setCredentials, credentials, data }) => {
+  // if(data && Boolean(data.sign_in.length)) navigate()
 
   return (
     <Container component="main" maxWidth="xs">
@@ -38,33 +27,38 @@ const SignInLayout = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box sx={{ mt: 1 }}>
           <TextField
+            value={credentials.input_name}
+            onChange={(e) =>
+              setCredentials((curr) => {
+                return { ...curr, input_name: e.target.value };
+              })
+            }
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            label="User Name"
             autoFocus
           />
           <TextField
+            value={credentials.input_password}
+            onChange={(e) =>
+              setCredentials((curr) => {
+                return { ...curr, input_password: e.target.value };
+              })
+            }
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
-            id="password"
-            autoComplete="current-password"
           />
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            onClick={() => navigate('/messages')}
+            onClick={() => handleSignIn(credentials)}
           >
             Sign In
           </Button>

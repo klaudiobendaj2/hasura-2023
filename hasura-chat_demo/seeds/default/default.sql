@@ -7,7 +7,7 @@ TRUNCATE TABLE messages CASCADE;
 
 
 -- Seed data for users table
-INSERT INTO users (username, password) VALUES
+INSERT INTO users (user_name, user_password) VALUES
   ('John Doe', 'password123'),
   ('Jane Smith', 'password456');
 

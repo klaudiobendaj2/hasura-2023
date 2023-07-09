@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users  (
   id SERIAL PRIMARY KEY,
-  username VARCHAR(50) NOT NULL,
-  password VARCHAR(100) NOT NULL,
+  user_name VARCHAR(50) NOT NULL,
+  user_password VARCHAR(100) NOT NULL,
   is_typing BOOLEAN,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -16,6 +16,20 @@ CREATE TABLE IF NOT EXISTS messages (
   FOREIGN KEY (sender_id) REFERENCES users (id),
   FOREIGN KEY (receiver_id) REFERENCES users (id)
 );
+
+
+CREATE OR REPLACE FUNCTION sign_in(
+  input_name TEXT,
+  input_password TEXT
+) RETURNS SETOF users AS $$
+BEGIN
+  RETURN QUERY
+    SELECT *
+    FROM users
+    WHERE user_name = input_name AND user_password = input_password;
+END;
+$$ LANGUAGE plpgsql;
+
 
 
 
