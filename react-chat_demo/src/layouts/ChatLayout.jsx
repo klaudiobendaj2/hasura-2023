@@ -1,26 +1,23 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ChatAppBar from "../components/ChatAppBar";
 import ChatBox from "../components/ChatBox";
 import TextInput from "../components/TextInput";
 import MessagesList from "../components/MessagesList";
-import { useChatContext } from "../state/withContext";
+import { useParams } from "react-router-dom";
+import { useMemo } from "react";
 
-const ChatLayout = () => {
-  const navigate = useNavigate();
-  const { currentUserId } = useChatContext();
+const ChatLayout = ({ messages }) => {
+  const latestMessageFromSender = (id) => {
+    const clonedMessagges = [...messages];
+    return clonedMessagges.reverse().find((message) => message.sender_id == id);
+  };
 
-  useEffect(() => {
-    if (!currentUserId) return navigate("/");
-  }, []);
-
-  if (!currentUserId) return <p>Loading....</p>;
+  console.log(latestMessageFromSender);
 
   return (
     <>
-      <ChatAppBar />
+      <ChatAppBar senderData={latestMessageFromSender} />
       <ChatBox>
-        <MessagesList />
+        <MessagesList messages={messages} />
       </ChatBox>
       <TextInput />
     </>

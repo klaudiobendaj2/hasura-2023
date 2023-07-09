@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { gql, useQuery, useSubscription } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useChatContext } from "../state/withContext";
 import HomeLayout from "../layouts/HomeLayout";
@@ -33,11 +33,11 @@ const HomeContainer = () => {
     if (!currentUserId) return navigate("/");
   }, []);
 
-  useEffect(() => {
-    if (data && data.messages_with_user_data) {
-      setMessages(data.messages_with_user_data);
-    }
-  }, [loading, data]);
+  // useEffect(() => {
+  //   if (data && data.messages_with_user_data) {
+  //     setMessages(data.messages_with_user_data);
+  //   }
+  // }, [loading, data]);
 
   if (!currentUserId || loading) return <p>Loading....</p>;
 

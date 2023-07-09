@@ -6,20 +6,22 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
+import { useParams } from "react-router-dom";
 
+const ChatAppBar = ({ senderData }) => {
+  const { id } = useParams();
 
-const ChatAppBar = () => {
+  const userInfo = senderData(id);
+
+  console.log(id);
 
   return (
-    <AppBar position="static" sx={{borderRadius: '10px 10px 0 0'}}>
+    <AppBar position="static" sx={{ borderRadius: "10px 10px 0 0" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Tooltip title="Jane Smith">
+          <Tooltip title={userInfo.user_name}>
             <IconButton sx={{ p: 0, mr: 2 }}>
-              <Avatar
-                alt="Remy Sharp"
-                src="https://images.pexels.com/photos/4946515/pexels-photo-4946515.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-              />
+              <Avatar alt="Remy Sharp" src={userInfo.user_profile_picture} />
             </IconButton>
           </Tooltip>
           <Typography
@@ -29,7 +31,7 @@ const ChatAppBar = () => {
             href="/"
             sx={{
               mr: 2,
-              display:"flex",
+              display: "flex",
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none"

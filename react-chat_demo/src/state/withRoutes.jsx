@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ChatLayout from "../layouts/ChatLayout";
+import ChatContainer from "../containers/ChatContainer";
 import SignInContainer from "../containers/SignInContainer";
 import HomeContainer from "../containers/HomeContainer";
 
@@ -15,7 +15,7 @@ const withRoutes = (App) => (props) => {
     },
     {
       path: "chat/:id",
-      element: <ChatLayout />
+      element: <ChatContainer />
     }
   ]);
 
