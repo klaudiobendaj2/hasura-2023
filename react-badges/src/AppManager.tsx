@@ -1,4 +1,5 @@
 import React from "react";
+import CandidatureProposals from "./CandidatureProposals";
 
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 
@@ -10,7 +11,9 @@ const AppManager: React.FC = () => (
     routes={[
       {
         path: "dashboard",
-        element: <div>Manager</div>
+        element: (<div>
+          <CandidatureProposals />
+        </div>)
       }
     ]}
   />
