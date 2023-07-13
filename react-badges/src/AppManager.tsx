@@ -1,6 +1,7 @@
 import React from "react";
 
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
+import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
 
 const AppManager: React.FC = () => (
   <AppEntrypoint
@@ -10,7 +11,7 @@ const AppManager: React.FC = () => (
     routes={[
       {
         path: "dashboard",
-        element: <div>Manager</div>
+        element: <div><AddCandidatureProposal/></div>
       }
     ]}
   />
