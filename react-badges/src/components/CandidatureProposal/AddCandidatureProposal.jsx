@@ -18,7 +18,7 @@ const AddCandidatureProposal = () => {
   useEffect(() => {
     const fetchEngineers = async () => {
       try {
-        const { data } = await getEngineersByManager({ variables: { managerId: parseInt(managerId) } });
+        const { data } = await getEngineersByManager({ variables: { managerId: managerId } });
         setEngineers(data.get_engineers_by_manager);
       } catch (error) {
         console.error('Error fetching engineers:', error);
@@ -58,16 +58,16 @@ const AddCandidatureProposal = () => {
       console.log("proposalDesc: ", proposalDescription, typeof proposalDescription);
       
       if (badgeId && badgeVersion && selectedEngineer !== '' && managerId) {
-        // Convert badgeVersion to a string representation of timestamp without timezone
+
         const badgeVersionString = new Date(badgeVersion).toISOString();
         
         await addCandidatureProposal({
           variables: {
             badgeId: Number(badgeId),
             badgeVersion: badgeVersionString,
-            engineer: Number(selectedEngineer),
+            engineer: Number(selectedEngineer.value),
             proposalDescription,
-            createdBy: parseInt(managerId, 10)
+            createdBy: managerId
           }
         });
   

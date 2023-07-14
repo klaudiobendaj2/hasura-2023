@@ -5,6 +5,7 @@ export const GET_ENGINEERS = gql`
     get_engineers_by_manager(args: { manager_id: $managerId }) {
       name
       roles
+      id
     }
   }
 `;
