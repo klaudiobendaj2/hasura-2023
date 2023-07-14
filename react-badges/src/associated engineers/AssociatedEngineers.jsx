@@ -43,7 +43,7 @@ const AssociatedEngineers = () => {
         <TableRow>
           <TableCell>Name</TableCell>
           <TableCell>Roles</TableCell>
-          <TableCell>Action</TableCell>
+          <TableCell>Add Proposal</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

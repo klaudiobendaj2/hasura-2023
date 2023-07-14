@@ -4,19 +4,25 @@ import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
 import CandidatureProposals from "./CandidatureProposals";
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 const managerMenuItems = [
   {
     link: "managers/badges",
-    text: "Badges"
+    text: "Badges",
+    icon: <MilitaryTechIcon/>
   },
   {
     link: "managers/AssociatedEngineers",
-    text: "Team Members"
+    text: "Team Members",
+    icon: <GroupWorkIcon/>
   },
   {
     link: "managers/CandidatureProposals",
-    text: "Candidature Proposals"
+    text: "Candidature Proposals",
+    icon: <PostAddIcon/>
   }
 ];
 
