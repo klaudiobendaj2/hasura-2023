@@ -1,81 +1,102 @@
-import React, { useEffect } from "react";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import React, { useState, useContext } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { AuthContext } from "./state/with-auth";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Button } from "@mui/material";
 
-const GET_CANDIDATURE_PROPOSALS = gql`
-  query {
-    manager_to_engineer_badge_candidature_proposals {
-      badge_version
-      created_by
-      created_at
-      engineer
+const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
+  query MyQuery {
+    engineer_to_manager_badge_candidature_proposals {
       id
+      created_by
+      badge_version
+      manager
       proposal_description
-      engineer_badge_candidature_proposal_responses {
-        disapproval_motivation
-        is_approved
+      badges_version {
+        title
+      }
+      user {
+        name
+      }
+      userByManager {
+        name
       }
     }
   }
 `;
 
 const CandidatureProposals = () => {
-  const { loading, error, data } = useQuery(GET_CANDIDATURE_PROPOSALS);
-  useEffect(() => {
-    // if(data){
-    console.log(data);
-    // }
-  }, [data]);
+  const { managerId } = useContext(AuthContext);
+  const { loading, error, data } = useQuery(
+    GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS
+  );
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error</div>;
+    return <div>Error...{error}</div>;
   }
-
-  const candidatures = data.manager_to_engineer_badge_candidature_proposals;
-  console.log(candidatures);
+  console.log(data);
+  const candidatures = data.engineer_to_manager_badge_candidature_proposals;
+  console.log(data.engineer_to_manager_badge_candidature_proposals);
 
   return (
-    <>
-      <table style={{ border: "1px solid red" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid red" }}>Badge Version</th>
-            <th style={{ border: "1px solid red" }}>Engineer</th>
-            <th style={{ border: "1px solid red" }}>Proposal Description</th>
-            <th style={{ border: "1px solid red" }}>Created By</th>
-            <th style={{ border: "1px solid red" }}>Disaproval Motivation</th>
-            <th style={{ border: "1px solid red" }}>Is Approved</th>
-          </tr>
-        </thead>
-        <tbody>
-          {candidatures.map((item) => (
-            <tr key={item.id}>
-              <td style={{ border: "1px solid red" }}>{item.badge_version}</td>
-              <td style={{ border: "1px solid red" }}>{item.engineer}</td>
-              <td style={{ border: "1px solid red" }}>
-                {item.proposal_description}
-              </td>
-              <td style={{ border: "1px solid red" }}>{item.created_by}</td>
-              {item.engineer_badge_candidature_proposal_responses.map(
-                (item, index) => (
-                  <React.Fragment key={index}>
-                    <td style={{ border: "1px solid red" }}>
-                      {item.disapproval_motivation ? "Yes" : "No"}
-                    </td>
-                    <td style={{ border: "1px solid red" }}>
-                      {item.is_approved ? "Yes" : "No"}
-                    </td>
-                  </React.Fragment>
-                )
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Engineer who applied</TableCell>
+            <TableCell align="right">Badge Version</TableCell>
+            <TableCell align="right">Badge Title</TableCell>
+            <TableCell align="right">Proposal Description</TableCell>
+            <TableCell align="right">Manager</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {candidatures.map(
+            (item) =>
+              item.manager === parseInt(managerId) && (
+                <TableRow
+                  key={item.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {item.user.name}
+                  </TableCell>
+                  <TableCell align="right">{item.badge_version}</TableCell>
+                  <TableCell align="right">
+                    {item.badges_version.title}
+                  </TableCell>
+                  <TableCell align="right">
+                    {item.proposal_description}
+                  </TableCell>
+                  <TableCell align="right">{item.userByManager.name}</TableCell>
+                  {/* {item.engineer_badge_candidature_proposal_responses.map(
+                    (item) => (
+                      <React.Fragment key={item.response_id}>
+                        <TableCell align="right">
+                          {item.is_approved ? "Yes" : "No"}
+                        </TableCell>
+                        <TableCell align="right">
+                          {item.disapproval_motivation ? "Yes" : "No"}
+                        </TableCell>
+                      </React.Fragment>
+                    )
+                  )} */}
+                </TableRow>
+              )
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
