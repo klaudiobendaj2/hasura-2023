@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useContext } from "react";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "./state/with-auth";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -31,11 +31,41 @@ const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
   }
 `;
 
+const UPDATE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
+  mutation managerProposalResponse(
+    $response_id: Int!
+    $is_approved: Boolean!
+    $dissaproval_motivation: String!
+    $proposal_id: Int!
+  ) {
+    update_manager_badge_candidature_proposal_response(
+      where: { response_id: { _eq: $response_id } }
+      _set: {
+        is_approved: $is_approved
+        disapproval_motivation: $dissaproval_motivation
+      }
+    ) {
+      returning {
+        is_approved
+        disapproval_motivation
+        proposal_id
+        response_id
+        created_by
+        created_at
+      }
+    }
+  }
+`;
+
 const CandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
   const { loading, error, data } = useQuery(
     GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS
   );
+
+  const [updateResponse, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(UPDATE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
+  console.log(data2);
 
   if (loading) {
     return <div>Loading...</div>;

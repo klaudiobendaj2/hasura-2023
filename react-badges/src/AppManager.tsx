@@ -15,7 +15,7 @@ const managerMenuItems = [
   },
   {
     link: "managers/CandidatureProposals",
-    text: "Badges Definitions"
+    text: "Candidature Proposals"
   }
 ];
 
