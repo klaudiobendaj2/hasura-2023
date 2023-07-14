@@ -33,7 +33,6 @@ const withAuth = (Component) => (props) => {
 
     setHasura(_hasura);
     setRoles(_roles);
-    setManagerId(_hasura["x-hasura-tenant-id"]);
 
     // Apply the role from localStorage with a default on the JWT contents:
     const _role = localStorage.getItem("hasura-role");
