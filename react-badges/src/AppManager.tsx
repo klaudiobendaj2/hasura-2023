@@ -6,25 +6,20 @@ import { DrawerMenu } from "./layouts/BasicLayout";
 
 const managerMenuItems = [
   {
-    link: "managers",
-    text: "Badges",
-  
+    link: "managers/badges",
+    text: "Badges"
   },
   {
     link: "managers/AssociatedEngineers",
-    text: "Team Members",
-    
+    text: "Team Members"
   },
   {
-    link: "",
-    text: "Badges Definitions",
-
+    link: "managers/CandidatureProposals",
+    text: "Badges Definitions"
   }
 ];
 
 const AppManager: React.FC = () => (
-
-
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
@@ -33,16 +28,34 @@ const AppManager: React.FC = () => (
     mobileUtils={managerMenuItems}
     routes={[
       {
+        path: "managers/badges",
+        element: (
+          <div>
+            {/* <CandidatureProposals /> */}
+            {/* <AssociatedEngineers/> */}
+          </div>
+        )
+      },
+      {
         path: "managers/AssociatedEngineers",
-        element: (<div>
-          <CandidatureProposals />
-          <AssociatedEngineers/>
-        </div>)
+        element: (
+          <div>
+            {/* <CandidatureProposals /> */}
+            <AssociatedEngineers />
+          </div>
+        )
+      },
+      {
+        path: "managers/CandidatureProposals",
+        element: (
+          <div>
+            <CandidatureProposals />
+            {/* <AssociatedEngineers /> */}
+          </div>
+        )
       }
     ]}
   />
-  );
+);
 
 export default AppManager;
-
-

@@ -58,6 +58,7 @@ const CandidatureProposals = () => {
             <TableCell align="right">Badge Title</TableCell>
             <TableCell align="right">Proposal Description</TableCell>
             <TableCell align="right">Manager</TableCell>
+            <TableCell align="right">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -79,18 +80,14 @@ const CandidatureProposals = () => {
                     {item.proposal_description}
                   </TableCell>
                   <TableCell align="right">{item.userByManager.name}</TableCell>
-                  {/* {item.engineer_badge_candidature_proposal_responses.map(
-                    (item) => (
-                      <React.Fragment key={item.response_id}>
-                        <TableCell align="right">
-                          {item.is_approved ? "Yes" : "No"}
-                        </TableCell>
-                        <TableCell align="right">
-                          {item.disapproval_motivation ? "Yes" : "No"}
-                        </TableCell>
-                      </React.Fragment>
-                    )
-                  )} */}
+                  <TableCell align="right">
+                    <Button variant="contained" color="success">
+                      Approve
+                    </Button>
+                    <Button variant="contained" color="error">
+                      Reject
+                    </Button>
+                  </TableCell>
                 </TableRow>
               )
           )}
