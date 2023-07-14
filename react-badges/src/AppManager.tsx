@@ -2,7 +2,7 @@ import React from "react";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-// import AvailableBadges from "./Managers/AvailableBadges";
+import AvailableBadges from "./Managers/AvailableBadges";
 import CandidatureProposals from "./CandidatureProposals";
 
 const managerMenuItems = [
@@ -36,14 +36,14 @@ const AppManager: React.FC = () => (
           </div>
         )
       },
-      // {
-      //   path: "managers/badges",
-      //   element: (
-      //     <div>
-      //       <AvailableBadges/>
-      //     </div>
-      //   )
-      // },
+      {
+        path: "managers/badges",
+        element: (
+          <div>
+            <AvailableBadges/>
+          </div>
+        )
+      },
       {
         path: "managers/CandidatureProposals",
         element: (
