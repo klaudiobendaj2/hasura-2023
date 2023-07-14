@@ -1,8 +1,8 @@
 import React from "react";
+import CandidatureProposals from "./CandidatureProposals";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-
 
 const managerMenuItems = [
   {
@@ -34,7 +34,10 @@ const AppManager: React.FC = () => (
     routes={[
       {
         path: "managers/AssociatedEngineers",
-        element: <div><AssociatedEngineers/></div>
+        element: (<div>
+          <CandidatureProposals />
+          <AssociatedEngineers/>
+        </div>)
       }
     ]}
   />

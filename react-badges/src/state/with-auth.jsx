@@ -20,7 +20,6 @@ const withAuth = (Component) => (props) => {
   const [role, setRole] = useState(null);
   const [roles, setRoles] = useState(null);
   const [managerId,setManagerId] = useState(null);
-
   const applyToken = (_token) => {
     // Read the token:
     const _payload = jwtDecode(_token);
@@ -34,6 +33,7 @@ const withAuth = (Component) => (props) => {
 
     setHasura(_hasura);
     setRoles(_roles);
+    setManagerId(_hasura["x-hasura-tenant-id"]);
 
     // Apply the role from localStorage with a default on the JWT contents:
     const _role = localStorage.getItem("hasura-role");
@@ -108,7 +108,6 @@ const withAuth = (Component) => (props) => {
         logout,
         switchRole,
         managerId
-      
       }}
     >
       <Component {...props} />
