@@ -2,34 +2,25 @@ import React from "react";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-
+// import AvailableBadges from "./Managers/AvailableBadges";
+import CandidatureProposals from "./CandidatureProposals";
 
 const managerMenuItems = [
   {
-    link: "managers/Badges",
-    text: "Badges",
-  
+    link: "managers/badges",
+    text: "Badges"
   },
   {
     link: "managers/AssociatedEngineers",
-    text: "Team Members",
-    
+    text: "Team Members"
   },
   {
-    link: "manager/AddProposal",
-    text: "Add Proposal",
-
-  },
-  {
-    link: "manager/ProposalCandidature",
-    text: "Proposal Candidature",
-
-  },
+    link: "managers/CandidatureProposals",
+    text: "Candidature Proposals"
+  }
 ];
 
 const AppManager: React.FC = () => (
-
-
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
@@ -38,23 +29,32 @@ const AppManager: React.FC = () => (
     mobileUtils={managerMenuItems}
     routes={[
       {
-        path: "managers/Badges",
-        element: <div>a</div>
-      },
-      {
         path: "managers/AssociatedEngineers",
-        element: <div><AssociatedEngineers/></div>
+        element: (
+          <div>
+            <AssociatedEngineers />
+          </div>
+        )
       },
+      // {
+      //   path: "managers/badges",
+      //   element: (
+      //     <div>
+      //       <AvailableBadges/>
+      //     </div>
+      //   )
+      // },
       {
-        path: "manager/AddProposal",
-        element: <div>b</div>
-      },
-      {
-        path: "manager/ProposalCandidature",
-        element: <div>c</div>
+        path: "managers/CandidatureProposals",
+        element: (
+          <div>
+            <CandidatureProposals/>
+          </div>
+        )
       }
     ]}
+    
   />
-  );
+);
 
 export default AppManager;
