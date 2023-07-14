@@ -1,6 +1,9 @@
-import React,{useContext} from 'react';
+import React,{useContext, useEffect} from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { AuthContext } from '../state/with-auth';
+import { Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import ProposalButton from './ProposalButton';
+
 
 
 const GET_ENGINEERS = gql`
@@ -8,20 +11,24 @@ const GET_ENGINEERS = gql`
     get_engineers_by_manager(args: { manager_id: $managerId }) {
       name
       roles
+      id
     }
   }
 `;
 
+
 const AssociatedEngineers = () => {
     const {managerId}=useContext(AuthContext)
-    console.log("magerid",managerId)
+    console.log("managerid",typeof managerId);
   const [getEngineersByManager, {  loading, error, data }] = useMutation(GET_ENGINEERS, {
-    variables: { managerId },
+    variables: { managerId},
   });
 
+  const handleProposalClick=(engineerId)=>{
+    console.log("proposal corresponding for engineer with id: ",engineerId)
+  }
 
-
-  React.useEffect(() => {
+  useEffect(() => {
     getEngineersByManager();
   }, [getEngineersByManager]);
 
@@ -30,17 +37,32 @@ const AssociatedEngineers = () => {
 
   return (
     <div>
-      <h1>List of Engineers</h1>
-      <ul>
-        {data && data.get_engineers_by_manager.map((engineer) => (
-          <li key={engineer.name}>
-            <strong>Name:</strong> {engineer.name}
-            <br />
-            <strong>Roles:</strong> {engineer.roles}
-          </li>
+    <h1 style={{ textAlign: 'center' }}>List of Engineers</h1>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>Roles</TableCell>
+          <TableCell>Action</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data && data.get_engineers_by_manager.map((engineer)=> (
+          
+          <TableRow key={engineer.id}>
+            <TableCell>{engineer.name}</TableCell>
+            <TableCell>{engineer.roles.join('/')}</TableCell>
+
+            <TableCell>
+              <ProposalButton onClick={()=>handleProposalClick(engineer.id)} id={engineer.id}/>
+            </TableCell>
+          </TableRow>
         ))}
-      </ul>
-    </div>
+      </TableBody>
+    </Table>
+  </div>
+
+
   );
 };
 
