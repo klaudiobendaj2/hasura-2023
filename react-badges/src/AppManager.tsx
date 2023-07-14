@@ -6,7 +6,7 @@ import { DrawerMenu } from "./layouts/BasicLayout";
 
 const managerMenuItems = [
   {
-    link: "managers",
+    link: "managers/Badges",
     text: "Badges",
   
   },
@@ -16,10 +16,15 @@ const managerMenuItems = [
     
   },
   {
-    link: "",
-    text: "Badges Definitions",
+    link: "manager/AddProposal",
+    text: "Add Proposal",
 
-  }
+  },
+  {
+    link: "manager/ProposalCandidature",
+    text: "Proposal Candidature",
+
+  },
 ];
 
 const AppManager: React.FC = () => (
@@ -33,8 +38,20 @@ const AppManager: React.FC = () => (
     mobileUtils={managerMenuItems}
     routes={[
       {
+        path: "managers/Badges",
+        element: <div>a</div>
+      },
+      {
         path: "managers/AssociatedEngineers",
         element: <div><AssociatedEngineers/></div>
+      },
+      {
+        path: "manager/AddProposal",
+        element: <div>b</div>
+      },
+      {
+        path: "manager/ProposalCandidature",
+        element: <div>c</div>
       }
     ]}
   />

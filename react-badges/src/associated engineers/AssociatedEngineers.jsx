@@ -25,7 +25,7 @@ const AssociatedEngineers = () => {
   });
 
   const handleProposalClick=(engineerId)=>{
-    console.log("proposal corresponding for engineer with id: ",engineerId)
+    console.log("proposal corresponding for engineer with id: ", engineerId)
   }
 
   useEffect(() => {
