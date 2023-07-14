@@ -20,7 +20,6 @@ const withAuth = (Component) => (props) => {
   const [role, setRole] = useState(null);
   const [roles, setRoles] = useState(null);
   const [managerId,setManagerId] = useState(null);
-
   const applyToken = (_token) => {
     // Read the token:
     const _payload = jwtDecode(_token);
@@ -29,9 +28,6 @@ const withAuth = (Component) => (props) => {
     const _roles = _hasura["x-hasura-allowed-roles"];
     setManagerId(parseInt(_hasura["x-hasura-tenant-id"]));
     console.log("x-hasura-tenant-id:", _hasura["x-hasura-tenant-id"]);
-
-    // const managerId=_hasura["x-hasura-tenant-id"];
-
     setHasura(_hasura);
     setRoles(_roles);
 
@@ -108,7 +104,6 @@ const withAuth = (Component) => (props) => {
         logout,
         switchRole,
         managerId
-      
       }}
     >
       <Component {...props} />

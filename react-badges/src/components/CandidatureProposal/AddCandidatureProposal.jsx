@@ -1,40 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { AuthContext } from '../../state/with-auth';
-import { GET_ENGINEERS } from './mutations';
 import { GET_BADGES_VERSIONS } from './queries';
 import { INSERT_CANDIDATURE_PROPOSAL } from './mutations';
-
-const AddCandidatureProposal = () => {
+import { useNavigate } from 'react-router-dom';
+const AddCandidatureProposal = ({ selectedEngineer }) => {
   const { managerId } = useContext(AuthContext);
-  const [engineers, setEngineers] = useState([]);
-  const [selectedEngineer, setSelectedEngineer] = useState('');
   const [selectedBadgeVersion, setSelectedBadgeVersion] = useState('');
   const [proposalDescription, setProposalDescription] = useState('');
-  const [getEngineersByManager, { loading: engineersLoading, error: engineersError }] = useMutation(GET_ENGINEERS);
   const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
   const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
-
-  useEffect(() => {
-    const fetchEngineers = async () => {
-      try {
-        const { data } = await getEngineersByManager({ variables: { managerId: managerId } });
-        setEngineers(data.get_engineers_by_manager);
-      } catch (error) {
-        console.error('Error fetching engineers:', error);
-      }
-    };
-
-    if (managerId) {
-      console.log('managerid: ', typeof managerId);
-      fetchEngineers();
-    }
-  }, [managerId, getEngineersByManager]);
-
-  const handleEngineerSelection = (event) => {
-    setSelectedEngineer(event.target.value);
-  };
-
+  const  navigate = useNavigate();
   const handleBadgeVersionSelection = (event) => {
     setSelectedBadgeVersion(event.target.value);
   };
@@ -45,37 +21,34 @@ const AddCandidatureProposal = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
-      const selectedBadge = versionsData?.badges_versions_last.find(version => String(version.id) === selectedBadgeVersion);
+      const selectedBadge = versionsData?.badges_versions_last.find((version) => String(version.id) === selectedBadgeVersion);
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
-  
-      console.log("badge version:", badgeVersion, typeof badgeVersion);
-      console.log("badgeId: ", badgeId, typeof badgeId);
-      console.log("managerID: ", managerId, typeof managerId);
-      console.log("selectedEngineer:", selectedEngineer, typeof selectedEngineer);
-      console.log("proposalDesc: ", proposalDescription, typeof proposalDescription);
-      
-      if (badgeId && badgeVersion && selectedEngineer !== '' && managerId) {
 
-        const badgeVersionString = new Date(badgeVersion).toISOString();
-        
+      console.log('badge version:', badgeVersion, typeof badgeVersion);
+      console.log('badgeId: ', badgeId, typeof badgeId);
+      console.log('managerID: ', managerId, typeof managerId);
+      console.log('selectedEngineer:', selectedEngineer, typeof selectedEngineer);
+      console.log('proposalDesc: ', proposalDescription, typeof proposalDescription);
+
+      if (badgeId && badgeVersion && selectedEngineer !== '' && managerId) {
         await addCandidatureProposal({
           variables: {
             badgeId: Number(badgeId),
-            badgeVersion: badgeVersionString,
-            engineer: Number(selectedEngineer.value),
+            badgeVersion: badgeVersion,
+            engineer: parseInt(selectedEngineer),
             proposalDescription,
-            createdBy: managerId
-          }
+            createdBy: managerId,
+          },
         });
-  
-        setSelectedEngineer('');
+
         setSelectedBadgeVersion('');
         setProposalDescription('');
-  
+
         console.log('Candidature proposal added successfully!');
+        navigate('/managers/CandidatureProposals');
       } else {
         console.error('Failed to retrieve badge ID or badge version for the selected version.');
       }
@@ -83,33 +56,25 @@ const AddCandidatureProposal = () => {
       console.error('Error adding candidature proposal:', error);
     }
   };
-  
 
   if (!managerId) {
     return <p>Manager ID not available.</p>;
   }
 
-  if (engineersLoading || versionsLoading || addLoading) {
+  if (versionsLoading || addLoading) {
     return <p>Loading...</p>;
   }
 
-  if (engineersError || versionsError || addError) {
-    return <p>Error: {engineersError?.message || versionsError?.message || addError?.message}</p>;
+  if (versionsError || addError) {
+    return <p>Error: {versionsError?.message || addError?.message}</p>;
   }
 
   return (
     <div>
       <h1>Add Candidature Proposal</h1>
       <form onSubmit={handleFormSubmit}>
-        <label htmlFor="engineer">Select an Engineer:</label>
-        <select id="engineer" value={selectedEngineer} onChange={handleEngineerSelection}>
-          <option value="">None</option>
-          {engineers.map((engineer) => (
-            <option key={engineer.name} value={engineer.id}>
-              {engineer.name}
-            </option>
-          ))}
-        </select>
+        <label htmlFor="engineer">Engineer ID:</label>
+        <input id="engineer" type="text" value={selectedEngineer} disabled />
 
         <label htmlFor="badgeVersion">Select a Badge Version:</label>
         <select id="badgeVersion" value={selectedBadgeVersion} onChange={handleBadgeVersionSelection}>
@@ -122,11 +87,7 @@ const AddCandidatureProposal = () => {
         </select>
 
         <label htmlFor="proposalDescription">Proposal Description:</label>
-        <textarea
-          id="proposalDescription"
-          value={proposalDescription}
-          onChange={handleProposalDescriptionChange}
-        />
+        <textarea id="proposalDescription" value={proposalDescription} onChange={handleProposalDescriptionChange} />
 
         <button type="submit">Submit</button>
       </form>
