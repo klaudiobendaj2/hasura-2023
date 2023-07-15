@@ -1,16 +1,35 @@
-import React, { useContext, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { AuthContext } from '../../state/with-auth';
-import { GET_BADGES_VERSIONS } from './queries';
-import { INSERT_CANDIDATURE_PROPOSAL } from './mutations';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { AuthContext } from "../../state/with-auth";
+import { GET_BADGES_VERSIONS } from "./queries";
+import { INSERT_CANDIDATURE_PROPOSAL } from "./mutations";
+import { useNavigate } from "react-router-dom";
+import {
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputLabel,
+  Grid
+} from "@mui/material";
+
 const AddCandidatureProposal = ({ selectedEngineer }) => {
   const { managerId } = useContext(AuthContext);
-  const [selectedBadgeVersion, setSelectedBadgeVersion] = useState('');
-  const [proposalDescription, setProposalDescription] = useState('');
-  const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
-  const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
-  const  navigate = useNavigate();
+  const [selectedBadgeVersion, setSelectedBadgeVersion] = useState("");
+  const [proposalDescription, setProposalDescription] = useState("");
+  const {
+    loading: versionsLoading,
+    error: versionsError,
+    data: versionsData
+  } = useQuery(GET_BADGES_VERSIONS);
+  const [addCandidatureProposal, { loading: addLoading, error: addError }] =
+    useMutation(INSERT_CANDIDATURE_PROPOSAL);
+  const navigate = useNavigate();
+
   const handleBadgeVersionSelection = (event) => {
     setSelectedBadgeVersion(event.target.value);
   };
@@ -23,75 +42,124 @@ const AddCandidatureProposal = ({ selectedEngineer }) => {
     event.preventDefault();
 
     try {
-      const selectedBadge = versionsData?.badges_versions_last.find((version) => String(version.id) === selectedBadgeVersion);
+      const selectedBadge = versionsData?.badges_versions_last.find(
+        (version) => version.id === parseInt(selectedBadgeVersion)
+      );
+
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
 
-      console.log('badge version:', badgeVersion, typeof badgeVersion);
-      console.log('badgeId: ', badgeId, typeof badgeId);
-      console.log('managerID: ', managerId, typeof managerId);
-      console.log('selectedEngineer:', selectedEngineer, typeof selectedEngineer);
-      console.log('proposalDesc: ', proposalDescription, typeof proposalDescription);
-
-      if (badgeId && badgeVersion && selectedEngineer !== '' && managerId) {
+      if (badgeId && badgeVersion && selectedEngineer !== "" && managerId) {
         await addCandidatureProposal({
           variables: {
             badgeId: Number(badgeId),
             badgeVersion: badgeVersion,
-            engineer: parseInt(selectedEngineer),
+            engineer: parseInt(selectedEngineer.id),
             proposalDescription,
-            createdBy: managerId,
-          },
+            createdBy: managerId
+          }
         });
 
-        setSelectedBadgeVersion('');
-        setProposalDescription('');
+        setSelectedBadgeVersion("");
+        setProposalDescription("");
 
-        console.log('Candidature proposal added successfully!');
-        navigate('/managers/CandidatureProposals');
+        console.log("Candidature proposal added successfully!");
+        console.log("Data:", {
+          badgeId: Number(badgeId),
+          badgeVersion: badgeVersion,
+          engineer: parseInt(selectedEngineer.id),
+          proposalDescription,
+          createdBy: managerId
+        });
+        navigate("/managers/CandidatureProposals");
       } else {
-        console.error('Failed to retrieve badge ID or badge version for the selected version.');
+        console.error(
+          "Failed to retrieve badge ID or badge version for the selected version."
+        );
       }
     } catch (error) {
-      console.error('Error adding candidature proposal:', error);
+      console.error("Error adding candidature proposal:", error);
     }
   };
 
   if (!managerId) {
-    return <p>Manager ID not available.</p>;
+    return <Typography variant="body1">Manager ID not available.</Typography>;
   }
 
   if (versionsLoading || addLoading) {
-    return <p>Loading...</p>;
+    return <CircularProgress />;
   }
 
   if (versionsError || addError) {
-    return <p>Error: {versionsError?.message || addError?.message}</p>;
+    return (
+      <Typography variant="body1">
+        Error: {versionsError?.message || addError?.message}
+      </Typography>
+    );
   }
 
   return (
-    <div>
-      <h1>Add Candidature Proposal</h1>
+    <Container component="main" maxWidth="xs">
+      <Typography
+        component="h1"
+        variant="h5"
+        style={{ marginBottom: "16px", textAlign: "center" }}
+      >
+        Add Candidature Proposal
+      </Typography>
       <form onSubmit={handleFormSubmit}>
-        <label htmlFor="engineer">Engineer ID:</label>
-        <input id="engineer" type="text" value={selectedEngineer} disabled />
-
-        <label htmlFor="badgeVersion">Select a Badge Version:</label>
-        <select id="badgeVersion" value={selectedBadgeVersion} onChange={handleBadgeVersionSelection}>
-          <option value="">None</option>
-          {versionsData?.badges_versions_last.map((version) => (
-            <option key={version.id} value={version.id}>
-              {version.title}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="proposalDescription">Proposal Description:</label>
-        <textarea id="proposalDescription" value={proposalDescription} onChange={handleProposalDescriptionChange} />
-
-        <button type="submit">Submit</button>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              id="engineer"
+              label="Engineer Name"
+              variant="outlined"
+              fullWidth
+              value={selectedEngineer ? selectedEngineer.name : ""}
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="badgeVersion-label">
+                Select a Badge Version
+              </InputLabel>
+              <Select
+                id="badgeVersion"
+                labelId="badgeVersion-label"
+                value={selectedBadgeVersion}
+                onChange={handleBadgeVersionSelection}
+                label="Select a Badge Version"
+              >
+                <MenuItem value="">None</MenuItem>
+                {versionsData?.badges_versions_last.map((version) => (
+                  <MenuItem key={version.id} value={version.id}>
+                    {version.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="proposalDescription"
+              label="Proposal Description"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              value={proposalDescription}
+              onChange={handleProposalDescriptionChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Submit
+            </Button>
+          </Grid>
+        </Grid>
       </form>
-    </div>
+    </Container>
   );
 };
 

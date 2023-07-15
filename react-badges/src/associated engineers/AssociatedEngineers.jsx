@@ -27,10 +27,11 @@ const AssociatedEngineers = () => {
     getEngineersByManager();
   }, [getEngineersByManager]);
 
-  const handleProposalClick = (engineerId) => {
+  const handleProposalClick = (engineerId, engineerName) => {
     console.log('proposal corresponding for engineer with id: ', engineerId);
-    setSelectedEngineer(engineerId);
+    setSelectedEngineer({ id: engineerId, name: engineerName });
   };
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -57,7 +58,7 @@ const AssociatedEngineers = () => {
                 <TableCell>{engineer.name}</TableCell>
                 <TableCell>{engineer.roles.join('/')}</TableCell>
                 <TableCell>
-                  <ProposalButton onClick={() => handleProposalClick(engineer.id)} id={engineer.id} />
+                  <ProposalButton onClick={() => handleProposalClick(engineer.id,engineer.name)} id={engineer.id} />
                 </TableCell>
               </TableRow>
             ))}
