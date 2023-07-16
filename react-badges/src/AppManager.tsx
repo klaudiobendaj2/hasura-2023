@@ -4,6 +4,7 @@ import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
 import CandidatureProposals from "./CandidatureProposals";
+import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 
 const managerMenuItems = [
   {
@@ -17,6 +18,10 @@ const managerMenuItems = [
   {
     link: "managers/CandidatureProposals",
     text: "Candidature Proposals"
+  },
+  {
+    link: "managers/ApprovalRejectionIssues",
+    text: "Approval Rejection Issues"
   }
 ];
 
@@ -24,7 +29,7 @@ const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
-    defaultRoute="managers"
+    defaultRoute="managers/badges"
     drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
     mobileUtils={managerMenuItems}
     routes={[
@@ -32,8 +37,7 @@ const AppManager: React.FC = () => (
         path: "managers/badges",
         element: (
           <div>
-            {/* <CandidatureProposals /> */}
-            {/* <AssociatedEngineers/> */}
+            <AvailableBadges />
           </div>
         )
       },
@@ -58,6 +62,14 @@ const AppManager: React.FC = () => (
         element: (
           <div>
             <CandidatureProposals />
+          </div>
+        )
+      },
+      {
+        path: "managers/ApprovalRejectionIssues",
+        element: (
+          <div>
+            <ApprovalRejectionIssues />
           </div>
         )
       }

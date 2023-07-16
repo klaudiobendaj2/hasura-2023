@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "./state/with-auth";
 import Table from "@mui/material/Table";
@@ -9,6 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+import TextArea from "./UI/TextArea";
 
 const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
   query MyQuery {
@@ -27,22 +33,24 @@ const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
       userByManager {
         name
       }
+      manager_badge_candidature_proposal_responses {
+        response_id
+      }
     }
   }
 `;
 
-const UPDATE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
+const APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
   mutation managerProposalResponse(
-    $response_id: Int!
     $is_approved: Boolean!
-    $dissaproval_motivation: String!
+    $disapproval_motivation: String!
     $proposal_id: Int!
   ) {
     update_manager_badge_candidature_proposal_response(
-      where: { response_id: { _eq: $response_id } }
+      where: { proposal_id: { _eq: $proposal_id } }
       _set: {
         is_approved: $is_approved
-        disapproval_motivation: $dissaproval_motivation
+        disapproval_motivation: $disapproval_motivation
       }
     ) {
       returning {
@@ -57,15 +65,86 @@ const UPDATE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
   }
 `;
 
+const DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
+  mutation managerProposalResponse(
+    $is_approved: Boolean!
+    $disapproval_motivation: String!
+    $proposal_id: Int!
+  ) {
+    update_manager_badge_candidature_proposal_response(
+      where: { proposal_id: { _eq: $proposal_id } }
+      _set: {
+        is_approved: $is_approved
+        disapproval_motivation: $disapproval_motivation
+      }
+    ) {
+      returning {
+        is_approved
+        disapproval_motivation
+        proposal_id
+        response_id
+        created_by
+        created_at
+      }
+    }
+  }
+`;
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4
+};
+
 const CandidatureProposals = () => {
+  const [open, setOpen] = useState(false);
+  const [textAreaValue, setTextAreaValue] = useState("");
+  console.log(textAreaValue);
   const { managerId } = useContext(AuthContext);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const { loading, error, data } = useQuery(
     GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS
   );
 
-  const [updateResponse, { data: data2, loading: loading2, error: error2 }] =
-    useMutation(UPDATE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
-  console.log(data2);
+  const [approveResponse, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
+
+  const [disapproveResponse] = useMutation(
+    DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER
+  );
+
+  const onApproveClick = (proposalId) => {
+    approveResponse({
+      variables: {
+        proposal_id: proposalId,
+        is_approved: true,
+        disapproval_motivation: "---"
+      }
+    });
+    setTextAreaValue("");
+  };
+
+  const onDisapproveClick = (proposalId) => {
+    disapproveResponse({
+      variables: {
+        proposal_id: proposalId,
+        is_approved: false,
+        disapproval_motivation: textAreaValue
+      }
+    });
+  };
+
+  const getTextAreaValue = (item) => {
+    setTextAreaValue(item);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -74,9 +153,8 @@ const CandidatureProposals = () => {
   if (error) {
     return <div>Error...{error}</div>;
   }
-  console.log(data);
+
   const candidatures = data.engineer_to_manager_badge_candidature_proposals;
-  console.log(data.engineer_to_manager_badge_candidature_proposals);
 
   return (
     <TableContainer component={Paper}>
@@ -111,13 +189,62 @@ const CandidatureProposals = () => {
                   </TableCell>
                   <TableCell align="right">{item.userByManager.name}</TableCell>
                   <TableCell align="right">
-                    <Button variant="contained" color="success">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => onApproveClick(item.id)}
+                    >
                       Approve
                     </Button>
-                    <Button variant="contained" color="error">
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleOpen}
+                    >
                       Reject
                     </Button>
                   </TableCell>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    slots={{ backdrop: Backdrop }}
+                    slotProps={{
+                      backdrop: {
+                        timeout: 500
+                      }
+                    }}
+                  >
+                    <Fade in={open}>
+                      <Box sx={style}>
+                        <Typography
+                          id="transition-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          Add a disapproval motivation
+                        </Typography>
+                        <Typography
+                          id="transition-modal-description"
+                          sx={{ mt: 2 }}
+                        >
+                          <TextArea
+                            getTextArea={getTextAreaValue}
+                            textAreaValue={textAreaValue}
+                          />
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => onDisapproveClick(item.id)}
+                        >
+                          Submit
+                        </Button>
+                      </Box>
+                    </Fade>
+                  </Modal>
                 </TableRow>
               )
           )}
