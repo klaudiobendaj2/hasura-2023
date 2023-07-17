@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "./state/with-auth";
 import Table from "@mui/material/Table";
@@ -117,7 +117,7 @@ const CandidatureProposals = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { loading, error, data } = useQuery(
+  const { loading, error, data, refetch } = useQuery(
     GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
     {
       variables: {
@@ -125,6 +125,10 @@ const CandidatureProposals = () => {
       }
     }
   );
+
+  useEffect(() => {
+    refetch({ isApproved: isApprovedFilter });
+  }, [isApprovedFilter]);
 
   const [approveResponse, { data: data2, loading: loading2, error: error2 }] =
     useMutation(APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
