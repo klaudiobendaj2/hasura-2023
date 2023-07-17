@@ -33,6 +33,7 @@ const managerMenuItems = [
   }
 ];
 
+
 const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
@@ -79,3 +80,4 @@ const AppManager: React.FC = () => (
 );
 
 export default AppManager;
+
