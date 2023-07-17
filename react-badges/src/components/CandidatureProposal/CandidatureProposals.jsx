@@ -142,7 +142,7 @@ const CandidatureProposals = () => {
       variables: {
         proposal_id: proposalId,
         is_approved: true,
-        disapproval_motivation: "---"
+        disapproval_motivation: null
       }
     });
     setTextAreaValue("");
