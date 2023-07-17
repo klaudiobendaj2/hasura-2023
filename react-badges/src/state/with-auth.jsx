@@ -26,14 +26,10 @@ const withAuth = (Component) => (props) => {
     console.log(_payload);
     const _hasura = _payload["https://hasura.io/jwt/claims"];
     const _roles = _hasura["x-hasura-allowed-roles"];
-    setManagerId(parseInt(_hasura["x-hasura-tenant-id"]))
+    setManagerId(parseInt(_hasura["x-hasura-tenant-id"]));
     console.log("x-hasura-tenant-id:", _hasura["x-hasura-tenant-id"]);
-
-    // const managerId=_hasura["x-hasura-tenant-id"];
-
     setHasura(_hasura);
     setRoles(_roles);
-    setManagerId(_hasura["x-hasura-tenant-id"]);
 
     // Apply the role from localStorage with a default on the JWT contents:
     const _role = localStorage.getItem("hasura-role");

@@ -3,7 +3,7 @@ import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
-import CandidatureProposals from "./CandidatureProposals";
+import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 import './App.css';
 
@@ -13,8 +13,8 @@ const managerMenuItems = [
     text: "Available Badges"
   },
   {
-    link: "managers/AssociatedEngineers",
-    text: "Team Members"
+    link: 'managers/AssociatedEngineers',
+    text: 'Team Members'
   },
   {
     link: "managers/CandidatureProposals",
