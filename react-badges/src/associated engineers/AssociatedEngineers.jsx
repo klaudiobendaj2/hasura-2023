@@ -4,17 +4,10 @@ import { AuthContext } from '../state/with-auth';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import ProposalButton from './ProposalButton';
 import AddCandidatureProposal from '../components/CandidatureProposal/AddCandidatureProposal';
+import {GET_ENGINEERS} from '../state/queries-mutations.graphql'
 
 
-const GET_ENGINEERS = gql`
-  mutation GetEngineersByManager($managerId: Int!) {
-    get_engineers_by_manager(args: { manager_id: $managerId }) {
-      name
-      roles
-      id
-    }
-  }
-`;
+
 
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
