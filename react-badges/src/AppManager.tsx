@@ -8,7 +8,6 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import RuleIcon from '@mui/icons-material/Rule';
-import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 
 const managerMenuItems = [
   {
@@ -66,14 +65,14 @@ const AppManager: React.FC = () => (
           </div>
         )
       },
-      {
-        path: "managers/IssuingRequest",
-        element: (
-          <div>
-            <ApprovalRejectionIssues/>
-          </div>
-        )
-      }
+      // {
+      //   path: "managers/IssuingRequest",
+      //   element: (
+      //     <div>
+      //       <ApprovalRejectionIssues/>
+      //     </div>
+      //   )
+      // }
     ]}
     
   />
