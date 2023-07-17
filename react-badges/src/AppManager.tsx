@@ -2,7 +2,6 @@ import React from 'react';
 import AppEntrypoint, { ManagerIcon } from './containers/AppEntrypoint';
 import AssociatedEngineers from './associated engineers/AssociatedEngineers';
 import { DrawerMenu } from './layouts/BasicLayout';
-import AddCandidatureProposal from './components/CandidatureProposal/AddCandidatureProposal';
 import CandidatureProposals from './components/CandidatureProposal/CandidatureProposals';
 
 const managerMenuItems = [
@@ -32,10 +31,6 @@ const AppManager: React.FC = () => {
         {
           path: 'managers/AssociatedEngineers',
           element: <AssociatedEngineers />
-        },
-        {
-          path: 'managers/AddProposal/:engineerId',
-          element: <AddCandidatureProposal />
         },
         {
           path: 'managers/CandidatureProposals',
