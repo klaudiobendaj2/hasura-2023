@@ -3,29 +3,36 @@ import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
-import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
+import CandidatureProposals from './components/CandidatureProposal/CandidatureProposals';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import RuleIcon from '@mui/icons-material/Rule';
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
-import './App.css';
 
 const managerMenuItems = [
   {
     link: "managers/badges",
-    text: "Available Badges"
+    text: "Badges",
+    icon: <MilitaryTechIcon/>
   },
   {
-    link: 'managers/AssociatedEngineers',
-    text: 'Team Members'
+    link: "managers/AssociatedEngineers",
+    text: "Team Members",
+    icon: <GroupWorkIcon/>
   },
   {
     link: "managers/CandidatureProposals",
-    text: "Candidature Proposals"
+    text: "Candidature Proposals",
+    icon: <PostAddIcon/>
   },
-
   {
-    link: "managers/IssuesRequests",
-    text: "Issues Requests"
+    link: "managers/IssuingRequest",
+    text: "Issuing Request",
+    icon: <RuleIcon/>
   }
 ];
+
 
 const AppManager: React.FC = () => (
   <AppEntrypoint
@@ -47,7 +54,7 @@ const AppManager: React.FC = () => (
         path: "managers/badges",
         element: (
           <div>
-            <AvailableBadges />
+            <AvailableBadges/>
           </div>
         )
       },
@@ -55,20 +62,22 @@ const AppManager: React.FC = () => (
         path: "managers/CandidatureProposals",
         element: (
           <div>
-            <CandidatureProposals />
+            <CandidatureProposals/>
           </div>
         )
       },
       {
-        path: "managers/IssuesRequests",
+        path: "managers/IssuingRequest",
         element: (
           <div>
-            <ApprovalRejectionIssues />
+            <ApprovalRejectionIssues/>
           </div>
         )
       }
     ]}
+    
   />
 );
 
 export default AppManager;
+
