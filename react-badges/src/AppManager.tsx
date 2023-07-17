@@ -8,12 +8,12 @@ import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 
 const managerMenuItems = [
   {
-    link: "managers/badges",
-    text: "Badges"
+    link: 'managers/badges',
+    text: 'Badges'
   },
   {
-    link: "managers/AssociatedEngineers",
-    text: "Team Members"
+    link: 'managers/AssociatedEngineers',
+    text: 'Team Members'
   },
   {
     link: "managers/CandidatureProposals",

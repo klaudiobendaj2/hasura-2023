@@ -4,8 +4,6 @@ import './Button.css';
 
 function ProposalButton({ onClick,id}) {
 
-  
-
   return (
     <Button className='proposalButton' variant="contained"  onClick={()=>onClick(id)}>
       Add Proposal
