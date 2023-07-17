@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
-// import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { styled } from '@mui/system';
 
 const GET_BADGES = gql`
   query MyQuery {
@@ -19,22 +23,30 @@ const GET_BADGES = gql`
 
 const FilterButton = ({ showLatest, onClick }) => {
   return (
-    <button onClick={onClick}>
-      {showLatest ? "Show All Badges" : "Show Latest Badges"}
-    </button>
+    <div  style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+      <Button onClick={onClick} variant="contained" >
+        {showLatest ? 'Show All Badges' : 'Show Latest Badges'}
+      </Button>
+    </div>
   );
 };
 
+const StyledRoot = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+});
+
+const StyledCard = styled(Card)({
+  width: '300px',
+  margin: '1rem',
+});
+
 const BadgeList = () => {
   const [showLatest, setShowLatest] = useState(false);
-  // const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(GET_BADGES);
   console.log(data);
-
-  const handleClickIssue = () => {
-    // navigate("/dashborad/issues");
-  };
 
   const handleFilterClick = () => {
     setShowLatest(!showLatest);
@@ -52,24 +64,27 @@ const BadgeList = () => {
 
   return (
     <div>
-      <h2>Available Badges</h2>
-      <div>
-        <button className="issue-btn" onClick={handleClickIssue}>
-          Go To Existing Issues
-        </button>
-      </div>
-      <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
-      <ul>
-        {badges.map((badge, index) => (
-          <li key={index}>
-            <h3>{badge.title}</h3>
-            <p>{badge.description}</p>
-            <p>
-              <strong>Created at:</strong> {badge.created_at}
-            </p>
-          </li>
+      <Typography variant="h2" align="center" gutterBottom>
+        Available Badges
+      </Typography>
+      <StyledRoot >
+        {badges.map((badge, index) => ( 
+          <StyledCard key={index} >
+            <CardContent>
+              <Typography  display= 'flex' justifyContent= 'center' variant="h5" component="h3" gutterBottom>
+                <strong>{badge.title}</strong>
+              </Typography>
+              <Typography textAlign="justify" variant="body1" component="p">
+                {badge.description}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Created at:</strong> {badge.created_at}
+              </Typography>
+            </CardContent>
+          </StyledCard>
         ))}
-      </ul>
+      </StyledRoot>
+      <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
     </div>
   );
 };

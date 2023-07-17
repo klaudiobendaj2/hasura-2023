@@ -4,11 +4,13 @@ import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
 import CandidatureProposals from "./CandidatureProposals";
+import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
+import './App.css';
 
 const managerMenuItems = [
   {
     link: "managers/badges",
-    text: "Badges"
+    text: "Available Badges"
   },
   {
     link: "managers/AssociatedEngineers",
@@ -17,6 +19,11 @@ const managerMenuItems = [
   {
     link: "managers/CandidatureProposals",
     text: "Candidature Proposals"
+  },
+
+  {
+    link: "managers/IssuesRequests",
+    text: "Issues Requests"
   }
 ];
 
@@ -40,7 +47,7 @@ const AppManager: React.FC = () => (
         path: "managers/badges",
         element: (
           <div>
-            <AvailableBadges/>
+            <AvailableBadges />
           </div>
         )
       },
@@ -48,12 +55,19 @@ const AppManager: React.FC = () => (
         path: "managers/CandidatureProposals",
         element: (
           <div>
-            <CandidatureProposals/>
+            <CandidatureProposals />
+          </div>
+        )
+      },
+      {
+        path: "managers/IssuesRequests",
+        element: (
+          <div>
+            <ApprovalRejectionIssues />
           </div>
         )
       }
     ]}
-    
   />
 );
 
