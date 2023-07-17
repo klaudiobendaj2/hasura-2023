@@ -19,7 +19,7 @@ const withAuth = (Component) => (props) => {
   const [hasura, setHasura] = useState([]);
   const [role, setRole] = useState(null);
   const [roles, setRoles] = useState(null);
-  const [managerId,setManagerId] = useState(null);
+  const [managerId, setManagerId] = useState(null);
   const applyToken = (_token) => {
     // Read the token:
     const _payload = jwtDecode(_token);
@@ -88,8 +88,6 @@ const withAuth = (Component) => (props) => {
     localStorage.setItem("hasura-role", to);
     setRole(to);
   };
-
-
 
   return (
     <AuthContext.Provider

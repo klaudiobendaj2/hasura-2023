@@ -29,9 +29,10 @@ RETURNS SETOF engineer_badge_candidature_proposal_response
 AS $$
 BEGIN
   RETURN QUERY
-  SELECT *
-  FROM engineer_badge_candidature_proposal_response
-  WHERE created_by = manager_id AND is_approved = TRUE;
+  SELECT r.*
+  FROM engineer_badge_candidature_proposal_response r 
+  LEFT JOIN manager_to_engineer_badge_candidature_proposals p ON r.proposal_id = p.id
+  WHERE p.created_by = manager_id AND r.is_approved = TRUE;
 END;
 $$ LANGUAGE PLPGSQL;
 
