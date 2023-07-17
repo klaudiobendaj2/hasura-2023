@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
-// import { useNavigate } from "react-router-dom";
+import { Button, Typography, Card, CardContent } from "@mui/material";
+
 
 const GET_BADGES = gql`
   query MyQuery {
@@ -33,7 +34,7 @@ const BadgeList = () => {
   console.log(data);
 
   const handleClickIssue = () => {
-    // navigate("/dashborad/issues");
+    // navigate("/dashboard/issues");
   };
 
   const handleFilterClick = () => {
@@ -52,24 +53,33 @@ const BadgeList = () => {
 
   return (
     <div>
-      <h2>Available Badges</h2>
+      <Typography variant="h2">Available Badges</Typography>
       <div>
-        <button className="issue-btn" onClick={handleClickIssue}>
+        <Button variant="contained" color="primary" onClick={handleClickIssue}>
           Go To Existing Issues
-        </button>
+        </Button>
       </div>
       <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
-      <ul>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: showLatest ? "flex-start" : "space-between",
+          flexWrap: "wrap",
+          gap: "20px",
+        }}
+      >
         {badges.map((badge, index) => (
-          <li key={index}>
-            <h3>{badge.title}</h3>
-            <p>{badge.description}</p>
-            <p>
-              <strong>Created at:</strong> {badge.created_at}
-            </p>
-          </li>
+          <Card key={index} style={{ width: "30%" }}>
+            <CardContent>
+              <Typography variant="h3">{badge.title}</Typography>
+              <Typography variant="body1">{badge.description}</Typography>
+              <Typography variant="body2">
+                <strong>Created at:</strong> {badge.created_at}
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
