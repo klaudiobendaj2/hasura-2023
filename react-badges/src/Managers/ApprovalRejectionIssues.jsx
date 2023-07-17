@@ -4,15 +4,12 @@ import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
 import { Button, TextField } from "@mui/material";
 
-<<<<<<< HEAD
-=======
 import React, { useEffect, useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
 import { Button, TextField } from "@mui/material";
 
->>>>>>> main
 const GET_ISSUING_REQUESTS = gql`
   mutation MyMutation($managerId: Int!) {
     get_issuing_requests_for_manager(args: { managerid: $managerId }) {
@@ -30,8 +27,6 @@ const GET_ISSUING_REQUESTS = gql`
     }
   }
 `;
-<<<<<<< HEAD
-=======
 const UPDATE_ISSUING_REQUEST_REJECT = gql`
   mutation RejectIssuingRequest($requestId: Int!) {
     update_issuing_requests(
@@ -167,7 +162,6 @@ export default ApprovalRejectionIssues;
 
 // import React from 'react';
 // import { useMutation, useQuery, gql } from '@apollo/client';
->>>>>>> main
 
 const ApprovalRejectionIssues = () => {
   const [showRejectionTextArea, setShowRejectionTextArea] = useState(false);
@@ -178,98 +172,6 @@ const ApprovalRejectionIssues = () => {
     { variables: { managerId } }
   );
 
-<<<<<<< HEAD
-  console.log(data);
-
-  const handleRejectionClick = () => {
-    setShowRejectionTextArea(true);
-  };
-
-  const handleDescriptionChange = (event) => {
-    setRejectionDescription(event.target.value);
-  };
-
-  const handleApprovalClick = () => {
-    setShowRejectionTextArea(false);
-  };
-
-  const handleRejectionSubmit = () => {};
-
-  useEffect(() => {
-    getExistingIssues();
-  }, [getExistingIssues]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  return (
-    <div>
-      <h2>Existing Issues</h2>
-      {data &&
-        data.get_issuing_requests_for_manager.map((issue) => (
-          <div key={issue.id}>
-            <h3>{issue.badge_title}</h3>
-            <p>{issue.badge_description}</p>
-            <p>
-              <strong>Badge Version: </strong>
-              {issue.badge_version}
-            </p>
-            <p>
-              <strong>Engineer: </strong>
-              {issue.engineer_name}
-            </p>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleApprovalClick}
-              sx={{ marginRight: "10px" }}
-            >
-              Approve
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleRejectionClick}
-              sx={{ backgroundColor: "red" }}
-            >
-              Reject
-            </Button>
-
-            {showRejectionTextArea && (
-              <div>
-                <TextField
-                  value={rejectionDescription}
-                  onChange={handleDescriptionChange}
-                  placeholder="Enter rejection description"
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  fullWidth
-                />
-
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleRejectionSubmit}
-                  sx={{ backgroundColor: "green" }}
-                >
-                  Submit
-                </Button>
-              </div>
-            )}
-          </div>
-        ))}
-    </div>
-  );
-};
-
-export default ApprovalRejectionIssues;
-=======
 // const APPROVE_ISSUING_REQUEST = gql`
 //   mutation ApproveIssuingRequest($requestId: ID!) {
 //     approve_issuing_request(id: $requestId) {
@@ -340,4 +242,3 @@ export default ApprovalRejectionIssues;
 
 // export default IssuingRequests;
 
->>>>>>> main
