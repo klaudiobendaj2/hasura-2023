@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import Button from '@mui/material/Button';
@@ -6,12 +5,6 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/system';
-=======
-import React, { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
-import { Button, Typography, Card, CardContent } from "@mui/material";
-
->>>>>>> main
 
 const GET_BADGES = gql`
   query MyQuery {
@@ -55,13 +48,6 @@ const BadgeList = () => {
   const { loading, error, data } = useQuery(GET_BADGES);
   console.log(data);
 
-<<<<<<< HEAD
-=======
-  const handleClickIssue = () => {
-    // navigate("/dashboard/issues");
-  };
-
->>>>>>> main
   const handleFilterClick = () => {
     setShowLatest(!showLatest);
   };
@@ -78,7 +64,6 @@ const BadgeList = () => {
 
   return (
     <div>
-<<<<<<< HEAD
       <Typography variant="h2" align="center" gutterBottom>
         Available Badges
       </Typography>
@@ -100,35 +85,6 @@ const BadgeList = () => {
         ))}
       </StyledRoot>
       <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
-=======
-      <Typography variant="h2">Available Badges</Typography>
-      <div>
-        <Button variant="contained" color="primary" onClick={handleClickIssue}>
-          Go To Existing Issues
-        </Button>
-      </div>
-      <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: showLatest ? "flex-start" : "space-between",
-          flexWrap: "wrap",
-          gap: "20px",
-        }}
-      >
-        {badges.map((badge, index) => (
-          <Card key={index} style={{ width: "30%" }}>
-            <CardContent>
-              <Typography variant="h3">{badge.title}</Typography>
-              <Typography variant="body1">{badge.description}</Typography>
-              <Typography variant="body2">
-                <strong>Created at:</strong> {badge.created_at}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
->>>>>>> main
     </div>
   );
 };
