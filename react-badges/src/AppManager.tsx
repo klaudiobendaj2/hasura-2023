@@ -8,6 +8,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import RuleIcon from '@mui/icons-material/Rule';
+import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 
 const managerMenuItems = [
   {
@@ -37,7 +38,7 @@ const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
-    defaultRoute="managers"
+    defaultRoute="managers/badges"
     drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
     mobileUtils={managerMenuItems}
     routes={[
@@ -65,14 +66,14 @@ const AppManager: React.FC = () => (
           </div>
         )
       },
-      // {
-      //   path: "managers/IssuingRequest",
-      //   element: (
-      //     <div>
-      //       <ApprovalRejectionIssues/>
-      //     </div>
-      //   )
-      // }
+      {
+        path: "managers/IssuingRequest",
+        element: (
+          <div>
+            <ApprovalRejectionIssues/>
+          </div>
+        )
+      }
     ]}
     
   />
