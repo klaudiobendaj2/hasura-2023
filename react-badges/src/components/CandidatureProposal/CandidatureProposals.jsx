@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { gql, useQuery } from "@apollo/client";
-import { AuthContext } from "./state/with-auth";
+import { AuthContext } from "../../state/with-auth";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";

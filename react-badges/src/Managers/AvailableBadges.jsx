@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { Button, Typography, Card, CardContent } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
+
 
 const GET_BADGES = gql`
   query MyQuery {
