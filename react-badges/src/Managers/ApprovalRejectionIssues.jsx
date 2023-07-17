@@ -4,12 +4,6 @@ import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
 import { Button, TextField } from "@mui/material";
 
-import React, { useEffect, useState } from "react";
-import { useMutation, gql } from "@apollo/client";
-import { useContext } from "react";
-import { AuthContext } from "../state/with-auth";
-import { Button, TextField } from "@mui/material";
-
 const GET_ISSUING_REQUESTS = gql`
   mutation MyMutation($managerId: Int!) {
     get_issuing_requests_for_manager(args: { managerid: $managerId }) {
@@ -27,15 +21,19 @@ const GET_ISSUING_REQUESTS = gql`
     }
   }
 `;
-const UPDATE_ISSUING_REQUEST_REJECT = gql`
-  mutation RejectIssuingRequest($requestId: Int!) {
+
+const REJECT_ISSUING_REQUEST = gql`
+  mutation RejectIssuingRequest($id: Int!, $rejectionDescription: String!) {
     update_issuing_requests(
-      where: { id: { _eq: $requestId } }
-      _set: { disapproval_motivation: "nuk u pranua", is_approved: false }
+      _set: {
+        is_approved: false
+        disapproval_motivation: $rejectionDescription
+      }
+      where: { id: { _eq: $id } }
     ) {
       returning {
-        id
         disapproval_motivation
+        id
         is_approved
         request_id
       }
@@ -43,22 +41,51 @@ const UPDATE_ISSUING_REQUEST_REJECT = gql`
   }
 `;
 
-  
+const APPROVE_ISSUING_REQUEST = gql`
+  mutation ApproveIssuingRequest($id: Int!, $isApproved: Boolean!) {
+    update_issuing_requests(
+      _set: { is_approved: $isApproved, disapproval_motivation: null }
 
-
+      where: { id: { _eq: $id } }
+    ) {
+      returning {
+        id
+        is_approved
+        request_id
+      }
+    }
+  }
+`;
 
 const ApprovalRejectionIssues = () => {
   const [showRejectionTextArea, setShowRejectionTextArea] = useState(false);
   const [rejectionDescription, setRejectionDescription] = useState("");
   const { managerId } = useContext(AuthContext);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [getExistingIssues, { loading, error, data }] = useMutation(
     GET_ISSUING_REQUESTS,
     { variables: { managerId } }
   );
-const [rejectIssuingRequest,{rejection}] = useMutation(UPDATE_ISSUING_REQUEST_REJECT);
-  console.log("rejection",rejection);
+  const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
+  const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
 
-  const handleRejectionClick = () => {
+  const handleApprovalClick = async (id) => {
+    try {
+      await approveIssuingRequest({
+        variables: {
+          id: id,
+          isApproved: true,
+          rejectionDescription: null
+        }
+      });
+      getExistingIssues();
+    } catch (error) {
+      console.error("Error approving issuing request:", error);
+    }
+  };
+
+  const handleRejectionClick = (id) => {
+    setSelectedRequestId(id);
     setShowRejectionTextArea(true);
   };
 
@@ -66,22 +93,22 @@ const [rejectIssuingRequest,{rejection}] = useMutation(UPDATE_ISSUING_REQUEST_RE
     setRejectionDescription(event.target.value);
   };
 
-  const handleApprovalClick = () => {
-    setShowRejectionTextArea(false);
-  };
-
   const handleRejectionSubmit = async () => {
     try {
       await rejectIssuingRequest({
-        variables: { requestId: parseInt("your-request-id-here") },
+        variables: {
+          id: selectedRequestId,
+          rejectionDescription: rejectionDescription
+        }
       });
+      setSelectedRequestId(null);
       setRejectionDescription("");
       setShowRejectionTextArea(false);
+      getExistingIssues();
     } catch (error) {
       console.error("Error rejecting issuing request:", error);
     }
   };
-  
 
   useEffect(() => {
     getExistingIssues();
@@ -114,18 +141,19 @@ const [rejectIssuingRequest,{rejection}] = useMutation(UPDATE_ISSUING_REQUEST_RE
             <Button
               variant="contained"
               color="primary"
-              onClick={handleApprovalClick}
+              onClick={() => handleApprovalClick(issue.id)}
               sx={{ marginRight: "10px" }}
             >
               Approve
             </Button>
+
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleRejectionClick}
+              onClick={() => handleRejectionClick(issue.id)}
               sx={{ backgroundColor: "red" }}
             >
-                Reject
+              Reject
             </Button>
 
             {showRejectionTextArea && (
@@ -157,88 +185,3 @@ const [rejectIssuingRequest,{rejection}] = useMutation(UPDATE_ISSUING_REQUEST_RE
 };
 
 export default ApprovalRejectionIssues;
-
-
-
-// import React from 'react';
-// import { useMutation, useQuery, gql } from '@apollo/client';
-
-const ApprovalRejectionIssues = () => {
-  const [showRejectionTextArea, setShowRejectionTextArea] = useState(false);
-  const [rejectionDescription, setRejectionDescription] = useState("");
-  const { managerId } = useContext(AuthContext);
-  const [getExistingIssues, { loading, error, data }] = useMutation(
-    GET_ISSUING_REQUESTS,
-    { variables: { managerId } }
-  );
-
-// const APPROVE_ISSUING_REQUEST = gql`
-//   mutation ApproveIssuingRequest($requestId: ID!) {
-//     approve_issuing_request(id: $requestId) {
-//       id
-//     }
-//   }
-// `;
-
-// const REJECT_ISSUING_REQUEST = gql`
-//   mutation RejectIssuingRequest($requestId: ID!, $rejectionReason: String!) {
-//     reject_issuing_request(id: $requestId, reason: $rejectionReason) {
-//       id
-//     }
-//   }
-// `;
-
-// function IssuingRequests({ managerId }) {
-//   const { loading, error, data } = useMutation(GET_ISSUING_REQUESTS, {
-//     variables: { managerId },
-//   });
-
-//   const [approveRequest] = useMutation(APPROVE_ISSUING_REQUEST);
-//   const [rejectRequest] = useMutation(REJECT_ISSUING_REQUEST);
-
-//   const handleApprove = (requestId) => {
-//     approveRequest({
-//       variables: { requestId },
-//       // Perform any necessary UI updates or show a success message
-//     });
-//   };
-
-//   const handleReject = (requestId) => {
-//     const reason = prompt('Enter reason for rejection:');
-//     if (reason) {
-//       rejectRequest({
-//         variables: { requestId, rejectionReason: reason },
-//         // Perform any necessary UI updates or show a success message
-//       });
-//     }
-//   };
-
-//   if (loading) return <p>Loading...</p>;
-//   if (error) return <p>Error: {error.message}</p>;
-//   if (!data || !data.get_issuing_requests_for_manager)
-//     return <p>No issuing requests found.</p>;
-
-//   return (
-//     <div>
-//       <h2>Issuing Requests</h2>
-//       {data.get_issuing_requests_for_manager.map((request) => (
-//         <div key={request.id}>
-//           <h3>{request.badge_title}</h3>
-//           <p>{request.badge_description}</p>
-//           <p>Engineer: {request.engineer_name}</p>
-//           <p>Created At: {request.created_at}</p>
-//           {!request.is_issued && (
-//             <div>
-//               <button onClick={() => handleApprove(request.id)}>Approve</button>
-//               <button onClick={() => handleReject(request.id)}>Reject</button>
-//             </div>
-//           )}
-//           <hr />
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default IssuingRequests;
-
