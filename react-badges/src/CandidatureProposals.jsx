@@ -17,8 +17,14 @@ import Typography from "@mui/material/Typography";
 import TextArea from "./UI/TextArea";
 
 const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
-  query MyQuery {
-    engineer_to_manager_badge_candidature_proposals {
+  query MyQuery($isApproved: Boolean!) {
+    engineer_to_manager_badge_candidature_proposals(
+      where: {
+        manager_badge_candidature_proposal_responses: {
+          is_approved: { _eq: $isApproved }
+        }
+      }
+    ) {
       id
       created_by
       badge_version
@@ -105,13 +111,19 @@ const style = {
 const CandidatureProposals = () => {
   const [open, setOpen] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState("");
-  console.log(textAreaValue);
+  const [isApprovedFilter, setIsApprovedFilter] = useState(true);
+
   const { managerId } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const { loading, error, data } = useQuery(
-    GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS
+    GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
+    {
+      variables: {
+        isApproved: isApprovedFilter
+      }
+    }
   );
 
   const [approveResponse, { data: data2, loading: loading2, error: error2 }] =
@@ -146,6 +158,14 @@ const CandidatureProposals = () => {
     setTextAreaValue(item);
   };
 
+  const handleShowOngoing = () => {
+    setIsApprovedFilter(true);
+  };
+
+  const handleShowDisapproved = () => {
+    setIsApprovedFilter(false);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -157,100 +177,106 @@ const CandidatureProposals = () => {
   const candidatures = data.engineer_to_manager_badge_candidature_proposals;
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Engineer who applied</TableCell>
-            <TableCell align="right">Badge Version</TableCell>
-            <TableCell align="right">Badge Title</TableCell>
-            <TableCell align="right">Proposal Description</TableCell>
-            <TableCell align="right">Manager</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {candidatures.map(
-            (item) =>
-              item.manager === parseInt(managerId) && (
-                <TableRow
-                  key={item.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.user.name}
-                  </TableCell>
-                  <TableCell align="right">{item.badge_version}</TableCell>
-                  <TableCell align="right">
-                    {item.badges_version.title}
-                  </TableCell>
-                  <TableCell align="right">
-                    {item.proposal_description}
-                  </TableCell>
-                  <TableCell align="right">{item.userByManager.name}</TableCell>
-                  <TableCell align="right">
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => onApproveClick(item.id)}
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={handleOpen}
-                    >
-                      Reject
-                    </Button>
-                  </TableCell>
-                  <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                      backdrop: {
-                        timeout: 500
-                      }
-                    }}
+    <>
+      <Button onClick={handleShowOngoing}>Show Ongoing</Button>
+      <Button onClick={handleShowDisapproved}>Show Disapproved</Button>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Engineer who applied</TableCell>
+              <TableCell align="right">Badge Version</TableCell>
+              <TableCell align="right">Badge Title</TableCell>
+              <TableCell align="right">Proposal Description</TableCell>
+              <TableCell align="right">Manager</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {candidatures.map(
+              (item) =>
+                item.manager === parseInt(managerId) && (
+                  <TableRow
+                    key={item.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <Fade in={open}>
-                      <Box sx={style}>
-                        <Typography
-                          id="transition-modal-title"
-                          variant="h6"
-                          component="h2"
-                        >
-                          Add a disapproval motivation
-                        </Typography>
-                        <Typography
-                          id="transition-modal-description"
-                          sx={{ mt: 2 }}
-                        >
-                          <TextArea
-                            getTextArea={getTextAreaValue}
-                            textAreaValue={textAreaValue}
-                          />
-                        </Typography>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => onDisapproveClick(item.id)}
-                        >
-                          Submit
-                        </Button>
-                      </Box>
-                    </Fade>
-                  </Modal>
-                </TableRow>
-              )
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                    <TableCell component="th" scope="row">
+                      {item.user.name}
+                    </TableCell>
+                    <TableCell align="right">{item.badge_version}</TableCell>
+                    <TableCell align="right">
+                      {item.badges_version.title}
+                    </TableCell>
+                    <TableCell align="right">
+                      {item.proposal_description}
+                    </TableCell>
+                    <TableCell align="right">
+                      {item.userByManager.name}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => onApproveClick(item.id)}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleOpen}
+                      >
+                        Reject
+                      </Button>
+                    </TableCell>
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      open={open}
+                      onClose={handleClose}
+                      closeAfterTransition
+                      slots={{ backdrop: Backdrop }}
+                      slotProps={{
+                        backdrop: {
+                          timeout: 500
+                        }
+                      }}
+                    >
+                      <Fade in={open}>
+                        <Box sx={style}>
+                          <Typography
+                            id="transition-modal-title"
+                            variant="h6"
+                            component="h2"
+                          >
+                            Add a disapproval motivation
+                          </Typography>
+                          <Typography
+                            id="transition-modal-description"
+                            sx={{ mt: 2 }}
+                          >
+                            <TextArea
+                              getTextArea={getTextAreaValue}
+                              textAreaValue={textAreaValue}
+                            />
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => onDisapproveClick(item.id)}
+                          >
+                            Submit
+                          </Button>
+                        </Box>
+                      </Fade>
+                    </Modal>
+                  </TableRow>
+                )
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
