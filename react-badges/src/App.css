@@ -1,5 +1,5 @@
 .css-ze0x5a-MuiPaper-root-MuiCard-root{
-    background-color: #FDF4F5;
+    background-color: #F1F6F9;
     width:390px;
     height: 400px;
 }
@@ -11,7 +11,7 @@
     margin-left: 20px;
 }
 .css-sghohy-MuiButtonBase-root-MuiButton-root{
-   background-color:#8B1874;
+   /* background-color:#8B1874; */
    color:white;
    font-family: auto;
 
@@ -71,10 +71,10 @@
     font-weight: bold;
     padding: 30px;
  } */
-
+/* 
  .css-sghohy-MuiButtonBase-root-MuiButton-root:hover{
     background-color: #9A208C;
- }
+ } */
 
 /* .css-bhp9pd-MuiPaper-root-MuiCard-root{
     width: 442px;

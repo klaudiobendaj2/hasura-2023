@@ -44,7 +44,8 @@ const REJECT_ISSUING_REQUEST = gql`
 const APPROVE_ISSUING_REQUEST = gql`
   mutation ApproveIssuingRequest($id: Int!, $isApproved: Boolean!) {
     update_issuing_requests(
-      _set: { is_approved: $isApproved }
+      _set: { is_approved: $isApproved, disapproval_motivation: null }
+
       where: { id: { _eq: $id } }
     ) {
       returning {
@@ -68,23 +69,21 @@ const ApprovalRejectionIssues = () => {
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
 
-
   const handleApprovalClick = async (id) => {
     try {
       await approveIssuingRequest({
         variables: {
           id: id,
           isApproved: true,
-          rejectionDescription: null,
-        },
+          rejectionDescription: null
+        }
       });
       getExistingIssues();
     } catch (error) {
       console.error("Error approving issuing request:", error);
     }
   };
-  
-  
+
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
     setShowRejectionTextArea(true);

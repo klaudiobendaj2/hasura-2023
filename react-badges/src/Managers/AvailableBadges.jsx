@@ -78,7 +78,7 @@ const BadgeList = () => {
                 {badge.description}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>Created at:</strong> {badge.created_at}
+                <strong>Created at: </strong> {badge.created_at}
               </Typography>
             </CardContent>
           </StyledCard>
