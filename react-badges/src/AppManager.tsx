@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AppEntrypoint, { ManagerIcon } from './containers/AppEntrypoint';
 import AssociatedEngineers from './associated engineers/AssociatedEngineers';
@@ -45,5 +46,6 @@ const AppManager: React.FC = () => {
     />
   );
 };
+
 
 export default AppManager;
