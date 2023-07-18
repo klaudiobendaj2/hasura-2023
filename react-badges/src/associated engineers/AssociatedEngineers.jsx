@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { AuthContext } from '../state/with-auth';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
@@ -17,9 +17,9 @@ const AssociatedEngineers = () => {
     getEngineersByManager();
   }, [getEngineersByManager]);
 
-  const handleProposalClick = (engineerId) => {
-    console.log('Proposal corresponding for engineer with id: ', engineerId);
-    navigate(`/managers/AddCandidatureProposal/${engineerId}`);
+  const handleProposalClick = (engineerId,engineerName) => {
+    console.log('Proposal corresponding for engineer with id: ', engineerId , engineerName);
+    navigate(`/managers/AddCandidatureProposal/${engineerId}/${encodeURIComponent(engineerName)}`);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -43,7 +43,7 @@ const AssociatedEngineers = () => {
                 <TableCell>{engineer.name}</TableCell>
                 <TableCell>{engineer.roles.join('/')}</TableCell>
                 <TableCell>
-                <ProposalButton onClick={() => handleProposalClick(engineer.id)} />
+                <ProposalButton onClick={() => handleProposalClick(engineer.id, engineer.name)} id={engineer.id} />
                 </TableCell>
               </TableRow>
             ))}
