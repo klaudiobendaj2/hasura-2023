@@ -9,6 +9,7 @@ import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import RuleIcon from '@mui/icons-material/Rule';
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
+import AddCandidatureProposal from './components/CandidatureProposal/AddCandidatureProposal';
 
 const managerMenuItems = [
   {
@@ -33,7 +34,6 @@ const managerMenuItems = [
   }
 ];
 
-
 const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
@@ -44,40 +44,26 @@ const AppManager: React.FC = () => (
     routes={[
       {
         path: "managers/AssociatedEngineers",
-        element: (
-          <div>
-            <AssociatedEngineers />
-          </div>
-        )
+        element: <AssociatedEngineers />,
       },
       {
         path: "managers/badges",
-        element: (
-          <div>
-            <AvailableBadges/>
-          </div>
-        )
+        element: <AvailableBadges />,
+      },
+      {
+        path: 'managers/AddCandidatureProposal/:engineerId/:engineerName',
+        element: <AddCandidatureProposal />,      
       },
       {
         path: "managers/CandidatureProposals",
-        element: (
-          <div>
-            <CandidatureProposals/>
-          </div>
-        )
+        element: <CandidatureProposals />,
       },
       {
         path: "managers/IssuingRequest",
-        element: (
-          <div>
-            <ApprovalRejectionIssues/>
-          </div>
-        )
-      }
+        element: <ApprovalRejectionIssues />,
+      },
     ]}
-    
   />
 );
 
 export default AppManager;
-

@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { AuthContext } from "../../state/with-auth";
-import { GET_BADGES_VERSIONS, INSERT_CANDIDATURE_PROPOSAL } from "../../state/queries-mutations.graphql";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { AuthContext } from '../../state/with-auth';
+import { GET_BADGES_VERSIONS, INSERT_CANDIDATURE_PROPOSAL } from '../../state/queries-mutations.graphql';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Typography,
   TextField,
@@ -15,61 +15,49 @@ import {
   InputLabel,
   FormHelperText,
   Grid
-} from "@mui/material";
-import { useForm } from "react-hook-form";
+} from '@mui/material';
+import { useForm } from 'react-hook-form';
 
-const AddCandidatureProposal = ({ selectedEngineer }) => {
+const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
-  const {
-    loading: versionsLoading,
-    error: versionsError,
-    data: versionsData
-  } = useQuery(GET_BADGES_VERSIONS);
-  const [addCandidatureProposal, { loading: addLoading, error: addError }] =
-    useMutation(INSERT_CANDIDATURE_PROPOSAL);
+  const { engineerId, engineerName } = useParams();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
+  const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
   const navigate = useNavigate();
 
   const handleFormSubmit = async (data) => {
     try {
-      const selectedBadge = versionsData?.badges_versions_last.find(
-        (version) => version.id === parseInt(data.selectedBadgeVersion)
-      );
-
+      const selectedBadge = versionsData?.badges_versions_last.find((version) => version.id === parseInt(data.selectedBadgeVersion));
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
 
-      if (badgeId && badgeVersion && selectedEngineer !== "" && managerId) {
+      if (badgeId && badgeVersion && engineerId !== '' && managerId) {
         await addCandidatureProposal({
           variables: {
             badgeId: Number(badgeId),
             badgeVersion: badgeVersion,
-            engineer: parseInt(selectedEngineer.id),
+            engineer: parseInt(engineerId),
             proposalDescription: data.proposalDescription,
             createdBy: managerId
           }
         });
 
-        console.log("Candidature proposal added successfully!");
-        console.log("Data:", {
+        console.log('Candidature proposal added successfully!');
+        console.log('Data:', {
           badgeId: Number(badgeId),
           badgeVersion: badgeVersion,
-          engineer: parseInt(selectedEngineer.id),
+          engineer: parseInt(engineerId),
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-        navigate("/managers/CandidatureProposals");
+
+        navigate('/managers/CandidatureProposals');
       } else {
-        console.error(
-          "Failed to retrieve badge ID or badge version for the selected version."
-        );
+        console.error('Failed to retrieve badge ID or badge version for the selected version.');
       }
     } catch (error) {
-      console.error("Error adding candidature proposal:", error);
+      console.error('Error adding candidature proposal:', error);
     }
   };
 
@@ -91,11 +79,7 @@ const AddCandidatureProposal = ({ selectedEngineer }) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Typography
-        component="h1"
-        variant="h5"
-        style={{ marginBottom: "16px", textAlign: "center" }}
-      >
+      <Typography component="h1" variant="h5" style={{ marginBottom: '16px', textAlign: 'center' }}>
         Add Candidature Proposal
       </Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -106,21 +90,19 @@ const AddCandidatureProposal = ({ selectedEngineer }) => {
               label="Engineer Name"
               variant="outlined"
               fullWidth
-              value={selectedEngineer ? selectedEngineer.name : ""}
+              value={decodeURIComponent(engineerName)}
               disabled
             />
           </Grid>
           <Grid item xs={12}>
             <FormControl variant="outlined" fullWidth error={!!errors.selectedBadgeVersion}>
-              <InputLabel id="badgeVersion-label">
-                Select a Badge Version
-              </InputLabel>
+              <InputLabel id="badgeVersion-label">Select a Badge Version</InputLabel>
               <Select
                 id="badgeVersion"
                 labelId="badgeVersion-label"
-                defaultValue={""}
+                defaultValue=""
                 label="Select a Badge Version"
-                {...register("selectedBadgeVersion", { required: true })}
+                {...register('selectedBadgeVersion', { required: true })}
               >
                 <MenuItem value="">None</MenuItem>
                 {versionsData?.badges_versions_last.map((version) => (
@@ -142,7 +124,7 @@ const AddCandidatureProposal = ({ selectedEngineer }) => {
               fullWidth
               multiline
               rows={4}
-              {...register("proposalDescription", { required: true })}
+              {...register('proposalDescription', { required: true })}
               error={!!errors.proposalDescription}
             />
             {errors.proposalDescription && (
