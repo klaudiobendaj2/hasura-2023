@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
-  const { engineerId, engineerName } = useParams();
+  const { engineerId } = useParams();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
   const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
@@ -90,7 +90,7 @@ const AddCandidatureProposal = () => {
               label="Engineer Name"
               variant="outlined"
               fullWidth
-              value={decodeURIComponent(engineerName)}
+              value={engineerId}
               disabled
             />
           </Grid>

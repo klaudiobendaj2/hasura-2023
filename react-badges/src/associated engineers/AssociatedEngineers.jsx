@@ -12,16 +12,14 @@ const AssociatedEngineers = () => {
   const [getEngineersByManager, { loading, error, data }] = useMutation(GET_ENGINEERS, {
     variables: { managerId },
   });
-  const [selectedEngineer, setSelectedEngineer] = useState(null);
 
   useEffect(() => {
     getEngineersByManager();
   }, [getEngineersByManager]);
 
-  const handleProposalClick = (engineerId, engineerName) => {
+  const handleProposalClick = (engineerId) => {
     console.log('Proposal corresponding for engineer with id: ', engineerId);
-    setSelectedEngineer({ id: engineerId, name: engineerName });
-    navigate(`/managers/AddCandidatureProposal/${engineerId}/${encodeURIComponent(engineerName)}`);
+    navigate(`/managers/AddCandidatureProposal/${engineerId}`);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -45,7 +43,7 @@ const AssociatedEngineers = () => {
                 <TableCell>{engineer.name}</TableCell>
                 <TableCell>{engineer.roles.join('/')}</TableCell>
                 <TableCell>
-                  <ProposalButton onClick={() => handleProposalClick(engineer.id, engineer.name)} id={engineer.id} />
+                <ProposalButton onClick={() => handleProposalClick(engineer.id)} />
                 </TableCell>
               </TableRow>
             ))}
