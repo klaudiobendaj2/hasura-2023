@@ -72,6 +72,25 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
   }
 `;
 
+export const GET_ENGINEERS_PENDING_PROPOSALS = gql`
+mutation PendingProposals($managerId: Int!) {
+  get_engineers_pending_proposals_for_managers(args: {managerid: $managerId}) {
+  id
+    badge_version
+    userByManager {
+      name
+      id
+    }
+    user {
+      name
+    }
+    badges_version {
+        title
+    }
+  }
+}
+`;
+
 export const APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
   mutation managerProposalResponse(
     $is_approved: Boolean!
