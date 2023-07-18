@@ -149,7 +149,6 @@ const ApprovalRejectionIssues = () => {
                 variant="contained"
                 color="secondary"
                 onClick={() => handleRejectionClick(issue.id)}
-                sx={{ backgroundColor: "red" }}
               >
                 Reject
               </Button>
@@ -169,7 +168,6 @@ const ApprovalRejectionIssues = () => {
                   variant="contained"
                   color="secondary"
                   onClick={handleRejectionSubmit}
-                  sx={{ backgroundColor: "green" }}
                 >
                   Submit
                 </Button>

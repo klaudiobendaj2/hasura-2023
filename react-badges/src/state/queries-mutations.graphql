@@ -97,7 +97,7 @@ export const APPROVE_ISSUING_REQUEST = gql`
     update_issuing_requests(
       _set: { is_approved: $isApproved, disapproval_motivation: null }
 
-      where: { id: { _eq: $id } }
+      where: { request_id: { _eq: $id } }
     ) {
       returning {
         id
