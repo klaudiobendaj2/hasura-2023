@@ -25,7 +25,7 @@ const managerMenuItems = [
   },
   {
     link: "managers/CandidatureProposals",
-    text: "Candidature Proposals",
+    text: "Engineer Proposals",
     icon: <PostAddIcon />
   },
   {
