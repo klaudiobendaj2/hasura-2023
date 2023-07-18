@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
-import { Button, TextField } from "@mui/material";
+import {  Button, TextField } from "@mui/material";
 import {
   GET_ISSUING_REQUESTS,
   REJECT_ISSUING_REQUEST,
   APPROVE_ISSUING_REQUEST
 } from "../state/queries-mutations.graphql";
-// import Alert from '@mui/material/Alert';
-// import Stack from '@mui/material/Stack';
+import Swal from "sweetalert2";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
+
 
 const ApprovalRejectionIssues = () => {
   const [showRejectionTextArea, setShowRejectionTextArea] = useState(false);
@@ -24,6 +27,11 @@ const ApprovalRejectionIssues = () => {
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
 
   const handleApprovalClick = async (id) => {
+    Swal.fire(
+      'The issue request was approved!',
+      '',
+      'success'
+    )
     try {
       await approveIssuingRequest({
         variables: {
@@ -50,6 +58,9 @@ const ApprovalRejectionIssues = () => {
   };
 
   const handleRejectionSubmit = async () => {
+    Swal.fire(
+      'The issue request was not approved!'
+    )
     try {
       await rejectIssuingRequest({
         variables: {
@@ -81,12 +92,14 @@ const ApprovalRejectionIssues = () => {
 
   return (
     <div>
-      <h2>Existing Issues</h2>
+      <Typography variant="h2" align="center" gutterBottom>
+        Existing Issues
+      </Typography>
       {data && data.get_issuing_requests_for_manager.length === 0 ? (
-      //    <Stack sx={{ width: '100%' }} spacing={2}>
-      //    <Alert severity="info">No issues found!</Alert>
-      //  </Stack>
-      <p>No issues found</p>
+        <Alert severity="info">
+        <AlertTitle>Info</AlertTitle>
+        <strong>No issue requests found!</strong>
+      </Alert>
       ) : (
         data &&
         data.get_issuing_requests_for_manager.map((issue) => (
