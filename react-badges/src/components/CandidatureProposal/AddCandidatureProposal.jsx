@@ -23,7 +23,7 @@ const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
   const { engineerId, engineerName } = useParams();
   const [selectedEngineer, setSelectedEngineer] = useState('');
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({mode:"onChange"});
   const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
   const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
   const [getEngineersByManager, { loading:engineersLoading, error: engineersError, data: engineersData }] = useMutation(GET_ENGINEERS, {
@@ -101,7 +101,7 @@ const AddCandidatureProposal = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Typography component="h1" variant="h5" style={{ marginBottom: '16px', textAlign: 'center' }}>
+      <Typography component="h1" variant="h5" style={{ margin: '50px', textAlign: 'center' }}>
         Add Candidature Proposal
       </Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -146,9 +146,8 @@ const AddCandidatureProposal = () => {
                 labelId="badgeVersion-label"
                 defaultValue=""
                 label="Select a Badge Version"
-                {...register('selectedBadgeVersion', { required: true })}
+                {...register('selectedBadgeVersion', { required: "Please select a badge version." })}
               >
-                <MenuItem value="">None</MenuItem>
                 {versionsData?.badges_versions_last.map((version) => (
                   <MenuItem key={version.id} value={version.id}>
                     {version.title}
@@ -156,7 +155,7 @@ const AddCandidatureProposal = () => {
                 ))}
               </Select>
               {errors.selectedBadgeVersion && (
-                <FormHelperText>Please select a badge version.</FormHelperText>
+                <FormHelperText error>{errors.selectedBadgeVersion.message}</FormHelperText>
               )}
             </FormControl>
           </Grid>
