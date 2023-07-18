@@ -9,6 +9,7 @@ import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import RuleIcon from "@mui/icons-material/Rule";
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
+import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
 import "./App.css";
 
 const managerMenuItems = [
@@ -25,6 +26,11 @@ const managerMenuItems = [
   {
     link: "managers/CandidatureProposals",
     text: "Candidature Proposals",
+    icon: <PostAddIcon />
+  },
+  {
+    link: "managers/ManagerCandidatureProposals",
+    text: "Manager Proposals",
     icon: <PostAddIcon />
   },
   {
@@ -63,6 +69,14 @@ const AppManager: React.FC = () => (
         element: (
           <div>
             <CandidatureProposals />
+          </div>
+        )
+      },
+      {
+        path: "managers/ManagerCandidatureProposals",
+        element: (
+          <div>
+            <ManagerCandidatureProposals />
           </div>
         )
       },

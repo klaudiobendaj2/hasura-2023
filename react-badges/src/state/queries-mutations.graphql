@@ -66,6 +66,7 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
       manager_badge_candidature_proposal_responses {
         response_id
         is_approved
+        proposal_id
       }
     }
   }
