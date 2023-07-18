@@ -5,21 +5,8 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/system';
+import {GET_BADGES} from "../state/queries-mutations.graphql";
 
-const GET_BADGES = gql`
-  query MyQuery {
-    badges_versions {
-      title
-      description
-      created_at
-    }
-    badges_versions_last {
-      title
-      description
-      created_at
-    }
-  }
-`;
 
 const FilterButton = ({ showLatest, onClick }) => {
   return (

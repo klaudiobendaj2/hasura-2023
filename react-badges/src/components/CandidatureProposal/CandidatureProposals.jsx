@@ -156,6 +156,7 @@ const CandidatureProposals = () => {
         disapproval_motivation: textAreaValue
       }
     });
+    setTextAreaValue("");
   };
 
   const getTextAreaValue = (item) => {

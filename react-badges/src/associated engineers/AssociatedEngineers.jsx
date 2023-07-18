@@ -6,9 +6,6 @@ import ProposalButton from './ProposalButton';
 import AddCandidatureProposal from '../components/CandidatureProposal/AddCandidatureProposal';
 import {GET_ENGINEERS} from '../state/queries-mutations.graphql'
 
-
-
-
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
   console.log('managerid', typeof managerId);

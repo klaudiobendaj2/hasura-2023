@@ -3,59 +3,13 @@ import { useMutation, gql } from "@apollo/client";
 import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
 import { Button, TextField } from "@mui/material";
-
-const GET_ISSUING_REQUESTS = gql`
-  mutation MyMutation($managerId: Int!) {
-    get_issuing_requests_for_manager(args: { managerid: $managerId }) {
-      badge_id
-      badge_title
-      candidature_evidences
-      engineer_id
-      engineer_name
-      id
-      is_issued
-      manager_id
-      badge_description
-      badge_version
-      created_at
-    }
-  }
-`;
-
-const REJECT_ISSUING_REQUEST = gql`
-  mutation RejectIssuingRequest($id: Int!, $rejectionDescription: String!) {
-    update_issuing_requests(
-      _set: {
-        is_approved: false
-        disapproval_motivation: $rejectionDescription
-      }
-      where: { id: { _eq: $id } }
-    ) {
-      returning {
-        disapproval_motivation
-        id
-        is_approved
-        request_id
-      }
-    }
-  }
-`;
-
-const APPROVE_ISSUING_REQUEST = gql`
-  mutation ApproveIssuingRequest($id: Int!, $isApproved: Boolean!) {
-    update_issuing_requests(
-      _set: { is_approved: $isApproved, disapproval_motivation: null }
-
-      where: { id: { _eq: $id } }
-    ) {
-      returning {
-        id
-        is_approved
-        request_id
-      }
-    }
-  }
-`;
+import {
+  GET_ISSUING_REQUESTS,
+  REJECT_ISSUING_REQUEST,
+  APPROVE_ISSUING_REQUEST
+} from "../state/queries-mutations.graphql";
+// import Alert from '@mui/material/Alert';
+// import Stack from '@mui/material/Stack';
 
 const ApprovalRejectionIssues = () => {
   const [showRejectionTextArea, setShowRejectionTextArea] = useState(false);
@@ -78,7 +32,7 @@ const ApprovalRejectionIssues = () => {
           rejectionDescription: null
         }
       });
-      console.log(`Engineer's id:`,id);
+      console.log(`Engineer's id:`, id);
       getExistingIssues();
     } catch (error) {
       console.error("Error approving issuing request:", error);
@@ -88,7 +42,7 @@ const ApprovalRejectionIssues = () => {
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
     setShowRejectionTextArea(true);
-    console.log(`Engineer's id:`,id);
+    console.log(`Engineer's id:`, id);
   };
 
   const handleDescriptionChange = (event) => {
@@ -103,7 +57,7 @@ const ApprovalRejectionIssues = () => {
           rejectionDescription: rejectionDescription
         }
       });
-      console.log("Description:",rejectionDescription);
+      console.log("Description:", rejectionDescription);
       setSelectedRequestId(null);
       setRejectionDescription("");
       setShowRejectionTextArea(false);
@@ -128,7 +82,13 @@ const ApprovalRejectionIssues = () => {
   return (
     <div>
       <h2>Existing Issues</h2>
-      {data &&
+      {data && data.get_issuing_requests_for_manager.length === 0 ? (
+      //    <Stack sx={{ width: '100%' }} spacing={2}>
+      //    <Alert severity="info">No issues found!</Alert>
+      //  </Stack>
+      <p>No issues found</p>
+      ) : (
+        data &&
         data.get_issuing_requests_for_manager.map((issue) => (
           <div key={issue.id}>
             <h3>{issue.badge_title}</h3>
@@ -182,7 +142,8 @@ const ApprovalRejectionIssues = () => {
               </div>
             )}
           </div>
-        ))}
+        ))
+      )}
     </div>
   );
 };
