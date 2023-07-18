@@ -78,6 +78,7 @@ const ApprovalRejectionIssues = () => {
           rejectionDescription: null
         }
       });
+      console.log(`Engineer's id:`,id);
       getExistingIssues();
     } catch (error) {
       console.error("Error approving issuing request:", error);
@@ -87,6 +88,7 @@ const ApprovalRejectionIssues = () => {
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
     setShowRejectionTextArea(true);
+    console.log(`Engineer's id:`,id);
   };
 
   const handleDescriptionChange = (event) => {
@@ -101,6 +103,7 @@ const ApprovalRejectionIssues = () => {
           rejectionDescription: rejectionDescription
         }
       });
+      console.log("Description:",rejectionDescription);
       setSelectedRequestId(null);
       setRejectionDescription("");
       setShowRejectionTextArea(false);
