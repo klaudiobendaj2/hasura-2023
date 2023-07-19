@@ -7,7 +7,7 @@ import {
   GET_ENGINEERS
 } from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import Route404 from "../Route404";
+import Swal from "sweetalert2"
 import {
   Typography,
   TextField,
@@ -51,10 +51,8 @@ const AddCandidatureProposal = () => {
   }, [getEngineersByManager]);
 
   const navigate = useNavigate();
-
   const location = useLocation();
   const pathname = location.pathname;
-  console.log(pathname);
 
   const handleFormSubmit = async (data) => {
     try {
@@ -63,9 +61,7 @@ const AddCandidatureProposal = () => {
       );
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
-
       const engineerValue = data.selectedEngineer || engineerId;
-
       if (badgeId && badgeVersion && engineerId !== "" && managerId) {
         await addCandidatureProposal({
           variables: {
@@ -76,7 +72,6 @@ const AddCandidatureProposal = () => {
             createdBy: managerId
           }
         });
-
         console.log("Candidature proposal added successfully!");
         console.log("Data:", {
           badgeId: Number(badgeId),
@@ -85,8 +80,13 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-
-        navigate("/managers/CandidatureProposals");
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Proposal sent successfully to engineer!",
+        }).then(() => {
+          navigate("/managers/CandidatureProposals");
+        });
       } else {
         console.error(
           "Failed to retrieve badge ID or badge version for the selected version."
