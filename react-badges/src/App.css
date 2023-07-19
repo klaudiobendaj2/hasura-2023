@@ -4,7 +4,6 @@
     height: 400px;
 }
 
-
 .css-1oetjkv-MuiTypography-root{
     padding:20px;
 }
@@ -16,13 +15,7 @@
    /* background-color:#8B1874; */
    color:white;
    font-family: auto;
-
 }
-
-/* .css-12fsjqq-MuiToolbar-root{
-    background-color: #8B1874;
-    height:50px;
-} */
 
 .css-li5etn-MuiTypography-root{
     color:white;
@@ -47,51 +40,11 @@
     padding:30px;
 }
 
-  /* .css-1as93il{
-    background-color: #FDF4F5;
-  } */
-
-  /* .css-uob957-MuiListSubheader-root{
-    background-color: #FDF4F5;
-  } */
-
-  /* .css-xdkkht-MuiToolbar-root{
-    background-color: #FDF4F5;
-
-  } */
-
- /* .css-1sw2rh2{
-    background-color: #FDF4F5;
- } */
-
+  
  .css-1fczirg-MuiTypography-root{
     padding:17px;
  }
 
- /* .css-1fczirg-MuiTypography-root{
-    color:#8B1874;
-    font-family: monosp;
-    font-weight: bold;
-    padding: 30px;
- } */
-/* 
- .css-sghohy-MuiButtonBase-root-MuiButton-root:hover{
-    background-color: #9A208C;
- } */
-
-/* .css-bhp9pd-MuiPaper-root-MuiCard-root{
-    width: 442px;
-    height: 497px;
-    padding: 20px;
-    border: 1px solid #E8A0BF;
-    box-shadow: 0px 2px 1px -1px #E8A0BF, 0px 1px 1px 0px #E8A0BF, 0px 1px 3px 0px #E8A0BF;
-
-}
-
-.css-1sw2rh2{
-    padding-top:15px;
-}
- */
 
  .issuebuttons{
     justify-content: center;
