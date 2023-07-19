@@ -61,9 +61,10 @@ const TextArea = (props) => {
   return (
     <StyledTextarea
       aria-label="empty textarea"
-      placeholder="(Optional)"
+      placeholder="Disapproval motivation"
       value={props.textAreaValue}
       onChange={(e) => props.getTextArea(e.target.value)}
+      required
     />
   );
 };

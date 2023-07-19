@@ -54,7 +54,8 @@ const CandidatureProposals = () => {
     {
       variables: {
         isApproved: isApprovedFilter
-      }
+      },
+      fetchPolicy: "network-only"
     }
   );
 
@@ -93,8 +94,8 @@ const CandidatureProposals = () => {
     { data: data3, loading: loading3, error: error3 }
   ] = useMutation(DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
 
-  const onApproveClick = (proposalId) => {
-    approveResponse({
+  const onApproveClick = async (proposalId) => {
+    await approveResponse({
       variables: {
         proposal_id: proposalId,
         is_approved: true,
@@ -103,7 +104,11 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
+    // Refetch the GET_ENGINEERS_PENDING_PROPOSALS mutation after approval
+
     setTextAreaValue("");
+
+    await getPendingProposals();
   };
 
   const onDisapproveClick = (proposalId) => {
@@ -132,6 +137,8 @@ const CandidatureProposals = () => {
     setIsApprovedFilter(false);
   };
 
+  console.log(data);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -146,6 +153,8 @@ const CandidatureProposals = () => {
   if (pendingError) {
     return <div>Error...{error}</div>;
   }
+
+  console.log(data);
 
   const candidatures = data.engineer_to_manager_badge_candidature_proposals;
   const pendingProposals =
@@ -171,9 +180,15 @@ const CandidatureProposals = () => {
               <TableCell align="right">Manager</TableCell>
               <TableCell
                 align="right"
-                // style={{ display: isApprovedValue ? "block" : "none" }}
+                style={{ display: showPendingProposals ? "block" : "none" }}
               >
                 Actions
+              </TableCell>
+              <TableCell
+                align="right"
+                style={{ display: showPendingProposals ? "none" : "block" }}
+              >
+                Status
               </TableCell>
             </TableRow>
           </TableHead>
@@ -268,7 +283,7 @@ const CandidatureProposals = () => {
               )}
             {!showPendingProposals &&
               candidatures.map(
-                (item) =>
+                (item, index) =>
                   item.manager === parseInt(managerId) && (
                     <TableRow
                       key={item.id}
@@ -288,6 +303,13 @@ const CandidatureProposals = () => {
                       </TableCell>
                       <TableCell align="right">
                         {item.userByManager.name}
+                      </TableCell>
+                      <TableCell align="right">
+                        {item?.manager_badge_candidature_proposal_responses[
+                          index
+                        ]?.is_approved
+                          ? "Proposal approved"
+                          : "Proposal rejected"}
                       </TableCell>
                     </TableRow>
                   )

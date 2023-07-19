@@ -77,6 +77,7 @@ mutation PendingProposals($managerId: Int!) {
   get_engineers_pending_proposals_for_managers(args: {managerid: $managerId}) {
   id
     badge_version
+    proposal_description
     userByManager {
       name
       id
