@@ -21,7 +21,7 @@ interface User {
   token: string;
 }
 
-const users: User[] = [
+export const users: User[] = [
   {
     id: 3,
     name: "Darth Vaeder",
@@ -63,7 +63,7 @@ const LoginView = () => {
       <List>
         {users.map((user) => (
           <ListItem key={user.id}>
-            <ListItemButton onClick={() => login(user.token)}>
+            <ListItemButton onClick={() => login(user.token,user.name)}>
               <ListItemText
                 primary={user.name}
                 secondary={user.roles.join(", ")}
