@@ -1,4 +1,3 @@
-
 CREATE TABLE engineer_to_manager_badge_candidature_proposals (
   id SERIAL PRIMARY KEY, 
   manager INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
@@ -75,9 +74,10 @@ FROM
   JOIN badges_definitions bd ON bcr.badge_id = bd.id AND bcr.badge_version = bd.created_at
 WHERE
   EXISTS (
-    SELECT 1
+    SELECT *
     FROM issuing_requests ir
     WHERE ir.request_id = bcr.id
+    AND (ir.is_approved IS NULL) 
   );
 
 
@@ -220,4 +220,3 @@ CREATE TRIGGER insert_issuing_request_trigger
 AFTER UPDATE ON badge_candidature_request
 FOR EACH ROW
 EXECUTE FUNCTION insert_issuing_request();
-

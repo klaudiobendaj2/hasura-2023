@@ -15,7 +15,7 @@ import { users } from "./views/LoginView";
 
 const managerMenuItems = [
   {
-    link: "managers/badges",
+    link: "managers/Badges",
     text: "Badges",
     icon: <MilitaryTechIcon/>
   },
@@ -45,7 +45,7 @@ const AppManager: React.FC = () => {
     <AppEntrypoint
       icon={<ManagerIcon/>}
       title={`${manager?.name} (Manager)`}
-      defaultRoute="managers/badges"
+      defaultRoute="managers/Badges"
       drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
       mobileUtils={managerMenuItems}
       routes={[
@@ -58,7 +58,7 @@ const AppManager: React.FC = () => {
           )
         },
         {
-          path: "managers/badges",
+          path: "managers/Badges",
           element: (
             <div>
               <AvailableBadges/>
