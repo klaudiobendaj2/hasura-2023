@@ -121,6 +121,7 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
+    setTextAreaValue("");
   };
 
   const getTextAreaValue = (item) => {

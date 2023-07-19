@@ -3,6 +3,7 @@ import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
 import AvailableBadges from "./Managers/AvailableBadges";
+<<<<<<< HEAD
 import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
@@ -11,10 +12,17 @@ import RuleIcon from "@mui/icons-material/Rule";
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
 import "./App.css";
+=======
+import CandidatureProposals from './components/CandidatureProposal/CandidatureProposals';
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import RuleIcon from '@mui/icons-material/Rule';
+>>>>>>> main
 
 const managerMenuItems = [
   {
-    link: "managers/badges",
+    link: "managers/Badges",
     text: "Badges",
     icon: <MilitaryTechIcon />
   },
@@ -44,7 +52,13 @@ const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
+<<<<<<< HEAD
     defaultRoute="managers/badges"
+=======
+
+    defaultRoute="managers/Badges"
+
+>>>>>>> main
     drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
     mobileUtils={managerMenuItems}
     routes={[
@@ -57,7 +71,7 @@ const AppManager: React.FC = () => (
         )
       },
       {
-        path: "managers/badges",
+        path: "managers/Badges",
         element: (
           <div>
             <AvailableBadges />
@@ -80,6 +94,7 @@ const AppManager: React.FC = () => (
           </div>
         )
       },
+<<<<<<< HEAD
       {
         path: "managers/IssuingRequest",
         element: (
@@ -88,6 +103,16 @@ const AppManager: React.FC = () => (
           </div>
         )
       }
+=======
+      // {
+      //   path: "managers/IssuingRequest",
+      //   element: (
+      //     <div>
+      //       <ApprovalRejectionIssues/>
+      //     </div>
+      //   )
+      // }
+>>>>>>> main
     ]}
   />
 );
