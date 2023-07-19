@@ -12,6 +12,7 @@ import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 import './App.css';
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
+import AddCandidatureProposal from './components/CandidatureProposal/AddCandidatureProposal';
 
 const managerMenuItems = [
   {
@@ -51,39 +52,32 @@ const AppManager: React.FC = () => {
       routes={[
         {
           path: "managers/AssociatedEngineers",
-          element: (
-            <div>
-              <AssociatedEngineers />
-            </div>
-          )
+          element: <AssociatedEngineers />,
         },
         {
-          path: "managers/Badges",
-          element: (
-            <div>
-              <AvailableBadges/>
-            </div>
-          )
+          path: "managers/badges",
+          element: <AvailableBadges />,
+        },
+        {
+          path: 'managers/AddCandidatureProposal/:engineerId/:engineerName',
+          element: <AddCandidatureProposal />,      
+        },
+        {
+          path: 'managers/AddCandidatureProposal',
+          element: <AddCandidatureProposal />,      
         },
         {
           path: "managers/CandidatureProposals",
-          element: (
-            <div>
-              <CandidatureProposals/>
-            </div>
-          )
+          element: <CandidatureProposals />,
         },
         {
           path: "managers/IssuingRequest",
-          element: (
-            <div>
-              <ApprovalRejectionIssues/>
-            </div>
-          )
-        }
+          element: <ApprovalRejectionIssues />,
+        },
       ]}
     />
   );
 };
+
 
 export default AppManager;
