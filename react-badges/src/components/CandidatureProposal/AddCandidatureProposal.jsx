@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import {
@@ -7,7 +7,7 @@ import {
   GET_ENGINEERS
 } from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 import {
   Typography,
   TextField,
@@ -30,7 +30,7 @@ const AddCandidatureProposal = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control,
+    control
   } = useForm({ mode: "onChange" });
   const {
     loading: versionsLoading,
@@ -61,7 +61,25 @@ const AddCandidatureProposal = () => {
       );
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
+
       const engineerValue = data.selectedEngineer || engineerId;
+      const engineer = engineersData?.get_engineers_by_manager.find(
+        (engineer) => engineer.id === parseInt(engineerValue)
+      );
+
+      if (!engineer) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "This engineer doesn't exist.",
+        }).then(() => {
+          setTimeout(() => {
+            navigate("/managers/AssociatedEngineers");
+          }, 200);
+        });
+        return;
+      }
+
       if (badgeId && badgeVersion && engineerId !== "" && managerId) {
         await addCandidatureProposal({
           variables: {
@@ -83,7 +101,7 @@ const AddCandidatureProposal = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!",
+          text: "Proposal sent successfully to engineer!"
         }).then(() => {
           navigate("/managers/CandidatureProposals");
         });
