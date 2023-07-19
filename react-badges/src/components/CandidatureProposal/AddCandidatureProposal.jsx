@@ -143,7 +143,6 @@ const AddCandidatureProposal = () => {
                       labelId="engineer-label"
                       label="Select Engineer"
                     >
-                      <MenuItem value="">None</MenuItem>
                       {engineersData?.get_engineers_by_manager.map(
                         (engineer) => (
                           <MenuItem key={engineer.id} value={engineer.id}>
