@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery} from '@apollo/client';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/system';
 import {GET_BADGES} from "../state/queries-mutations.graphql";
-
 
 const FilterButton = ({ showLatest, onClick }) => {
   return (
