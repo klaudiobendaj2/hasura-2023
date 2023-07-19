@@ -4,9 +4,11 @@
     height: 400px;
 }
 
+
 .css-1oetjkv-MuiTypography-root{
     padding:20px;
 }
+
 .css-r40f8v-MuiTypography-root{
     margin-left: 20px;
 }
@@ -42,6 +44,7 @@
     padding:17px;
     font-family: monosp;
     font-weight: bold;
+    padding:30px;
 }
 
   /* .css-1as93il{
@@ -90,4 +93,13 @@
 }
  */
 
+ .issuebuttons{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    padding:20px;
+ }
 
+ .css-r40f8v-MuiTypography-root{
+    text-align: center;
+ }
