@@ -10,6 +10,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import RuleIcon from "@mui/icons-material/Rule";
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
+import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
 import "./App.css";
 
 const managerMenuItems = [
@@ -44,51 +45,33 @@ const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
-
     defaultRoute="managers/Badges"
-
     drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
     mobileUtils={managerMenuItems}
     routes={[
       {
         path: "managers/AssociatedEngineers",
-        element: (
-          <div>
-            <AssociatedEngineers />
-          </div>
-        )
+        element: <AssociatedEngineers />
       },
       {
-        path: "managers/Badges",
-        element: (
-          <div>
-            <AvailableBadges />
-          </div>
-        )
+        path: "managers/badges",
+        element: <AvailableBadges />
+      },
+      {
+        path: "managers/AddCandidatureProposal/:engineerId/:engineerName",
+        element: <AddCandidatureProposal />
+      },
+      {
+        path: "managers/AddCandidatureProposal",
+        element: <AddCandidatureProposal />
       },
       {
         path: "managers/CandidatureProposals",
-        element: (
-          <div>
-            <CandidatureProposals />
-          </div>
-        )
-      },
-      {
-        path: "managers/ManagerCandidatureProposals",
-        element: (
-          <div>
-            <ManagerCandidatureProposals />
-          </div>
-        )
+        element: <CandidatureProposals />
       },
       {
         path: "managers/IssuingRequest",
-        element: (
-          <div>
-            <ApprovalRejectionIssues />
-          </div>
-        )
+        element: <ApprovalRejectionIssues />
       }
     ]}
   />
