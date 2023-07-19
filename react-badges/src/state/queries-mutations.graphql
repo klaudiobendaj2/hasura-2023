@@ -80,7 +80,7 @@ export const REJECT_ISSUING_REQUEST = gql`
         is_approved: false
         disapproval_motivation: $rejectionDescription
       }
-      where: { id: { _eq: $id } }
+      where: { request_id: { _eq: $id } }
     ) {
       returning {
         disapproval_motivation
