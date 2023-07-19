@@ -38,6 +38,72 @@ export const GET_BADGES_VERSIONS = gql`
       title
     }
   }
+  `;
+
+  export const GET_BADGES = gql`
+  query MyQuery {
+    badges_versions {
+      title
+      description
+      created_at
+    }
+    badges_versions_last {
+      title
+      description
+      created_at
+    }
+  }
 `;
 
+export const GET_ISSUING_REQUESTS = gql`
+  mutation MyMutation($managerId: Int!) {
+    get_issuing_requests_for_manager(args: { managerid: $managerId }) {
+      badge_id
+      badge_title
+      candidature_evidences
+      engineer_id
+      engineer_name
+      id
+      is_issued
+      manager_id
+      badge_description
+      badge_version
+      created_at
+    }
+  }
+`;
 
+export const REJECT_ISSUING_REQUEST = gql`
+  mutation RejectIssuingRequest($id: Int!, $rejectionDescription: String!) {
+    update_issuing_requests(
+      _set: {
+        is_approved: false
+        disapproval_motivation: $rejectionDescription
+      }
+      where: { request_id: { _eq: $id } }
+    ) {
+      returning {
+        disapproval_motivation
+        id
+        is_approved
+        request_id
+      }
+    }
+  }
+`;
+
+export const APPROVE_ISSUING_REQUEST = gql`
+  mutation ApproveIssuingRequest($id: Int!, $isApproved: Boolean!) {
+    update_issuing_requests(
+      _set: { is_approved: $isApproved, disapproval_motivation: null }
+
+      where: { request_id: { _eq: $id } }
+    ) {
+      returning {
+        id
+        is_approved
+        request_id
+      }
+    }
+  }
+`;

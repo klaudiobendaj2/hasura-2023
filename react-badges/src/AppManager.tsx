@@ -10,10 +10,10 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import RuleIcon from '@mui/icons-material/Rule';
 import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
 import AddCandidatureProposal from './components/CandidatureProposal/AddCandidatureProposal';
-
+import "./App.css";
 const managerMenuItems = [
   {
-    link: "managers/badges",
+    link: "managers/Badges",
     text: "Badges",
     icon: <MilitaryTechIcon/>
   },
@@ -38,7 +38,7 @@ const AppManager: React.FC = () => (
   <AppEntrypoint
     icon={<ManagerIcon />}
     title="Manager"
-    defaultRoute="managers/badges"
+    defaultRoute="managers/Badges"
     drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
     mobileUtils={managerMenuItems}
     routes={[

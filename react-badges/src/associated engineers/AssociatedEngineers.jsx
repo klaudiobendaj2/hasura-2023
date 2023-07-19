@@ -23,11 +23,12 @@ const AssociatedEngineers = () => {
   };
 
   if (loading) return <p>Loading...</p>;
+
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
-      <h1 style={{ textAlign: 'center' }}>List of Engineers</h1>
+      <h1 style={{ textAlign: "center" }}>List of Engineers</h1>
       <Table>
         <TableHead>
           <TableRow>
@@ -41,7 +42,7 @@ const AssociatedEngineers = () => {
             data.get_engineers_by_manager.map((engineer) => (
               <TableRow key={engineer.id}>
                 <TableCell>{engineer.name}</TableCell>
-                <TableCell>{engineer.roles.join('/')}</TableCell>
+                <TableCell>{engineer.roles.join("/")}</TableCell>
                 <TableCell>
                 <ProposalButton onClick={() => handleProposalClick(engineer.id, engineer.name)} id={engineer.id} />
                 </TableCell>
