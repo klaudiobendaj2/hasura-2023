@@ -1,41 +1,20 @@
 import React, { useState } from 'react';
 import { useQuery} from '@apollo/client';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/system';
 import {GET_BADGES} from "../state/queries-mutations.graphql";
+import FilterButton from '../Badges/FilterButton';
 
-const FilterButton = ({ showLatest, onClick }) => {
-  return (
-    <div  style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-      <Button onClick={onClick} variant="contained" >
-        {showLatest ? 'Show All Badges' : 'Show Latest Badges'}
-      </Button>
-    </div>
-  );
-};
-
-const StyledRoot = styled('div')({
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-});
-
-const StyledCard = styled(Card)({
-  width: '300px',
-  margin: '1rem',
-});
 
 const BadgeList = () => {
-  const [showLatest, setShowLatest] = useState(false);
-
+  const [showAll, setShowAll] = useState(false);
   const { loading, error, data } = useQuery(GET_BADGES);
   console.log(data);
 
   const handleFilterClick = () => {
-    setShowLatest(!showLatest);
+    setShowAll(!showAll);
   };
 
   if (loading) {
@@ -46,11 +25,24 @@ const BadgeList = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  const badges = showLatest ? data.badges_versions_last : data.badges_versions;
+  const badges = showAll ? data.badges_versions : data.badges_versions_last;
+
+  const StyledRoot = styled('div')({
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  });
+  
+  const StyledCard = styled(Card)({
+    margin: '1rem',
+    backgroundColor: "#F1F6F9",
+    width:'390px',
+    height: '400px',
+  });
 
   return (
     <div>
-      <Typography variant="h2" align="center" gutterBottom>
+      <Typography variant="h2" align="center"  gutterBottom>
         Available Badges
       </Typography>
       <StyledRoot >
@@ -64,13 +56,13 @@ const BadgeList = () => {
                 {badge.description}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <strong>Created at: </strong> {badge.created_at}
+                <strong>Version: </strong> {badge.created_at}
               </Typography>
             </CardContent>
           </StyledCard>
         ))}
       </StyledRoot>
-      <FilterButton showLatest={showLatest} onClick={handleFilterClick} />
+      <FilterButton showAll={showAll} onClick={handleFilterClick} />
     </div>
   );
 };

@@ -1,30 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useContext } from "react";
 import { AuthContext } from "../state/with-auth";
-import { Button, TextField } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import {
+  Button,
+  TextField,
+  Alert,
+  AlertTitle,
+  Typography,
+  Card,
+  CardContent,
+  FormHelperText
+} from "@mui/material";
 import {
   GET_ISSUING_REQUESTS,
   REJECT_ISSUING_REQUEST,
   APPROVE_ISSUING_REQUEST
 } from "../state/queries-mutations.graphql";
+import Swal from "sweetalert2";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useForm } from "react-hook-form";
 
 const ApprovalRejectionIssues = () => {
   const { managerId } = useContext(AuthContext);
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const [rejectionDescription, setRejectionDescription] = useState("");
   const [getExistingIssues, { loading, error, data }] = useMutation(
     GET_ISSUING_REQUESTS,
     { variables: { managerId } }
   );
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ mode: "onChange" });
 
   const handleApprovalClick = async (id) => {
     try {
@@ -37,7 +49,13 @@ const ApprovalRejectionIssues = () => {
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
-      alert('The issue request was approved!');
+      Swal.fire({
+        icon: "success",
+        text: "The issue request was approved!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === id) {
           return { ...issue, showRejectionTextArea: false };
@@ -49,11 +67,9 @@ const ApprovalRejectionIssues = () => {
       console.error("Error approving issuing request:", error);
     }
   };
-  
 
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
-    setRejectionDescription("");
     const updatedIssueRequests = issueRequests.map((issue) => {
       if (issue.id === id) {
         return { ...issue, showRejectionTextArea: true };
@@ -63,21 +79,22 @@ const ApprovalRejectionIssues = () => {
     setIssueRequests(updatedIssueRequests);
   };
 
-  const handleDescriptionChange = (event) => {
-    setRejectionDescription(event.target.value);
-  };
 
-  const handleRejectionSubmit = async () => {
-    alert("The issue request was not approved!");
+  const handleRejectionSubmit = async (data) => {
+    Swal.fire({
+      text: "The issue request was not approved!",
+      showConfirmButton: false,
+      timer: 1500
+    });
+
     try {
       await rejectIssuingRequest({
         variables: {
           id: selectedRequestId,
-          rejectionDescription: rejectionDescription
+          rejectionDescription: data.rejectionDescription
         }
       });
       setSelectedRequestId(null);
-      setRejectionDescription("");
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === selectedRequestId) {
           return { ...issue, showRejectionTextArea: false };
@@ -151,13 +168,12 @@ const ApprovalRejectionIssues = () => {
               <Typography textAlign="justify" variant="body1" component="p">
                 {issue.badge_description}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <strong>Badge Version: </strong>
+              <Typography variant="body2" color="black" marginLeft="200px">
+                <strong>Version: </strong>
                 {issue.badge_version}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <strong>Engineer: </strong>
-                {issue.engineer_name}
+              <Typography variant="body2" marginLeft="260px" color="black">
+                <strong> Eng. {issue.engineer_name}</strong>
               </Typography>
             </CardContent>
             <div className="issuebuttons">
@@ -167,31 +183,39 @@ const ApprovalRejectionIssues = () => {
                 onClick={() => handleApprovalClick(issue.id)}
                 sx={{ marginRight: "10px" }}
               >
-                Approve
+                <DoneOutlinedIcon />
               </Button>
               <Button
                 variant="contained"
-                color="secondary"
+                color="error"
                 onClick={() => handleRejectionClick(issue.id)}
               >
-                Reject
+                <CloseOutlinedIcon />
               </Button>
             </div>
             {issue.showRejectionTextArea && (
               <CardContent>
                 <TextField
-                  value={rejectionDescription}
-                  onChange={handleDescriptionChange}
-                  placeholder="Enter rejection description"
+                  id="rejectionDescription"
+                  placeholder="Enter rejection description..."
                   multiline
                   rows={4}
                   variant="outlined"
                   fullWidth
+                  {...register("rejectionDescription", {
+                    required: "Please enter a rejection description."
+                  })}
+                  error={!!errors.rejectionDescription}
                 />
+                {errors.rejectionDescription && (
+                  <FormHelperText error>
+                    {errors.rejectionDescription.message}
+                  </FormHelperText>
+                )}
                 <Button
                   variant="contained"
-                  color="secondary"
-                  onClick={handleRejectionSubmit}
+                  color="success"
+                  onClick={handleSubmit(handleRejectionSubmit)}
                 >
                   Submit
                 </Button>

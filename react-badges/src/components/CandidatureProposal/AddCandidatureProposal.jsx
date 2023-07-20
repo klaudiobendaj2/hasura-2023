@@ -64,7 +64,7 @@ const AddCandidatureProposal = () => {
 
       const engineerValue = data.selectedEngineer || engineerId;
       const engineer = engineersData?.get_engineers_by_manager.find(
-        (engineer) => engineer.id === parseInt(engineerValue)
+        (engineer) => engineer.id === parseInt(engineerValue) && engineer.name === engineerName
       );
 
       if (!engineer) {
@@ -72,6 +72,8 @@ const AddCandidatureProposal = () => {
           icon: "error",
           title: "Error",
           text: "This engineer doesn't exist.",
+          showConfirmButton: false,
+          timer: 1500
         }).then(() => {
           setTimeout(() => {
             navigate("/managers/AssociatedEngineers");
@@ -101,7 +103,9 @@ const AddCandidatureProposal = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!"
+          text: "Proposal sent successfully!",
+          showConfirmButton: false,
+          timer: 1500
         }).then(() => {
           navigate("/managers/CandidatureProposals");
         });

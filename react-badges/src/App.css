@@ -1,8 +1,4 @@
-.css-ze0x5a-MuiPaper-root-MuiCard-root{
-    background-color: #F1F6F9;
-    width:390px;
-    height: 400px;
-}
+
 .css-1oetjkv-MuiTypography-root{
     padding:20px;
 }
@@ -50,3 +46,38 @@
  .css-r40f8v-MuiTypography-root{
     text-align: center;
  }
+
+ .swal2-popup {
+    font-size: 0.9rem; 
+    padding: 10px;
+    margin-left: 230px;
+  }
+
+  .css-ke5b6m-MuiButtonBase-root-MuiButton-root{
+    margin-left: 546px;
+  }
+
+  .css-wb57ya-MuiFormControl-root-MuiTextField-root{
+    padding:11px;
+  }
+
+  .css-8ewcdo-MuiInputBase-root-MuiOutlinedInput-root{
+    border: 1px solid black;
+    border-radius: 8px;
+  }
+
+  /* darkmode */
+  .css-1oetjkv-MuiTypography-root{
+    color:black
+  }
+
+  .css-1o6kmfp-MuiTypography-root{
+    color:black;
+    margin-left:50px;
+  }
+
+  .css-1cjlbjf-MuiTypography-root{
+    color:black;
+  }
+
+ 
