@@ -225,12 +225,20 @@ export const APPROVE_ISSUING_REQUEST = gql`
 `;
 
 export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
-  query MyQuery($isApproved: Boolean!) {
+  query MyQuery($isApproved: Boolean!,$managerId: Int!) {
     engineer_to_manager_badge_candidature_proposals(
       where: {
+        _and: 
+        [{
         manager_badge_candidature_proposal_responses: {
           is_approved: { _eq: $isApproved }
         }
+        },
+        {
+        manager: { _eq: $managerId }
+        }
+        ]
+        
       }
     ) {
       id
@@ -303,7 +311,7 @@ export const APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER = gql`
   }
 `;
 
-export const GET_CANDIDATURE_PROPOSALS = gql`
+export const GET_CANDIDATURE_PROPOSALS_BY_MANAGER = gql`
   query ManagerProposals($managerId: Int!){
     manager_to_engineer_badge_candidature_proposals(where: {created_by: {_eq: $managerId}}) {
       badge_version

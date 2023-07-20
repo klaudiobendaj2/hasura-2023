@@ -28,7 +28,8 @@ const CandidatureProposals = () => {
     GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
     {
       variables: {
-        isApproved: isApprovedFilter
+        isApproved: isApprovedFilter,
+        managerId: managerId
       }
       // fetchPolicy: "network-only"
     }
@@ -53,20 +54,6 @@ const CandidatureProposals = () => {
   useEffect(() => {
     refetch({ isApproved: isApprovedFilter });
   }, [isApprovedFilter, showPendingProposals]);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const approvalValue =
-  //       data.engineer_to_manager_badge_candidature_proposals[0]
-  //         ?.manager_badge_candidature_proposal_responses[0]?.is_approved;
-  //     console.log(approvalValue);
-  //     setIsApprovedValue(approvalValue);
-  //   }
-  // }, [data]);
-
-  // useEffect(() => {
-  //   refetch({ isApproved: isApprovedFilter });
-  // }, [isApprovedFilter]);
 
   const onApproveClick = async (proposalId) => {
     await managerResponse({

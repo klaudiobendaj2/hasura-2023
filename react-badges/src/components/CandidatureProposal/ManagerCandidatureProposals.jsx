@@ -10,17 +10,20 @@ import {
   TableRow,
   Paper
 } from "@mui/material";
-import { GET_CANDIDATURE_PROPOSALS } from "../../state/queries-mutations.graphql";
+import { GET_CANDIDATURE_PROPOSALS_BY_MANAGER } from "../../state/queries-mutations.graphql";
 import { Typography } from "@mui/material";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
   console.log(typeof managerId);
-  const { loading, error, data } = useQuery(GET_CANDIDATURE_PROPOSALS, {
-    variables: {
-      managerId: managerId
+  const { loading, error, data } = useQuery(
+    GET_CANDIDATURE_PROPOSALS_BY_MANAGER,
+    {
+      variables: {
+        managerId: managerId
+      }
     }
-  });
+  );
   useEffect(() => {
     // if(data){
     console.log(data);

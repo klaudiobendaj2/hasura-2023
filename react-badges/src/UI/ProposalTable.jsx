@@ -66,122 +66,104 @@ const ProposalTable = ({
         </TableHead>
         <TableBody>
           {showPendingProposals &&
-            pendingProposals.map(
-              (item) =>
-                item.userByManager.id === parseInt(managerId) && (
-                  <TableRow
-                    key={item.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 }
-                    }}
+            pendingProposals.map((item) => (
+              <TableRow
+                key={item.id}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 }
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {item.user.name}
+                </TableCell>
+                <TableCell align="right">{item.badge_version}</TableCell>
+                <TableCell align="right">{item.badges_version.title}</TableCell>
+                <TableCell align="right">{item.proposal_description}</TableCell>
+                <TableCell align="right">{item.userByManager.name}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => onApproveClick(item.id)}
                   >
-                    <TableCell component="th" scope="row">
-                      {item.user.name}
-                    </TableCell>
-                    <TableCell align="right">{item.badge_version}</TableCell>
-                    <TableCell align="right">
-                      {item.badges_version.title}
-                    </TableCell>
-                    <TableCell align="right">
-                      {item.proposal_description}
-                    </TableCell>
-                    <TableCell align="right">
-                      {item.userByManager.name}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="contained"
-                        color="success"
-                        onClick={() => onApproveClick(item.id)}
+                    Approve
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={handleOpen}
+                  >
+                    Reject
+                  </Button>
+                </TableCell>
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={open}
+                  onClose={handleClose}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500
+                    }
+                  }}
+                >
+                  <Fade in={open}>
+                    <Box sx={style}>
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
                       >
-                        Approve
-                      </Button>
+                        Add a disapproval motivation
+                      </Typography>
+                      <Typography
+                        id="transition-modal-description"
+                        sx={{ mt: 2 }}
+                      >
+                        <TextArea
+                          getTextArea={getTextAreaValue}
+                          textAreaValue={textAreaValue}
+                        />
+                      </Typography>
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={handleOpen}
+                        onClick={() => onDisapproveClick(item.id)}
                       >
-                        Reject
+                        Submit
                       </Button>
-                    </TableCell>
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      open={open}
-                      onClose={handleClose}
-                      closeAfterTransition
-                      slots={{ backdrop: Backdrop }}
-                      slotProps={{
-                        backdrop: {
-                          timeout: 500
-                        }
-                      }}
-                    >
-                      <Fade in={open}>
-                        <Box sx={style}>
-                          <Typography
-                            id="transition-modal-title"
-                            variant="h6"
-                            component="h2"
-                          >
-                            Add a disapproval motivation
-                          </Typography>
-                          <Typography
-                            id="transition-modal-description"
-                            sx={{ mt: 2 }}
-                          >
-                            <TextArea
-                              getTextArea={getTextAreaValue}
-                              textAreaValue={textAreaValue}
-                            />
-                          </Typography>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() => onDisapproveClick(item.id)}
-                          >
-                            Submit
-                          </Button>
-                        </Box>
-                      </Fade>
-                    </Modal>
-                  </TableRow>
-                )
-            )}
+                    </Box>
+                  </Fade>
+                </Modal>
+              </TableRow>
+            ))}
           {!showPendingProposals &&
-            candidatures.map(
-              (item, index) =>
-                item.manager === parseInt(managerId) && (
-                  <TableRow
-                    key={item.id}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 }
-                    }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {item.user.name}
-                    </TableCell>
-                    <TableCell align="right">{item.badge_version}</TableCell>
-                    <TableCell align="right">
-                      {item.badges_version.title}
-                    </TableCell>
-                    <TableCell align="right">
-                      {item.proposal_description}
-                    </TableCell>
-                    <TableCell align="right">
-                      {item.userByManager.name}
-                    </TableCell>
-                    <TableCell align="right">
-                      {item.manager_badge_candidature_proposal_responses
-                        .length > 0 &&
-                        (item.manager_badge_candidature_proposal_responses[0]
-                          .is_approved
-                          ? "Proposal approved"
-                          : "Proposal rejected")}
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
+            candidatures.map((item) => (
+              <TableRow
+                key={item.id}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 }
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {item.user.name}
+                </TableCell>
+                <TableCell align="right">{item.badge_version}</TableCell>
+                <TableCell align="right">{item.badges_version.title}</TableCell>
+                <TableCell align="right">{item.proposal_description}</TableCell>
+                <TableCell align="right">{item.userByManager.name}</TableCell>
+                <TableCell align="right">
+                  {item.manager_badge_candidature_proposal_responses.length >
+                    0 &&
+                    (item.manager_badge_candidature_proposal_responses[0]
+                      .is_approved
+                      ? "Proposal approved"
+                      : "Proposal rejected")}
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
