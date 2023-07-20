@@ -1,38 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Typography from "@mui/material/Typography";
-import TextArea from "../../UI/TextArea";
 import {
   GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
-  APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,
-  DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,
+  APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,
   GET_ENGINEERS_PENDING_PROPOSALS
 } from "../../state/queries-mutations.graphql";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4
-};
+import ProposalTable from "../../UI/ProposalTable";
 
 const CandidatureProposals = () => {
   const [open, setOpen] = useState(false);
@@ -54,8 +29,8 @@ const CandidatureProposals = () => {
     {
       variables: {
         isApproved: isApprovedFilter
-      },
-      fetchPolicy: "network-only"
+      }
+      // fetchPolicy: "network-only"
     }
   );
 
@@ -68,34 +43,33 @@ const CandidatureProposals = () => {
     }
   });
 
+  const [managerResponse, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
+
   useEffect(() => {
     getPendingProposals();
   }, [showPendingProposals]);
 
   useEffect(() => {
-    if (data) {
-      const approvalValue =
-        data.engineer_to_manager_badge_candidature_proposals[0]
-          ?.manager_badge_candidature_proposal_responses[0]?.is_approved;
-      console.log(approvalValue);
-      setIsApprovedValue(approvalValue);
-    }
-  }, [data]);
-
-  useEffect(() => {
     refetch({ isApproved: isApprovedFilter });
-  }, [isApprovedFilter]);
+  }, [isApprovedFilter, showPendingProposals]);
 
-  const [approveResponse, { data: data2, loading: loading2, error: error2 }] =
-    useMutation(APPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
+  // useEffect(() => {
+  //   if (data) {
+  //     const approvalValue =
+  //       data.engineer_to_manager_badge_candidature_proposals[0]
+  //         ?.manager_badge_candidature_proposal_responses[0]?.is_approved;
+  //     console.log(approvalValue);
+  //     setIsApprovedValue(approvalValue);
+  //   }
+  // }, [data]);
 
-  const [
-    disapproveResponse,
-    { data: data3, loading: loading3, error: error3 }
-  ] = useMutation(DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER);
+  // useEffect(() => {
+  //   refetch({ isApproved: isApprovedFilter });
+  // }, [isApprovedFilter]);
 
   const onApproveClick = async (proposalId) => {
-    await approveResponse({
+    await managerResponse({
       variables: {
         proposal_id: proposalId,
         is_approved: true,
@@ -104,15 +78,12 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
-    // Refetch the GET_ENGINEERS_PENDING_PROPOSALS mutation after approval
-
     setTextAreaValue("");
-
     await getPendingProposals();
   };
 
-  const onDisapproveClick = (proposalId) => {
-    disapproveResponse({
+  const onDisapproveClick = async (proposalId) => {
+    await managerResponse({
       variables: {
         proposal_id: proposalId,
         is_approved: false,
@@ -122,204 +93,61 @@ const CandidatureProposals = () => {
       }
     });
     setTextAreaValue("");
+    await getPendingProposals();
   };
 
   const getTextAreaValue = (item) => {
     setTextAreaValue(item);
   };
 
-  const handleShowOngoing = () => {
-    setShowPendingProposals(false);
+  const handleShowOngoing = async () => {
     setIsApprovedFilter(true);
-  };
-
-  const handleShowDisapproved = () => {
+    // await refetch({ isApproved: isApprovedFilter });
     setShowPendingProposals(false);
-    setIsApprovedFilter(false);
   };
 
-  console.log(data);
+  const handleShowDisapproved = async () => {
+    setIsApprovedFilter(false);
+    // await refetch({ isApproved: isApprovedFilter });
+    setShowPendingProposals(false);
+  };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (pendingLoading) {
-    return <div>Loading</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
-  if (error) {
-    return <div>Error...{error}</div>;
-  }
+  if (pendingLoading) return <div>Loading</div>;
 
-  if (pendingError) {
-    return <div>Error...{error}</div>;
-  }
+  if (loading2) return <div>Loading...</div>;
 
-  console.log(data);
+  if (error) return <div>Error...{error}</div>;
 
-  const candidatures = data.engineer_to_manager_badge_candidature_proposals;
+  if (pendingError) return <div>Error...{error}</div>;
+
+  if (error2) return <div>Error...{error}</div>;
+
+  const candidatures =
+    data?.engineer_to_manager_badge_candidature_proposals || [];
   const pendingProposals =
-    pendingData.get_engineers_pending_proposals_for_managers;
-
-  console.log(pendingProposals);
-  console.log(showPendingProposals);
+    pendingData?.get_engineers_pending_proposals_for_managers || [];
 
   return (
     <>
       <Button onClick={handleShowPending}>Show Pending Proposals</Button>
       <Button onClick={handleShowOngoing}>Show Ongoing</Button>
       <Button onClick={handleShowDisapproved}>Show Disapproved</Button>
-
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Engineer who applied</TableCell>
-              <TableCell align="right">Badge Version</TableCell>
-              <TableCell align="right">Badge Title</TableCell>
-              <TableCell align="right">Proposal Description</TableCell>
-              <TableCell align="right">Manager</TableCell>
-              <TableCell
-                align="right"
-                style={{ display: showPendingProposals ? "block" : "none" }}
-              >
-                Actions
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ display: showPendingProposals ? "none" : "block" }}
-              >
-                Status
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {showPendingProposals &&
-              pendingProposals.map(
-                (item) =>
-                  item.userByManager.id === parseInt(managerId) && (
-                    <TableRow
-                      key={item.id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 }
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {item.user.name}
-                      </TableCell>
-                      <TableCell align="right">{item.badge_version}</TableCell>
-                      <TableCell align="right">
-                        {item.badges_version.title}
-                      </TableCell>
-                      <TableCell align="right">
-                        {item.proposal_description}
-                      </TableCell>
-                      <TableCell align="right">
-                        {item.userByManager.name}
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        // style={{
-                        //   display: isApprovedValue ? "block" : "none"
-                        // }}
-                      >
-                        <Button
-                          variant="contained"
-                          color="success"
-                          onClick={() => onApproveClick(item.id)}
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={handleOpen}
-                        >
-                          Reject
-                        </Button>
-                      </TableCell>
-                      <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        slots={{ backdrop: Backdrop }}
-                        slotProps={{
-                          backdrop: {
-                            timeout: 500
-                          }
-                        }}
-                      >
-                        <Fade in={open}>
-                          <Box sx={style}>
-                            <Typography
-                              id="transition-modal-title"
-                              variant="h6"
-                              component="h2"
-                            >
-                              Add a disapproval motivation
-                            </Typography>
-                            <Typography
-                              id="transition-modal-description"
-                              sx={{ mt: 2 }}
-                            >
-                              <TextArea
-                                getTextArea={getTextAreaValue}
-                                textAreaValue={textAreaValue}
-                              />
-                            </Typography>
-                            <Button
-                              variant="contained"
-                              color="error"
-                              onClick={() => onDisapproveClick(item.id)}
-                            >
-                              Submit
-                            </Button>
-                          </Box>
-                        </Fade>
-                      </Modal>
-                    </TableRow>
-                  )
-              )}
-            {!showPendingProposals &&
-              candidatures.map(
-                (item, index) =>
-                  item.manager === parseInt(managerId) && (
-                    <TableRow
-                      key={item.id}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 }
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {item.user.name}
-                      </TableCell>
-                      <TableCell align="right">{item.badge_version}</TableCell>
-                      <TableCell align="right">
-                        {item.badges_version.title}
-                      </TableCell>
-                      <TableCell align="right">
-                        {item.proposal_description}
-                      </TableCell>
-                      <TableCell align="right">
-                        {item.userByManager.name}
-                      </TableCell>
-                      <TableCell align="right">
-                        {item?.manager_badge_candidature_proposal_responses[
-                          index
-                        ]?.is_approved
-                          ? "Proposal approved"
-                          : "Proposal rejected"}
-                      </TableCell>
-                    </TableRow>
-                  )
-              )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <ProposalTable
+        showPendingProposals={showPendingProposals}
+        pendingProposals={pendingProposals}
+        managerId={managerId}
+        handleOpen={handleOpen}
+        handleClose={handleClose}
+        textAreaValue={textAreaValue}
+        getTextAreaValue={getTextAreaValue}
+        open={open}
+        candidatures={candidatures}
+        onApproveClick={onApproveClick}
+        onDisapproveClick={onDisapproveClick}
+      />
     </>
   );
 };
-
 export default CandidatureProposals;

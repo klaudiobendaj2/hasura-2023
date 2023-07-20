@@ -77,6 +77,10 @@ const AppManager: React.FC = () => {
           element: <CandidatureProposals />,
         },
         {
+          path: "managers/ManagerCandidatureProposals",
+          element: <ManagerCandidatureProposals />,
+        },
+        {
           path: "managers/IssuingRequest",
           element: <ApprovalRejectionIssues />,
         },
