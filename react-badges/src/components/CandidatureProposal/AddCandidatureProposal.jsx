@@ -62,7 +62,7 @@ const AddCandidatureProposal = () => {
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
 
-      const engineerValue = data.selectedEngineer || engineerId;
+      const engineerValue = data.selectedEngineer || parseInt(engineerId);
       const engineer = engineersData?.get_engineers_by_manager.find(
         (engineer) => engineer.id === parseInt(engineerValue)
       );
@@ -80,19 +80,19 @@ const AddCandidatureProposal = () => {
         return;
       }
 
-      if (badgeId && badgeVersion && engineerId !== "" && managerId) {
+      if (badgeId && badgeVersion && engineerValue && managerId && proposalDescription) {
         await addCandidatureProposal({
           variables: {
-            badgeId: Number(badgeId),
+            badgeId: badgeId,
             badgeVersion: badgeVersion,
-            engineer: parseInt(engineerValue),
+            engineer: engineerValue,
             proposalDescription: data.proposalDescription,
             createdBy: managerId
           }
         });
         console.log("Candidature proposal added successfully!");
         console.log("Data:", {
-          badgeId: Number(badgeId),
+          badgeId: badgeId,
           badgeVersion: badgeVersion,
           engineer: engineerValue,
           proposalDescription: data.proposalDescription,
