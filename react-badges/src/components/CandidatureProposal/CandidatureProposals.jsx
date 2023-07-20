@@ -124,7 +124,6 @@ const CandidatureProposals = () => {
       <ProposalTable
         showPendingProposals={showPendingProposals}
         pendingProposals={pendingProposals}
-        managerId={managerId}
         handleOpen={handleOpen}
         handleClose={handleClose}
         textAreaValue={textAreaValue}

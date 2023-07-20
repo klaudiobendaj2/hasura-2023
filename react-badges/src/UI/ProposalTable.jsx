@@ -30,7 +30,6 @@ const style = {
 const ProposalTable = ({
   showPendingProposals,
   pendingProposals,
-  managerId,
   handleOpen,
   handleClose,
   textAreaValue,
