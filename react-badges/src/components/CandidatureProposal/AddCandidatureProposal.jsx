@@ -72,10 +72,10 @@ const AddCandidatureProposal = () => {
           icon: "error",
           title: "Error",
           text: "This engineer doesn't exist.",
+          showConfirmButton: false,
+          timer: 1500
         }).then(() => {
-          setTimeout(() => {
             navigate("/managers/AssociatedEngineers");
-          }, 200);
         });
         return;
       }
@@ -101,7 +101,9 @@ const AddCandidatureProposal = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!"
+          text: "Proposal sent successfully to engineer!",
+          showConfirmButton: false,
+          timer: 1500
         }).then(() => {
           navigate("/managers/CandidatureProposals");
         });
