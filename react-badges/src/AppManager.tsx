@@ -2,27 +2,16 @@ import React, { useContext } from "react";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
 import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-<<<<<<< HEAD
 import AvailableBadges from "./Badges/AvailableBadges";
-import CandidatureProposals from './components/CandidatureProposal/CandidatureProposals';
-import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import GroupWorkIcon from '@mui/icons-material/GroupWork';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import RuleIcon from '@mui/icons-material/Rule';
-import ApprovalRejectionIssues from "./IssueRequests/ApprovalRejectionIssues";
-import './App.css';
-=======
-import AvailableBadges from "./Managers/AvailableBadges";
 import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import RuleIcon from "@mui/icons-material/Rule";
-import ApprovalRejectionIssues from "./Managers/ApprovalRejectionIssues";
+import ApprovalRejectionIssues from "./IssueRequests/ApprovalRejectionIssues";
 import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
 import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
 import "./App.css";
->>>>>>> main
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
 
