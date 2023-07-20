@@ -142,7 +142,6 @@ const AddCandidatureProposal = () => {
       >
         Add Candidature Proposal
       </Typography>
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={2}>
           {pathname === "/managers/AddCandidatureProposal" ? (
             <Grid item xs={12}>
@@ -247,12 +246,11 @@ const AddCandidatureProposal = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button  variant="contained" color="primary" fullWidth onClick={handleSubmit(handleFormSubmit)}>
               Submit
             </Button>
           </Grid>
         </Grid>
-      </form>
     </Container>
   );
 };
