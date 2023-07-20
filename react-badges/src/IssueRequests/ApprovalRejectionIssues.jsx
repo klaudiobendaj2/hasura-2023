@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useContext } from "react";
+
 import { AuthContext } from "../state/with-auth";
 import {
   Button,
@@ -22,15 +23,23 @@ import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useForm } from "react-hook-form";
 
+
+
+
 const ApprovalRejectionIssues = () => {
   const { managerId } = useContext(AuthContext);
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [getExistingIssues, { loading, error, data }] = useMutation(
+
     GET_ISSUING_REQUESTS,
+
     { variables: { managerId } }
+
   );
+
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
+
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
   const {
     register,
@@ -38,14 +47,25 @@ const ApprovalRejectionIssues = () => {
     formState: { errors }
   } = useForm({ mode: "onChange" });
 
+
+
+
   const handleApprovalClick = async (id) => {
+
     try {
+
       await approveIssuingRequest({
+
         variables: {
+
           id: id,
+
           isApproved: true,
+
           rejectionDescription: null
+
         }
+
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
@@ -64,11 +84,18 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
     } catch (error) {
+
       console.error("Error approving issuing request:", error);
+
     }
+
   };
 
+
+
+
   const handleRejectionClick = (id) => {
+
     setSelectedRequestId(id);
     const updatedIssueRequests = issueRequests.map((issue) => {
       if (issue.id === id) {
@@ -88,12 +115,17 @@ const ApprovalRejectionIssues = () => {
     });
 
     try {
+
       await rejectIssuingRequest({
+
         variables: {
+
           id: selectedRequestId,
           rejectionDescription: data.rejectionDescription
         }
+
       });
+
       setSelectedRequestId(null);
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === selectedRequestId) {
@@ -103,13 +135,22 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
       getExistingIssues();
+
     } catch (error) {
+
       console.error("Error rejecting issuing request:", error);
+
     }
+
   };
 
+
+
+
   useEffect(() => {
+
     getExistingIssues();
+
   }, [getExistingIssues]);
 
   useEffect(() => {
@@ -125,14 +166,25 @@ const ApprovalRejectionIssues = () => {
   }, [data]);
 
   if (loading) {
+
     return <p>Loading...</p>;
+
   }
+
+
+
 
   if (error) {
+
     return <p>Error: {error.message}</p>;
+
   }
 
+
+
+
   return (
+
     <div>
       <Typography variant="h2" align="center" gutterBottom>
         Existing Issues
@@ -199,8 +251,11 @@ const ApprovalRejectionIssues = () => {
                   id="rejectionDescription"
                   placeholder="Enter rejection description..."
                   multiline
+
                   rows={4}
+
                   variant="outlined"
+
                   fullWidth
                   {...register("rejectionDescription", {
                     required: "Please enter a rejection description."
@@ -213,11 +268,14 @@ const ApprovalRejectionIssues = () => {
                   </FormHelperText>
                 )}
                 <Button
+
                   variant="contained"
                   color="success"
                   onClick={handleSubmit(handleRejectionSubmit)}
                 >
+
                   Submit
+
                 </Button>
               </CardContent>
             )}
@@ -225,7 +283,12 @@ const ApprovalRejectionIssues = () => {
         ))
       )}
     </div>
+
   );
+
 };
+
+
+
 
 export default ApprovalRejectionIssues;
