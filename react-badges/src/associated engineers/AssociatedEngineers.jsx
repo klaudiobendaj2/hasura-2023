@@ -19,9 +19,9 @@ const AssociatedEngineers = () => {
     getEngineersByManager();
   }, [getEngineersByManager]);
 
-  const handleProposalClick = (engineerId,engineerName) => {
-    console.log('Proposal corresponding for engineer with id: ', engineerId , engineerName);
-    navigate(`/managers/AddCandidatureProposal/${engineerId}/${encodeURIComponent(engineerName)}`);
+  const handleProposalClick = (engineerId) => {
+    console.log('Proposal corresponding for engineer with id: ', engineerId );
+    navigate(`/managers/AddCandidatureProposal/${engineerId}`);
   };
     const engineerImageMap = {
     1: '1.jpg',
@@ -49,7 +49,7 @@ const AssociatedEngineers = () => {
               <Typography color="textSecondary" sx={{ mb: 1,marginBottom:"10px" }}>
                 Roles: {engineer.roles.join("/")}
               </Typography>
-              <ProposalButton  onClick={() => handleProposalClick(engineer.id, engineer.name)} id={engineer.id}  />
+              <ProposalButton  onClick={() => handleProposalClick(engineer.id)} id={engineer.id}  />
             </CardContent>
           </Card>
         </Grid>

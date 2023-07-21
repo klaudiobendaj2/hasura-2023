@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import {
@@ -20,17 +20,19 @@ import {
   FormHelperText,
   Grid
 } from "@mui/material";
-import LoadableCurtain from "../LoadableCurtain"
+import LoadableCurtain from "../LoadableCurtain";
 import { useForm, Controller } from "react-hook-form";
-import CenteredLayout from "../../layouts/CenteredLayout"
+import CenteredLayout from "../../layouts/CenteredLayout";
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
-  const { engineerId, engineerName } = useParams(); 
+  const { engineerId } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    watch,
+    setValue
   } = useForm({ mode: "onChange" });
   const {
     loading: versionsLoading,
@@ -54,6 +56,35 @@ const AddCandidatureProposal = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
+  const [engineerExists, setEngineerExists] = useState(true);
+
+  useEffect(() => {
+    if (engineerId) {
+      if (engineersData) {
+        const validEngineer = engineersData.get_engineers_by_manager.find(
+          (engineer) => engineer.id === parseInt(engineerId)
+        );
+        if (!validEngineer) {
+          setEngineerExists(false);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "This engineer doesn't exist.",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            navigate("/managers/AssociatedEngineers");
+          });
+        } else {
+          setValue("engineerName", validEngineer.name);
+          setEngineerExists(true);
+        }
+      }
+    } else {
+      setEngineerExists(true);
+    }
+  }, [engineerId, engineersData, setValue,pathname]);
+
   const handleFormSubmit = async (data) => {
     try {
       const selectedBadge = versionsData?.badges_versions_last.find(
@@ -61,26 +92,15 @@ const AddCandidatureProposal = () => {
       );
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
-
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
-      const engineer = engineersData?.get_engineers_by_manager.find(
-        (engineer) => engineer.id === parseInt(engineerValue) && engineer.name === engineerName
-      );
-
-      if (!engineer) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "This engineer doesn't exist.",
-          showConfirmButton: false,
-          timer: 1500
-        }).then(() => {
-            navigate("/managers/AssociatedEngineers");
-        });
-        return;
-      }
-
-      if (badgeId && badgeVersion && engineerValue && managerId && proposalDescription) {
+    
+      if (
+        badgeId &&
+        badgeVersion &&
+        engineerValue &&
+        managerId &&
+        proposalDescription
+      ) {
         await addCandidatureProposal({
           variables: {
             badgeId: badgeId,
@@ -98,16 +118,16 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-        
-          Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: "Proposal sent successfully to engineer!",
-            showConfirmButton: false,
-            timer: 1500
-          }).then(() => {
-            navigate("/managers/CandidatureProposals");
-          });
+
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Proposal sent successfully to engineer!",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
+          navigate("/managers/CandidatureProposals");
+        });
       } else {
         console.error(
           "Failed to retrieve badge ID or badge version for the selected version."
@@ -123,9 +143,11 @@ const AddCandidatureProposal = () => {
   }
 
   if (versionsLoading || addLoading || engineersLoading) {
-    return (<CenteredLayout>
-      <LoadableCurtain text="Add Candidature Proposal"/>
-      </CenteredLayout>);
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Add Candidature Proposal" />
+      </CenteredLayout>
+    );
   }
 
   if (versionsError || addError) {
@@ -145,115 +167,118 @@ const AddCandidatureProposal = () => {
       >
         Add Candidature Proposal
       </Typography>
-        <Grid container spacing={2}>
-          {pathname === "/managers/AddCandidatureProposal" ? (
-            <Grid item xs={12}>
-              <FormControl
-                variant="outlined"
-                fullWidth
-                error={!!errors.selectedEngineer}
-              >
-                <InputLabel id="engineer-label">Select Engineer</InputLabel>
-                <Controller
-                  name="selectedEngineer"
-                  control={control}
-                  defaultValue=""
-                  rules={{ required: "Please select an engineer." }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      labelId="engineer-label"
-                      label="Select Engineer"
-                    >
-                      {engineersData?.get_engineers_by_manager.map(
-                        (engineer) => (
-                          <MenuItem key={engineer.id} value={engineer.id}>
-                            {engineer.name}
-                          </MenuItem>
-                        )
-                      )}
-                    </Select>
-                  )}
-                />
-                {errors.selectedEngineer && (
-                  <FormHelperText error>
-                    {errors.selectedEngineer.message}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-          ) : (
-            <Grid item xs={12}>
-              <TextField
-                id="engineer"
-                label="Engineer Name"
-                variant="outlined"
-                fullWidth
-                value={decodeURIComponent(engineerName)}
-                disabled
-              />
-            </Grid>
-          )}
+      <Grid container spacing={2}>
+        {engineerExists && pathname === "/managers/AddCandidatureProposal" ? (
           <Grid item xs={12}>
             <FormControl
               variant="outlined"
               fullWidth
-              error={!!errors.selectedBadgeVersion}
+              error={!!errors.selectedEngineer}
             >
-              <InputLabel id="badgeVersion-label">
-                Select a Badge Version
-              </InputLabel>
+              <InputLabel id="engineer-label">Select Engineer</InputLabel>
               <Controller
-                name="selectedBadgeVersion"
+                name="selectedEngineer"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Please select a badge version." }}
+                rules={{ required: "Please select an engineer." }}
                 render={({ field }) => (
                   <Select
                     {...field}
-                    labelId="badgeVersion-label"
-                    label="Select a Badge Version"
+                    labelId="engineer-label"
+                    label="Select Engineer"
                   >
-                    {versionsData?.badges_versions_last.map((version) => (
-                      <MenuItem key={version.id} value={version.id}>
-                        {version.title}
+                    {engineersData?.get_engineers_by_manager.map((engineer) => (
+                      <MenuItem key={engineer.id} value={engineer.id}>
+                        {engineer.name}
                       </MenuItem>
                     ))}
                   </Select>
                 )}
               />
-              {errors.selectedBadgeVersion && (
+              {errors.selectedEngineer && (
                 <FormHelperText error>
-                  {errors.selectedBadgeVersion.message}
+                  {errors.selectedEngineer.message}
                 </FormHelperText>
               )}
             </FormControl>
           </Grid>
+        ) : (
           <Grid item xs={12}>
             <TextField
-              id="proposalDescription"
-              label="Proposal Description"
+              id="engineer"
+              label="Engineer Name"
               variant="outlined"
               fullWidth
-              multiline
-              rows={4}
-              {...register("proposalDescription", {
-                required: "Please enter a proposal description."
-              })}
-              error={!!errors.proposalDescription}
+              value={watch("engineerName") || ""}
+              disabled
             />
-            {errors.proposalDescription && (
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <FormControl
+            variant="outlined"
+            fullWidth
+            error={!!errors.selectedBadgeVersion}
+          >
+            <InputLabel id="badgeVersion-label">
+              Select a Badge Version
+            </InputLabel>
+            <Controller
+              name="selectedBadgeVersion"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Please select a badge version." }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  labelId="badgeVersion-label"
+                  label="Select a Badge Version"
+                >
+                  {versionsData?.badges_versions_last.map((version) => (
+                    <MenuItem key={version.id} value={version.id}>
+                      {version.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+            {errors.selectedBadgeVersion && (
               <FormHelperText error>
-                {errors.proposalDescription.message}
+                {errors.selectedBadgeVersion.message}
               </FormHelperText>
             )}
-          </Grid>
-          <Grid item xs={12}>
-            <Button  variant="contained" color="primary" fullWidth onClick={handleSubmit(handleFormSubmit)}>
-              Submit
-            </Button>
-          </Grid>
+          </FormControl>
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="proposalDescription"
+            label="Proposal Description"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            {...register("proposalDescription", {
+              required: "Please enter a proposal description."
+            })}
+            error={!!errors.proposalDescription}
+          />
+          {errors.proposalDescription && (
+            <FormHelperText error>
+              {errors.proposalDescription.message}
+            </FormHelperText>
+          )}
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleSubmit(handleFormSubmit)}
+          >
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
