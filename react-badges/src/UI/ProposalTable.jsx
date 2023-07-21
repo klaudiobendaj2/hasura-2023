@@ -6,9 +6,12 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button
+  Box
 } from "@mui/material";
 import ModalComponent from "./ModalComponent";
+import ButtonComponent from "../UI/ButtonComponent";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 const ProposalTable = ({
   showPendingProposals,
@@ -27,22 +30,13 @@ const ProposalTable = ({
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Engineer who applied</TableCell>
+            <TableCell>Applicants</TableCell>
             <TableCell align="right">Badge Version</TableCell>
             <TableCell align="right">Badge Title</TableCell>
             <TableCell align="right">Proposal Description</TableCell>
             <TableCell align="right">Manager</TableCell>
-            <TableCell
-              align="right"
-              style={{ display: showPendingProposals ? "block" : "none" }}
-            >
-              Actions
-            </TableCell>
-            <TableCell
-              align="right"
-              style={{ display: showPendingProposals ? "none" : "block" }}
-            >
-              Status
+            <TableCell align={showPendingProposals ? "center" : "right"}>
+              {showPendingProposals ? "Actions" : "Status"}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -63,22 +57,22 @@ const ProposalTable = ({
                 <TableCell align="right">{item.proposal_description}</TableCell>
                 <TableCell align="right">{item.userByManager.name}</TableCell>
                 <TableCell align="right">
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => onApproveClick(item.id)}
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={handleOpen}
-                  >
-                    Reject
-                  </Button>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <ButtonComponent
+                      variant="contained"
+                      color="success"
+                      handleClick={() => onApproveClick(item.id)}
+                      content={<DoneOutlinedIcon />}
+                      sx={{ marginRight: "10px" }}
+                    />
+                    <ButtonComponent
+                      variant="contained"
+                      color="error"
+                      handleClick={() => handleOpen(item.id)}
+                      content={<CloseOutlinedIcon />}
+                    />
+                  </Box>
                 </TableCell>
-
                 <ModalComponent
                   handleClose={handleClose}
                   textAreaValue={textAreaValue}

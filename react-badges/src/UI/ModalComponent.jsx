@@ -1,6 +1,7 @@
 import { Box, Modal, Fade, Typography, Backdrop, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import TextArea from "./TextArea";
+import ButtonComponent from "./ButtonComponent";
 
 const style = {
   position: "absolute",
@@ -56,13 +57,12 @@ const ModalComponent = ({
             />
             {errors.textAreaValue && <p>This field is required.</p>}
           </Typography>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleSubmit(onDisapproveClick(itemId))}
-          >
-            Submit
-          </Button>
+          <ButtonComponent
+            variant="outlined"
+            color="success"
+            handleClick={() => handleSubmit(onDisapproveClick(itemId))}
+            content="Submit"
+          />
         </Box>
       </Fade>
     </Modal>

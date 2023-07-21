@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import { Button } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
   APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,
   GET_ENGINEERS_PENDING_PROPOSALS
 } from "../../state/queries-mutations.graphql";
 import ProposalTable from "../../UI/ProposalTable";
+import ButtonComponent from "../../UI/ButtonComponent";
 
 const CandidatureProposals = () => {
   const [open, setOpen] = useState(false);
@@ -30,7 +31,6 @@ const CandidatureProposals = () => {
         isApproved: isApprovedFilter,
         managerId: managerId
       }
-      // fetchPolicy: "network-only"
     }
   );
 
@@ -115,21 +115,51 @@ const CandidatureProposals = () => {
 
   return (
     <>
-      <Button onClick={handleShowPending}>Show Pending Proposals</Button>
-      <Button onClick={handleShowOngoing}>Show Ongoing</Button>
-      <Button onClick={handleShowDisapproved}>Show Disapproved</Button>
-      <ProposalTable
-        showPendingProposals={showPendingProposals}
-        pendingProposals={pendingProposals}
-        handleOpen={handleOpen}
-        handleClose={handleClose}
-        textAreaValue={textAreaValue}
-        getTextAreaValue={getTextAreaValue}
-        open={open}
-        candidatures={candidatures}
-        onApproveClick={onApproveClick}
-        onDisapproveClick={onDisapproveClick}
-      />
+      <Box
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      >
+        <Box
+          sx={{
+            width: "800px",
+            marginBottom: "20px",
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          <ButtonComponent
+            variant="outlined"
+            handleClick={handleShowPending}
+            content="Pending Proposals"
+            sx={{ marginRight: "10px" }}
+          />
+          <ButtonComponent
+            variant="outlined"
+            handleClick={handleShowOngoing}
+            content="Ongoing Candidatures"
+            sx={{ marginRight: "10px" }}
+          />
+          <ButtonComponent
+            variant="outlined"
+            handleClick={handleShowDisapproved}
+            content="Rejected Candidatures"
+          />
+        </Box>
+        <Box sx={{ width: "90%", margin: "0 auto" }}>
+          <ProposalTable
+            showPendingProposals={showPendingProposals}
+            pendingProposals={pendingProposals}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
+            textAreaValue={textAreaValue}
+            getTextAreaValue={getTextAreaValue}
+            open={open}
+            candidatures={candidatures}
+            onApproveClick={onApproveClick}
+            onDisapproveClick={onDisapproveClick}
+          />
+        </Box>
+      </Box>
     </>
   );
 };
