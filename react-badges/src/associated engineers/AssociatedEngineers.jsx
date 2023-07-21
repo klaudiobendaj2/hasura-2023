@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { AuthContext } from '../state/with-auth';
-import { Table, TableHead, TableRow, TableCell, TableBody,Card,CardContent,Typography,Avatar,Grid } from '@mui/material';
+import { Card,CardContent,Typography,Avatar,Grid } from '@mui/material';
 import ProposalButton from './ProposalButton';
 import { GET_ENGINEERS } from '../state/queries-mutations.graphql';
 import { useNavigate } from 'react-router-dom';
-import Loader from './Loader';
+import LoadableCurtain from '../components/LoadableCurtain';
+import CenteredLayout from '../layouts/CenteredLayout'
 
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
@@ -29,7 +30,7 @@ const AssociatedEngineers = () => {
     8: '8.jpg',
     }
 
-  if (loading) return <Loader/>;
+  if (loading) return (<CenteredLayout><LoadableCurtain text='Team Members'/></CenteredLayout>);
 
   if (error) return <p>Error: {error.message}</p>;
 
