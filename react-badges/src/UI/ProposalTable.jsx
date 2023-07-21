@@ -6,26 +6,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Backdrop,
-  Box,
-  Modal,
-  Fade,
-  Typography
+  Button
 } from "@mui/material";
-import TextArea from "./TextArea";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4
-};
+import ModalComponent from "./ModalComponent";
 
 const ProposalTable = ({
   showPendingProposals,
@@ -95,47 +78,15 @@ const ProposalTable = ({
                     Reject
                   </Button>
                 </TableCell>
-                <Modal
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
+
+                <ModalComponent
+                  handleClose={handleClose}
+                  textAreaValue={textAreaValue}
+                  getTextAreaValue={getTextAreaValue}
                   open={open}
-                  onClose={handleClose}
-                  closeAfterTransition
-                  slots={{ backdrop: Backdrop }}
-                  slotProps={{
-                    backdrop: {
-                      timeout: 500
-                    }
-                  }}
-                >
-                  <Fade in={open}>
-                    <Box sx={style}>
-                      <Typography
-                        id="transition-modal-title"
-                        variant="h6"
-                        component="h2"
-                      >
-                        Add a disapproval motivation
-                      </Typography>
-                      <Typography
-                        id="transition-modal-description"
-                        sx={{ mt: 2 }}
-                      >
-                        <TextArea
-                          getTextArea={getTextAreaValue}
-                          textAreaValue={textAreaValue}
-                        />
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => onDisapproveClick(item.id)}
-                      >
-                        Submit
-                      </Button>
-                    </Box>
-                  </Fade>
-                </Modal>
+                  onDisapproveClick={onDisapproveClick}
+                  itemId={item.id}
+                />
               </TableRow>
             ))}
           {!showPendingProposals &&

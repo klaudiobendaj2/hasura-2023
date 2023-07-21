@@ -14,10 +14,9 @@ const CandidatureProposals = () => {
   const [showPendingProposals, setShowPendingProposals] = useState(true);
   const [textAreaValue, setTextAreaValue] = useState("");
   const [isApprovedFilter, setIsApprovedFilter] = useState(true);
-  const [isApprovedValue, setIsApprovedValue] = useState(true);
+  const { managerId } = useContext(AuthContext);
   const currentTimestamp = new Date().toISOString();
 
-  const { managerId } = useContext(AuthContext);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleShowPending = () => {
@@ -89,13 +88,11 @@ const CandidatureProposals = () => {
 
   const handleShowOngoing = async () => {
     setIsApprovedFilter(true);
-    // await refetch({ isApproved: isApprovedFilter });
     setShowPendingProposals(false);
   };
 
   const handleShowDisapproved = async () => {
     setIsApprovedFilter(false);
-    // await refetch({ isApproved: isApprovedFilter });
     setShowPendingProposals(false);
   };
 

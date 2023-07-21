@@ -54,7 +54,7 @@ const ManagerCandidatureProposals = () => {
               <TableCell align="right">Engineer</TableCell>
               <TableCell align="right">Proposal Description</TableCell>
               <TableCell align="right">Created By</TableCell>
-              <TableCell align="right">Is Approved</TableCell>
+              <TableCell align="right">Status</TableCell>
               <TableCell align="right">Disaproval Motivation</TableCell>
             </TableRow>
           </TableHead>

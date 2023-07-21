@@ -57,14 +57,14 @@ const StyledTextarea = styled(TextareaAutosize)(
       `
 );
 
-const TextArea = (props) => {
+const TextArea = ({textAreaValue, getTextArea, register}) => {
   return (
     <StyledTextarea
       aria-label="empty textarea"
       placeholder="Disapproval motivation"
-      value={props.textAreaValue}
-      onChange={(e) => props.getTextArea(e.target.value)}
-      required
+      onChange={(e) => getTextArea(e.target.value)}
+      {...register("textAreaValue", { required: true })}
+      value={textAreaValue}
     />
   );
 };
