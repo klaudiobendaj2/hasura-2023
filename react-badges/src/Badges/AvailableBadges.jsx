@@ -35,27 +35,27 @@ const BadgeList = () => {
   
   const StyledCard = styled(Card)({
     margin: '1rem',
-    backgroundColor: "#F1F6F9",
+    // backgroundColor: "#F1F6F9",
     width:'390px',
     height: '400px',
   });
 
   return (
     <div>
-      <Typography variant="h2" align="center"  gutterBottom>
+      <Typography variant="h2" align="center" padding="30px" fontFamily= "monosp" fontWeight= "bold" gutterBottom>
         Available Badges
       </Typography>
       <StyledRoot >
         {badges.map((badge, index) => ( 
           <StyledCard key={index} >
-            <CardContent>
-              <Typography  display= 'flex' justifyContent= 'center' variant="h5" component="h3" gutterBottom>
+            <CardContent >
+              <Typography  display= 'flex' justifyContent= 'center'  gutterBottom>
                 <strong>{badge.title}</strong>
               </Typography>
-              <Typography textAlign="justify" variant="body1" component="p">
+              <Typography textAlign="justify" variant="body1" component="p" padding='20px'>
                 {badge.description}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography marginLeft="50px" color="text.secondary">
                 <strong>Version: </strong> {badge.created_at}
               </Typography>
             </CardContent>

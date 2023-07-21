@@ -1,46 +1,6 @@
 
-.css-1oetjkv-MuiTypography-root{
-    padding:20px;
-}
-
-.css-r40f8v-MuiTypography-root{
-    margin-left: 20px;
-}
-.css-sghohy-MuiButtonBase-root-MuiButton-root{
-   /* background-color:#8B1874; */
-   color:white;
-   font-family: auto;
-}
-.css-li5etn-MuiTypography-root{
-    color:white;
-}
-
-.css-1sn4lm3-MuiTypography-root{
-    color:white;
-}
-
-.css-zylse7-MuiButtonBase-root-MuiIconButton-root{
-    color:white;
-}
-
-.css-tzssek-MuiSvgIcon-root{
-    color:white;
-}
-
-.css-k6pxjf-MuiTypography-root{
-    padding:17px;
-    font-family: monosp;
-    font-weight: bold;
-    padding:30px;
-}
  .css-1fczirg-MuiTypography-root{
     padding:17px;
- }
- .issuebuttons{
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    padding:20px;
  }
 
  .css-r40f8v-MuiTypography-root{
@@ -61,10 +21,6 @@
     padding:11px;
   }
 
-  .css-8ewcdo-MuiInputBase-root-MuiOutlinedInput-root{
-    border: 1px solid black;
-    border-radius: 8px;
-  }
 
   /* darkmode */
   .css-1oetjkv-MuiTypography-root{

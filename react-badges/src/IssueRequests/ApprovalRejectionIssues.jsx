@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
-import { useContext } from "react";
-
 import { AuthContext } from "../state/with-auth";
 import {
-  Button,
   TextField,
   Alert,
   AlertTitle,
   Typography,
   Card,
   CardContent,
-  FormHelperText
+  FormHelperText,
+  Box
 } from "@mui/material";
 import {
   GET_ISSUING_REQUESTS,
@@ -22,8 +20,9 @@ import Swal from "sweetalert2";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useForm } from "react-hook-form";
-
-
+import ButtonComponent from "../UI/ButtonComponent";
+import CenteredLayout from "../layouts/CenteredLayout";
+import LoadableCurtain from "../components/LoadableCurtain";
 
 
 const ApprovalRejectionIssues = () => {
@@ -31,15 +30,10 @@ const ApprovalRejectionIssues = () => {
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [getExistingIssues, { loading, error, data }] = useMutation(
-
     GET_ISSUING_REQUESTS,
-
     { variables: { managerId } }
-
   );
-
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
-
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
   const {
     register,
@@ -47,25 +41,14 @@ const ApprovalRejectionIssues = () => {
     formState: { errors }
   } = useForm({ mode: "onChange" });
 
-
-
-
   const handleApprovalClick = async (id) => {
-
     try {
-
       await approveIssuingRequest({
-
         variables: {
-
           id: id,
-
           isApproved: true,
-
           rejectionDescription: null
-
         }
-
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
@@ -84,18 +67,11 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
     } catch (error) {
-
       console.error("Error approving issuing request:", error);
-
     }
-
   };
 
-
-
-
   const handleRejectionClick = (id) => {
-
     setSelectedRequestId(id);
     const updatedIssueRequests = issueRequests.map((issue) => {
       if (issue.id === id) {
@@ -106,24 +82,18 @@ const ApprovalRejectionIssues = () => {
     setIssueRequests(updatedIssueRequests);
   };
 
-
   const handleRejectionSubmit = async (data) => {
     Swal.fire({
       text: "The issue request was not approved!",
       showConfirmButton: false,
       timer: 1500
     });
-
     try {
-
       await rejectIssuingRequest({
-
         variables: {
-
           id: selectedRequestId,
           rejectionDescription: data.rejectionDescription
         }
-
       });
 
       setSelectedRequestId(null);
@@ -135,22 +105,13 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
       getExistingIssues();
-
     } catch (error) {
-
       console.error("Error rejecting issuing request:", error);
-
     }
-
   };
 
-
-
-
   useEffect(() => {
-
     getExistingIssues();
-
   }, [getExistingIssues]);
 
   useEffect(() => {
@@ -164,29 +125,21 @@ const ApprovalRejectionIssues = () => {
       setIssueRequests(updatedIssueRequests);
     }
   }, [data]);
-
   if (loading) {
-
-    return <p>Loading...</p>;
-
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Issuing Requests" />
+      </CenteredLayout>
+    );
   }
-
-
-
 
   if (error) {
-
     return <p>Error: {error.message}</p>;
-
   }
 
-
-
-
   return (
-
     <div>
-      <Typography variant="h2" align="center" gutterBottom>
+      <Typography variant="h2" align="center" padding="30px" fontFamily= "monosp" fontWeight= "bold" gutterBottom>
         Existing Issues
       </Typography>
       {issueRequests.length === 0 ? (
@@ -204,58 +157,57 @@ const ApprovalRejectionIssues = () => {
               width: "677px",
               marginLeft: "280px",
               height: issue.showRejectionTextArea ? "550px" : "350px",
-              backgroundColor: " #F1F6F9"
+              // backgroundColor: " #F1F6F9"
             }}
           >
             <CardContent>
               <Typography
                 display="flex"
                 justifyContent="center"
-                variant="h5"
-                component="h3"
                 gutterBottom
               >
                 <strong>{issue.badge_title}</strong>
               </Typography>
-              <Typography textAlign="justify" variant="body1" component="p">
+              <Typography
+                textAlign="justify"
+                variant="body1"
+                component="p"
+                padding="20px"
+              >
                 {issue.badge_description}
               </Typography>
-              <Typography variant="body2" color="black" marginLeft="200px">
+              <Typography variant="body2"  marginLeft="200px">
                 <strong>Version: </strong>
                 {issue.badge_version}
               </Typography>
-              <Typography variant="body2" marginLeft="260px" color="black">
+              <Typography variant="body2" marginLeft="260px" >
                 <strong> Eng. {issue.engineer_name}</strong>
               </Typography>
             </CardContent>
-            <div className="issuebuttons">
-              <Button
+            <Box justifyContent="center" display="flex" alignItems="center" padding="20px">
+              <ButtonComponent
                 variant="contained"
                 color="primary"
-                onClick={() => handleApprovalClick(issue.id)}
+                handleClick={() => handleApprovalClick(issue.id)}
                 sx={{ marginRight: "10px" }}
-              >
-                <DoneOutlinedIcon />
-              </Button>
-              <Button
+                content={<DoneOutlinedIcon />}
+              />
+
+              <ButtonComponent
                 variant="contained"
                 color="error"
-                onClick={() => handleRejectionClick(issue.id)}
-              >
-                <CloseOutlinedIcon />
-              </Button>
-            </div>
+                handleClick={() => handleRejectionClick(issue.id)}
+                content={<CloseOutlinedIcon />}
+              />
+            </Box>
             {issue.showRejectionTextArea && (
-              <CardContent>
-                <TextField
+              <CardContent >
+                <TextField  
                   id="rejectionDescription"
                   placeholder="Enter rejection description..."
                   multiline
-
                   rows={4}
-
                   variant="outlined"
-
                   fullWidth
                   {...register("rejectionDescription", {
                     required: "Please enter a rejection description."
@@ -267,28 +219,21 @@ const ApprovalRejectionIssues = () => {
                     {errors.rejectionDescription.message}
                   </FormHelperText>
                 )}
-                <Button
-
+                <ButtonComponent 
                   variant="contained"
                   color="success"
-                  onClick={handleSubmit(handleRejectionSubmit)}
-                >
-
-                  Submit
-
-                </Button>
+                  handleClick={handleSubmit(handleRejectionSubmit)}
+                  content="Submit"
+                />
               </CardContent>
+              
             )}
           </Card>
         ))
       )}
     </div>
-
   );
-
 };
 
-
-
-
 export default ApprovalRejectionIssues;
+
