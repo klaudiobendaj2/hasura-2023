@@ -9,7 +9,8 @@ import {
   Card,
   CardContent,
   FormHelperText,
-  Box
+  Box,
+  Grid
 } from "@mui/material";
 import {
   GET_ISSUING_REQUESTS,
@@ -137,101 +138,94 @@ const ApprovalRejectionIssues = () => {
     return <p>Error: {error.message}</p>;
   }
 
+
   return (
-    <div>
-      <Typography variant="h2" align="center" padding="30px" fontFamily= "monosp" fontWeight= "bold" gutterBottom>
-        Existing Issues
-      </Typography>
+    <Grid container spacing={2} justifyContent="center">
+      <Grid item xs={12}>
+        <Typography variant="h2" sx={{marginTop:"20px"}} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
+          Existing Issues
+        </Typography>
+      </Grid>
       {issueRequests.length === 0 ? (
-        <Alert severity="info">
-          <AlertTitle>Info</AlertTitle>
-          <strong>No issue requests found!</strong>
-        </Alert>
+        <Grid item xs={12}>
+          <Alert severity="info">
+            <AlertTitle>Info</AlertTitle>
+            <strong>No issue requests found!</strong>
+          </Alert>
+        </Grid>
       ) : (
         issueRequests.map((issue) => (
-          <Card
-            key={issue.id}
-            variant="outlined"
-            sx={{
-              marginBottom: "10px",
-              width: "677px",
-              marginLeft: "280px",
-              height: issue.showRejectionTextArea ? "550px" : "350px",
-              // backgroundColor: " #F1F6F9"
-            }}
-          >
-            <CardContent>
-              <Typography
-                display="flex"
-                justifyContent="center"
-                gutterBottom
-              >
-                <strong>{issue.badge_title}</strong>
-              </Typography>
-              <Typography
-                textAlign="justify"
-                variant="body1"
-                component="p"
-                padding="20px"
-              >
-                {issue.badge_description}
-              </Typography>
-              <Typography variant="body2"  marginLeft="200px">
-                <strong>Version: </strong>
-                {issue.badge_version}
-              </Typography>
-              <Typography variant="body2" marginLeft="260px" >
-                <strong> Eng. {issue.engineer_name}</strong>
-              </Typography>
-            </CardContent>
-            <Box justifyContent="center" display="flex" alignItems="center" padding="20px">
-              <ButtonComponent
-                variant="contained"
-                color="primary"
-                handleClick={() => handleApprovalClick(issue.id)}
-                sx={{ marginRight: "10px" }}
-                content={<DoneOutlinedIcon />}
-              />
-
-              <ButtonComponent
-                variant="contained"
-                color="error"
-                handleClick={() => handleRejectionClick(issue.id)}
-                content={<CloseOutlinedIcon />}
-              />
-            </Box>
-            {issue.showRejectionTextArea && (
-              <CardContent >
-                <TextField  
-                  id="rejectionDescription"
-                  placeholder="Enter rejection description..."
-                  multiline
-                  rows={4}
-                  variant="outlined"
-                  fullWidth
-                  {...register("rejectionDescription", {
-                    required: "Please enter a rejection description."
-                  })}
-                  error={!!errors.rejectionDescription}
-                />
-                {errors.rejectionDescription && (
-                  <FormHelperText error>
-                    {errors.rejectionDescription.message}
-                  </FormHelperText>
-                )}
-                <ButtonComponent 
-                  variant="contained"
-                  color="success"
-                  handleClick={handleSubmit(handleRejectionSubmit)}
-                  content="Submit"
-                />
+          <Grid item key={issue.id} xs={12} sm={8} >
+            <Card variant="outlined">
+              <CardContent sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}>
+                <Typography display="flex" justifyContent="center" gutterBottom>
+                  <strong>{issue.badge_title}</strong>
+                </Typography>
+                <Typography textAlign="justify" variant="body1" component="p" padding="20px">
+                  {issue.badge_description}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Version: </strong>
+                  {issue.badge_version}
+                </Typography>
+                <Typography variant="body2">
+                  <strong> Eng. {issue.engineer_name}</strong>
+                </Typography>
               </CardContent>
-              
-            )}
-          </Card>
+              <Box justifyContent="center" display="flex" alignItems="center" padding="20px">
+                <ButtonComponent
+                  variant="contained"
+                  color="primary"
+                  handleClick={() => handleApprovalClick(issue.id)}
+                  sx={{ marginRight: "10px" }}
+                  content={<DoneOutlinedIcon />}
+                />
+  
+                <ButtonComponent
+                  variant="contained"
+                  color="error"
+                  handleClick={() => handleRejectionClick(issue.id)}
+                  content={<CloseOutlinedIcon />}
+                />
+              </Box>
+              {issue.showRejectionTextArea && (
+                <CardContent>
+                  <TextField
+                    id="rejectionDescription"
+                    placeholder="Enter rejection description..."
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    fullWidth
+                    {...register("rejectionDescription", {
+                      required: "Please enter a rejection description."
+                    })}
+                    error={!!errors.rejectionDescription}
+                  />
+                  {errors.rejectionDescription && (
+                    <FormHelperText error>
+                      {errors.rejectionDescription.message}
+                    </FormHelperText>
+                  )}
+                  
+                  <ButtonComponent
+                    variant="contained"
+                    color="success"
+                    handleClick={handleSubmit(handleRejectionSubmit)}
+                    content="Submit"
+                  />
+                </CardContent>
+              )}
+            </Card>
+          </Grid>
         ))
       )}
-    </div>
+    </Grid>
   );
 };
 

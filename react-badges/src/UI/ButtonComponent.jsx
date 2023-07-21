@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 
 const ButtonComponent = ({variant, color, handleClick, sx, content}) => {
+  
   return (
     <Button
       variant={variant}

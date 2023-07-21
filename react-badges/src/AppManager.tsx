@@ -54,7 +54,6 @@ const AppManager: React.FC = () => {
       title={`${manager?.name} (Manager)`}
       defaultRoute="managers/Badges"
       drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
-      mobileUtils={managerMenuItems}
       routes={[
         {
           path: "managers/AssociatedEngineers",

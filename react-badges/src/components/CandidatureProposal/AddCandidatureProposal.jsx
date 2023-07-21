@@ -64,7 +64,7 @@ const AddCandidatureProposal = () => {
 
       const engineerValue = data.selectedEngineer || engineerId;
       const engineer = engineersData?.get_engineers_by_manager.find(
-        (engineer) => engineer.id === parseInt(engineerValue) && engineer.name === engineerName
+        (engineer) => engineer.id === parseInt(engineerValue) && engineer.name === engineerName || data.selectedEngineer
       );
 
       if (!engineer) {

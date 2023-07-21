@@ -2,20 +2,19 @@ import React, { useContext, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { AuthContext } from "../state/with-auth";
 import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
-import ProposalButton from "./ProposalButton";
+
 import { GET_ENGINEERS } from "../state/queries-mutations.graphql";
 import { useNavigate } from "react-router-dom";
 import LoadableCurtain from "../components/LoadableCurtain";
 import CenteredLayout from "../layouts/CenteredLayout";
+import ButtonComponent from "../UI/ButtonComponent";
 
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
   const navigate = useNavigate();
   const [getEngineersByManager, { loading, error, data }] = useMutation(
     GET_ENGINEERS,
-    {
-      variables: { managerId }
-    }
+    { variables: { managerId } }
   );
 
   useEffect(() => {
@@ -94,8 +93,11 @@ const AssociatedEngineers = () => {
                   >
                     Roles: {engineer.roles.join("/")}
                   </Typography>
-                  <ProposalButton
-                    onClick={() =>
+                  <ButtonComponent
+                    content={"Add Proposal"}
+                    sx={{fontSize:"10px"}}
+                    variant="contained"
+                    handleClick={() =>
                       handleProposalClick(engineer.id, engineer.name)
                     }
                     id={engineer.id}
