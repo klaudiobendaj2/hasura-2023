@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+
 import { useMutation, gql } from "@apollo/client";
+
 import { useContext } from "react";
+
 import { AuthContext } from "../state/with-auth";
+
 import { Button, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -14,26 +18,45 @@ import {
   APPROVE_ISSUING_REQUEST
 } from "../state/queries-mutations.graphql";
 
+
+
+
 const ApprovalRejectionIssues = () => {
   const { managerId } = useContext(AuthContext);
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [rejectionDescription, setRejectionDescription] = useState("");
   const [getExistingIssues, { loading, error, data }] = useMutation(
+
     GET_ISSUING_REQUESTS,
+
     { variables: { managerId } }
+
   );
+
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
+
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
 
+
+
+
   const handleApprovalClick = async (id) => {
+
     try {
+
       await approveIssuingRequest({
+
         variables: {
+
           id: id,
+
           isApproved: true,
+
           rejectionDescription: null
+
         }
+
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
@@ -46,12 +69,19 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
     } catch (error) {
+
       console.error("Error approving issuing request:", error);
+
     }
+
   };
   
 
+
+
+
   const handleRejectionClick = (id) => {
+
     setSelectedRequestId(id);
     setRejectionDescription("");
     const updatedIssueRequests = issueRequests.map((issue) => {
@@ -63,20 +93,36 @@ const ApprovalRejectionIssues = () => {
     setIssueRequests(updatedIssueRequests);
   };
 
+
+
+
   const handleDescriptionChange = (event) => {
+
     setRejectionDescription(event.target.value);
+
   };
+
+
+
 
   const handleRejectionSubmit = async () => {
     alert("The issue request was not approved!");
     try {
+
       await rejectIssuingRequest({
+
         variables: {
+
           id: selectedRequestId,
+
           rejectionDescription: rejectionDescription
+
         }
+
       });
+
       setSelectedRequestId(null);
+
       setRejectionDescription("");
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === selectedRequestId) {
@@ -86,13 +132,22 @@ const ApprovalRejectionIssues = () => {
       });
       setIssueRequests(updatedIssueRequests);
       getExistingIssues();
+
     } catch (error) {
+
       console.error("Error rejecting issuing request:", error);
+
     }
+
   };
 
+
+
+
   useEffect(() => {
+
     getExistingIssues();
+
   }, [getExistingIssues]);
 
   useEffect(() => {
@@ -108,14 +163,25 @@ const ApprovalRejectionIssues = () => {
   }, [data]);
 
   if (loading) {
+
     return <p>Loading...</p>;
+
   }
+
+
+
 
   if (error) {
+
     return <p>Error: {error.message}</p>;
+
   }
 
+
+
+
   return (
+
     <div>
       <Typography variant="h2" align="center" gutterBottom>
         Existing Issues
@@ -180,20 +246,33 @@ const ApprovalRejectionIssues = () => {
             {issue.showRejectionTextArea && (
               <CardContent>
                 <TextField
+
                   value={rejectionDescription}
+
                   onChange={handleDescriptionChange}
+
                   placeholder="Enter rejection description"
+
                   multiline
+
                   rows={4}
+
                   variant="outlined"
+
                   fullWidth
+
                 />
                 <Button
+
                   variant="contained"
+
                   color="secondary"
+
                   onClick={handleRejectionSubmit}
                 >
+
                   Submit
+
                 </Button>
               </CardContent>
             )}
@@ -201,7 +280,12 @@ const ApprovalRejectionIssues = () => {
         ))
       )}
     </div>
+
   );
+
 };
+
+
+
 
 export default ApprovalRejectionIssues;
