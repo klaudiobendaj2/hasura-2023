@@ -6,8 +6,8 @@ function ProposalButton({ onClick, engineer }) {
     onClick(engineer);
   };
   return (
-    <Button className='proposalButton' variant="contained" onClick={handleButtonClick}>
-      +
+    <Button className='proposalButton' sx={{fontSize:"10px"}} variant="contained" onClick={handleButtonClick}>
+      Add Proposal
     </Button>
   );
 }

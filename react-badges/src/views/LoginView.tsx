@@ -63,7 +63,7 @@ const LoginView = () => {
       <List>
         {users.map((user) => (
           <ListItem key={user.id}>
-            <ListItemButton onClick={() => login(user.token,user.name)}>
+            <ListItemButton onClick={() => login(user.token)}>
               <ListItemText
                 primary={user.name}
                 secondary={user.roles.join(", ")}
