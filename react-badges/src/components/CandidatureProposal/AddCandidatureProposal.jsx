@@ -14,18 +14,18 @@ import {
   Select,
   MenuItem,
   Button,
-  CircularProgress,
   Container,
   FormControl,
   InputLabel,
   FormHelperText,
   Grid
 } from "@mui/material";
+import LoadableCurtain from "../LoadableCurtain"
 import { useForm, Controller } from "react-hook-form";
-
+import CenteredLayout from "../../layouts/CenteredLayout"
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
-  const { engineerId, engineerName } = useParams();
+  const { engineerId, engineerName } = useParams(); 
   const {
     register,
     handleSubmit,
@@ -98,15 +98,16 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Proposal sent successfully to engineer!",
-          showConfirmButton: false,
-          timer: 1500
-        }).then(() => {
-          navigate("/managers/CandidatureProposals");
-        });
+        
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Proposal sent successfully to engineer!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            navigate("/managers/CandidatureProposals");
+          });
       } else {
         console.error(
           "Failed to retrieve badge ID or badge version for the selected version."
@@ -121,8 +122,10 @@ const AddCandidatureProposal = () => {
     return <Typography variant="body1">Manager ID not available.</Typography>;
   }
 
-  if (versionsLoading || addLoading) {
-    return <CircularProgress />;
+  if (versionsLoading || addLoading || engineersLoading) {
+    return (<CenteredLayout>
+      <LoadableCurtain text="Add Candidature Proposal"/>
+      </CenteredLayout>);
   }
 
   if (versionsError || addError) {

@@ -5,7 +5,8 @@ import { Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
 import ProposalButton from './ProposalButton';
 import { GET_ENGINEERS } from '../state/queries-mutations.graphql';
 import { useNavigate } from 'react-router-dom';
-
+import LoadableCurtain from '../components/LoadableCurtain';
+import CenteredLayout from '../layouts/CenteredLayout';
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -22,7 +23,9 @@ const AssociatedEngineers = () => {
     navigate(`/managers/AddCandidatureProposal/${engineerId}/${encodeURIComponent(engineerName)}`);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (<CenteredLayout>
+    <LoadableCurtain text='Team Members'/>
+    </CenteredLayout>);
 
   if (error) return <p>Error: {error.message}</p>;
 
