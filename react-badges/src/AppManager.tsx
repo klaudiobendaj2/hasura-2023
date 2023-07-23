@@ -11,7 +11,6 @@ import RuleIcon from "@mui/icons-material/Rule";
 import ApprovalRejectionIssues from "./IssueRequests/ApprovalRejectionIssues";
 import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
 import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
-import "./App.css";
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
 

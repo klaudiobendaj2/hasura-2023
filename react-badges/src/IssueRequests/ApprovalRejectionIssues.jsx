@@ -57,6 +57,7 @@ const ApprovalRejectionIssues = () => {
         showConfirmButton: false,
         timer: 1500
       });
+
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === id) {
           return { ...issue, showRejectionTextArea: false };
@@ -152,7 +153,14 @@ const ApprovalRejectionIssues = () => {
       ) : (
         issueRequests.map((issue) => (
           <Grid item key={issue.id} xs={12} sm={8}>
-            <Card variant="outlined" >
+            <Card
+              variant="outlined"
+              sx={{
+                borderRadius: "10px",
+                boxShadow:
+                  "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
+              }}
+            >
               <CardContent
                 sx={{
                   display: "flex",
@@ -164,6 +172,14 @@ const ApprovalRejectionIssues = () => {
                 <Typography display="flex" justifyContent="center" gutterBottom>
                   <strong>{issue.badge_title}</strong>
                 </Typography>
+                <hr
+                  style={{
+                    border: "1px solid #1976D2",
+                    margin: "10px auto",
+                    width: "100%"
+                  }}
+                />
+
                 <Typography
                   textAlign="justify"
                   variant="body1"
@@ -224,6 +240,10 @@ const ApprovalRejectionIssues = () => {
                     color="success"
                     handleClick={handleSubmit(handleRejectionSubmit)}
                     content="Submit"
+                    sx={{
+                      marginLeft: '730px',
+                    }}
+                    
                   />
                 </CardContent>
               )}
