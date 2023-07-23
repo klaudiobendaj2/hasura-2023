@@ -96,3 +96,4 @@ const ManagerCandidatureProposals = () => {
 };
 
 export default ManagerCandidatureProposals;
+

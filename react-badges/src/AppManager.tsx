@@ -46,48 +46,49 @@ const managerMenuItems = [
 const AppManager: React.FC = () => {
   const { managerId } = useContext(AuthContext);
   const manager = users.find((user) => user.id === managerId);
-  console.log('managerid', typeof managerId);
+  console.log("managerid", typeof managerId);
 
   return (
     <AppEntrypoint
-      icon={<ManagerIcon/>}
+      icon={<ManagerIcon />}
       title={`${manager?.name} (Manager)`}
       defaultRoute="managers/Badges"
-      drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
-      mobileUtils={managerMenuItems}
+      drawerContents={[
+        <DrawerMenu title="Manager:" items={managerMenuItems} />
+      ]}
+      // mobileUtils={managerMenuItems}
       routes={[
         {
           path: "managers/AssociatedEngineers",
-          element: <AssociatedEngineers />,
+          element: <AssociatedEngineers />
         },
         {
           path: "managers/badges",
-          element: <AvailableBadges />,
+          element: <AvailableBadges />
         },
         {
-          path: 'managers/AddCandidatureProposal/:engineerId/:engineerName',
-          element: <AddCandidatureProposal />,      
+          path: "managers/AddCandidatureProposal/:engineerId/:engineerName",
+          element: <AddCandidatureProposal />
         },
         {
-          path: 'managers/AddCandidatureProposal',
-          element: <AddCandidatureProposal />,      
+          path: "managers/AddCandidatureProposal",
+          element: <AddCandidatureProposal />
         },
         {
           path: "managers/CandidatureProposals",
-          element: <CandidatureProposals />,
+          element: <CandidatureProposals />
         },
         {
           path: "managers/ManagerCandidatureProposals",
-          element: <ManagerCandidatureProposals />,
+          element: <ManagerCandidatureProposals />
         },
         {
           path: "managers/IssuingRequest",
-          element: <ApprovalRejectionIssues />,
-        },
+          element: <ApprovalRejectionIssues />
+        }
       ]}
     />
   );
 };
-
 
 export default AppManager;
