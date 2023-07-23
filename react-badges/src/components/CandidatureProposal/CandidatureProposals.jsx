@@ -80,6 +80,7 @@ const CandidatureProposals = () => {
     });
     setTextAreaValue("");
     await getPendingProposals();
+    handleClose();
   };
 
   const getTextAreaValue = (item) => {

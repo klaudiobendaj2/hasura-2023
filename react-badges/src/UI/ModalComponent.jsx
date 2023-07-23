@@ -1,6 +1,14 @@
-import { Box, Modal, Fade, Typography, Backdrop, Button } from "@mui/material";
-import { useForm } from "react-hook-form";
-import TextArea from "./TextArea";
+import React from "react";
+import {
+  Box,
+  Grid,
+  Modal,
+  Fade,
+  Typography,
+  Backdrop,
+  TextField
+} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
 
 const style = {
@@ -26,9 +34,17 @@ const ModalComponent = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset
-  } = useForm();
+    formState: { errors }
+  } = useForm({
+    mode: "onChange"
+  });
+
+  console.log(errors);
+
+  const onSubmitClick = (data) => {
+    onDisapproveClick(itemId);
+  };
+  console.log(textAreaValue);
 
   return (
     <Modal
@@ -49,20 +65,41 @@ const ModalComponent = ({
           <Typography id="transition-modal-title" variant="h6" component="h2">
             Add a disapproval motivation
           </Typography>
-          <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-            <TextArea
-              getTextArea={getTextAreaValue}
-              textAreaValue={textAreaValue}
-              register={register}
-            />
-            {errors.textAreaValue && <p>This field is required.</p>}
-          </Typography>
-          <ButtonComponent
-            variant="outlined"
-            color="success"
-            handleClick={() => handleSubmit(onDisapproveClick(itemId))}
-            content="Submit"
-          />
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <TextField
+                label="Disapproval Motivation"
+                name="motivation"
+                value={textAreaValue}
+                {...register("motivation", {
+                  required: "This field is required!",
+                  minLength: {
+                    value: 5,
+                    message: "It should contain at least 5 characters!"
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Max 10 characters allowed!"
+                  }
+                })}
+                onChange={(e) => getTextAreaValue(e.target.value)}
+                error={!!errors.motivation}
+                helperText={errors.motivation?.message}
+                multiline
+                rows={3}
+                sx={{ style: { borderRadius: "8px" } }}
+              />
+            </Grid>
+            <Grid item>
+              <ButtonComponent
+                type="submit"
+                variant="outlined"
+                color="success"
+                handleClick={handleSubmit(onSubmitClick)}
+                content="Submit"
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Fade>
     </Modal>
