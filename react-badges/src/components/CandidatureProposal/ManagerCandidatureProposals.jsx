@@ -60,14 +60,14 @@ const ManagerCandidatureProposals = () => {
                   <TableCell align="right">
                     {item.engineer_badge_candidature_proposal_responses.length > 0
                       ? item.engineer_badge_candidature_proposal_responses[0].is_approved
-                        ? "Yes"
-                        : "No"
+                        ? "Approved"
+                        : "Disapproved"
                       : "Pending"}
                   </TableCell>
                   <TableCell align="right">
                     {item.engineer_badge_candidature_proposal_responses.length > 0
                       ? item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
-                        ? "Yes"
+                        ? item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
                         : "No"
                       : "---"}
                   </TableCell>

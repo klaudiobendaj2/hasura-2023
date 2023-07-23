@@ -112,8 +112,8 @@ const ProposalTable = ({
                       0 &&
                       (item.manager_badge_candidature_proposal_responses[0]
                         .is_approved
-                        ? "Proposal approved"
-                        : "Proposal rejected")}
+                        ? "Approved"
+                        : "Rejected")}
                   </TableCell>
                 </TableRow>
               ))}
