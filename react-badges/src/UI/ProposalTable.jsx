@@ -17,6 +17,11 @@ const ProposalTable = ({
   onApproveClick,
   onDisapproveClick
 }) => {
+  console.log(candidatures);
+  const hasApprovedCandidature = candidatures.map(
+    (candidature) => candidature.manager_badge_candidature_proposal_responses[0]?.is_approved
+  );
+  const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
   return (
     <>
       <TableContainer component={Paper}>
@@ -30,6 +35,7 @@ const ProposalTable = ({
               <TableCell align={showPendingProposals ? "center" : "left"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>
+              {!showPendingProposals && areAllCandidaturesApproved && <TableCell>Disapproval Motivation</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,10 +92,16 @@ const ProposalTable = ({
                   scope="row"
                   item={item}
                   additionalCell={
-                    <TableCell>
+                    <>
+                      <TableCell>
+                        {item.manager_badge_candidature_proposal_responses.length > 0 &&
+                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
+                      </TableCell>
                       {item.manager_badge_candidature_proposal_responses.length > 0 &&
-                        (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
-                    </TableCell>
+                      item.manager_badge_candidature_proposal_responses[0].is_approved ? null : (
+                        <TableCell>{item.manager_badge_candidature_proposal_responses[0].disapproval_motivation}</TableCell>
+                      )}
+                    </>
                   }
                 />
               ))}

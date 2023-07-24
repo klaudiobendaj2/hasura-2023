@@ -18,7 +18,7 @@ const ManagerCandidatureProposals = () => {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");
@@ -65,8 +65,8 @@ const ManagerCandidatureProposals = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Badge Version</TableCell>
                 <TableCell>Engineer</TableCell>
+                <TableCell>Badge Version</TableCell>
                 <TableCell>Proposal Description</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Disaproval Motivation</TableCell>
@@ -76,9 +76,9 @@ const ManagerCandidatureProposals = () => {
               {candidatures.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
                 <TableRow key={item.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {item.badge_version}
+                    {item.userByEngineer.name}
                   </TableCell>
-                  <TableCell>{item.userByEngineer.name}</TableCell>
+                  <TableCell>{item.badge_version}</TableCell>
                   <TableCell>{item.proposal_description}</TableCell>
                   <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0
