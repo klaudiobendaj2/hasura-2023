@@ -122,7 +122,7 @@ const AddCandidatureProposal = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!",
+          text: "Proposal sent successfully!",
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
