@@ -33,7 +33,7 @@ const ManagerCandidatureProposals = () => {
 
   return (
     <>
-      <Typography variant="h3" gutterBottom sx={{ marginTop: "15px", display: "flex", align: "center" }}>
+      <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold" gutterBottom>
         Manager's Proposals
       </Typography>
       <Box sx={{ width: "90%", margin: "0 auto" }}>
