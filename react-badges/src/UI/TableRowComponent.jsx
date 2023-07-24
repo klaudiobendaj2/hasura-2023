@@ -10,7 +10,6 @@ const TableRowComponent = ({ sx, component, scope, align, item, additionalCell }
       <TableCell align={align}>{item.badge_version}</TableCell>
       <TableCell align={align}>{item.badges_version.title}</TableCell>
       <TableCell align={align}>{item.proposal_description}</TableCell>
-      <TableCell align={align}>{item.userByManager.name}</TableCell>
       {additionalCell ? additionalCell : null}
     </TableRow>
   );

@@ -43,7 +43,6 @@ const ManagerCandidatureProposals = () => {
                 <TableCell>Badge Version</TableCell>
                 <TableCell align="right">Engineer</TableCell>
                 <TableCell align="right">Proposal Description</TableCell>
-                <TableCell align="right">Created By</TableCell>
                 <TableCell align="right">Status</TableCell>
                 <TableCell align="right">Disaproval Motivation</TableCell>
               </TableRow>
@@ -56,7 +55,6 @@ const ManagerCandidatureProposals = () => {
                   </TableCell>
                   <TableCell align="right">{item.userByEngineer.name}</TableCell>
                   <TableCell align="right">{item.proposal_description}</TableCell>
-                  <TableCell align="right">{item.created_by}</TableCell>
                   <TableCell align="right">
                     {item.engineer_badge_candidature_proposal_responses.length > 0
                       ? item.engineer_badge_candidature_proposal_responses[0].is_approved
@@ -66,9 +64,9 @@ const ManagerCandidatureProposals = () => {
                   </TableCell>
                   <TableCell align="right">
                     {item.engineer_badge_candidature_proposal_responses.length > 0
-                      ? item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
-                        ? item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
-                        : "No"
+                      ? item.engineer_badge_candidature_proposal_responses[0].is_approved === true
+                        ? "---"
+                        : item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
                       : "---"}
                   </TableCell>
                 </TableRow>

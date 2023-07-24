@@ -27,7 +27,6 @@ const ProposalTable = ({
               <TableCell align="right">Badge Version</TableCell>
               <TableCell align="right">Badge Title</TableCell>
               <TableCell align="right">Proposal Description</TableCell>
-              <TableCell align="right">Manager</TableCell>
               <TableCell align={showPendingProposals ? "center" : "right"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Select, MenuItem, InputLabel } from "@mui/material";
+import { Select, MenuItem } from "@mui/material";
 
 const DropDownComponent = ({ handleShowPending, handleShowOngoing, handleShowDisapproved }) => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -25,7 +25,7 @@ const DropDownComponent = ({ handleShowPending, handleShowOngoing, handleShowDis
   return (
     <Select value={selectedOption} displayEmpty onChange={handleDropdownChange}>
       <MenuItem value="" disabled>
-        Filter
+        Filter by status
       </MenuItem>
       <MenuItem value="pending">Pending Proposals</MenuItem>
       <MenuItem value="ongoing">Ongoing Candidatures</MenuItem>
