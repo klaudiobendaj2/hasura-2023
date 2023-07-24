@@ -1,12 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import {
-  GET_BADGES_VERSIONS,
-  INSERT_CANDIDATURE_PROPOSAL,
-  GET_ENGINEERS,
-  GET_CANDIDATURE_PROPOSALS_BY_MANAGER
-} from "../../state/queries-mutations.graphql";
+import { GET_BADGES_VERSIONS,INSERT_CANDIDATURE_PROPOSAL,GET_ENGINEERS,GET_CANDIDATURE_PROPOSALS_BY_MANAGER} from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
@@ -51,16 +46,13 @@ const AddCandidatureProposal = () => {
   const {
     loading,
     error,
-    data: managerProposalsData
+    data: managerProposalsData,
+    refetch: refetchManagerProposals
   } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
     variables: {
       managerId: managerId
     }
   });
-
-  // useEffect(() => {
-  //   console.log("dataaa", managerProposalsData);
-  // }, []);
 
   useEffect(() => {
     getEngineersByManager();
@@ -156,7 +148,6 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-
         Swal.fire({
           icon: "success",
           title: "Success!",
@@ -166,6 +157,7 @@ const AddCandidatureProposal = () => {
         }).then(() => {
           navigate("/managers/ManagerCandidatureProposals");
         });
+        refetchManagerProposals();
       } else {
         console.error(
           "Proposal for this badge to this engineer has already been sent."
