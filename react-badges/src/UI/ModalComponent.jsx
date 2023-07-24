@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Modal,
-  Fade,
-  Typography,
-  Backdrop,
-  TextField
-} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { Box, Grid, Modal, Fade, Typography, Backdrop, TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
 
 const style = {
@@ -23,14 +15,7 @@ const style = {
   p: 4
 };
 
-const ModalComponent = ({
-  handleClose,
-  textAreaValue,
-  getTextAreaValue,
-  open,
-  onDisapproveClick,
-  itemId
-}) => {
+const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, onDisapproveClick, itemId }) => {
   const {
     register,
     handleSubmit,
@@ -78,8 +63,8 @@ const ModalComponent = ({
                     message: "It should contain at least 5 characters!"
                   },
                   maxLength: {
-                    value: 10,
-                    message: "Max 10 characters allowed!"
+                    value: 150,
+                    message: "Max 150 characters allowed!"
                   }
                 })}
                 onChange={(e) => getTextAreaValue(e.target.value)}

@@ -33,10 +33,21 @@ const ManagerCandidatureProposals = () => {
 
   return (
     <>
+      <ButtonComponent
+        variant="contained"
+        handleClick={() => onButtonClick()}
+        content="Create new proposal"
+        sx={{
+          position: "fixed",
+          top: "130px",
+          marginBottom: "30px",
+          right: "55px"
+        }}
+      />
       <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold" gutterBottom>
         Manager's Proposals
       </Typography>
-      <Box sx={{ width: "90%", margin: "0 auto" }}>
+      <Box sx={{ width: "90%", margin: "0 auto", marginTop: "30px" }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -76,17 +87,6 @@ const ManagerCandidatureProposals = () => {
           </Table>
         </TableContainer>
       </Box>
-      <ButtonComponent
-        variant="contained"
-        handleClick={() => onButtonClick()}
-        content="Create new proposal"
-        sx={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px"
-          // Add any other custom styles you want to apply to the button
-        }}
-      />
     </>
   );
 };
