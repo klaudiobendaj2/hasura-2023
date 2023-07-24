@@ -24,10 +24,10 @@ const ProposalTable = ({
           <TableHead>
             <TableRow>
               <TableCell>Applicants</TableCell>
-              <TableCell align="right">Badge Version</TableCell>
-              <TableCell align="right">Badge Title</TableCell>
-              <TableCell align="right">Proposal Description</TableCell>
-              <TableCell align={showPendingProposals ? "center" : "right"}>
+              <TableCell>Badge Version</TableCell>
+              <TableCell>Badge Title</TableCell>
+              <TableCell>Proposal Description</TableCell>
+              <TableCell align={showPendingProposals ? "center" : "left"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>
             </TableRow>
@@ -42,7 +42,7 @@ const ProposalTable = ({
                   }}
                   component="th"
                   scope="row"
-                  align="right"
+                  align="left"
                   item={item}
                   additionalCell={
                     <>
@@ -84,10 +84,9 @@ const ProposalTable = ({
                   }}
                   component="th"
                   scope="row"
-                  align="right"
                   item={item}
                   additionalCell={
-                    <TableCell align="right">
+                    <TableCell>
                       {item.manager_badge_candidature_proposal_responses.length > 0 &&
                         (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
                     </TableCell>
