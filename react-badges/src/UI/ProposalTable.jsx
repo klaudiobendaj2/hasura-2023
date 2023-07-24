@@ -1,17 +1,9 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box
-} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
 import ModalComponent from "./ModalComponent";
 import ButtonComponent from "../UI/ButtonComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import TableRowComponent from "./TableRowComponent";
 
 const ProposalTable = ({
   showPendingProposals,
@@ -44,78 +36,64 @@ const ProposalTable = ({
           <TableBody>
             {showPendingProposals &&
               pendingProposals.map((item) => (
-                <TableRow
+                <TableRowComponent
                   key={item.id}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 }
                   }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.user.name}
-                  </TableCell>
-                  <TableCell align="right">{item.badge_version}</TableCell>
-                  <TableCell align="right">
-                    {item.badges_version.title}
-                  </TableCell>
-                  <TableCell align="right">
-                    {item.proposal_description}
-                  </TableCell>
-                  <TableCell align="right">{item.userByManager.name}</TableCell>
-                  <TableCell align="right">
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <ButtonComponent
-                        variant="contained"
-                        color="success"
-                        handleClick={() => onApproveClick(item.id)}
-                        content={<DoneOutlinedIcon />}
-                        sx={{ marginRight: "10px" }}
+                  component="th"
+                  scope="row"
+                  align="right"
+                  item={item}
+                  additionalCell={
+                    <>
+                      <TableCell align="right">
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <ButtonComponent
+                            variant="contained"
+                            color="success"
+                            handleClick={() => onApproveClick(item.id)}
+                            content={<DoneOutlinedIcon />}
+                            sx={{ marginRight: "10px" }}
+                          />
+                          <ButtonComponent
+                            variant="contained"
+                            color="error"
+                            handleClick={() => handleOpen(item.id)}
+                            content={<CloseOutlinedIcon />}
+                          />
+                        </Box>
+                      </TableCell>
+                      <ModalComponent
+                        handleClose={handleClose}
+                        textAreaValue={textAreaValue}
+                        getTextAreaValue={getTextAreaValue}
+                        open={open}
+                        onDisapproveClick={onDisapproveClick}
+                        itemId={item.id}
                       />
-                      <ButtonComponent
-                        variant="contained"
-                        color="error"
-                        handleClick={() => handleOpen(item.id)}
-                        content={<CloseOutlinedIcon />}
-                      />
-                    </Box>
-                  </TableCell>
-                  <ModalComponent
-                    handleClose={handleClose}
-                    textAreaValue={textAreaValue}
-                    getTextAreaValue={getTextAreaValue}
-                    open={open}
-                    onDisapproveClick={onDisapproveClick}
-                    itemId={item.id}
-                  />
-                </TableRow>
+                    </>
+                  }
+                />
               ))}
             {!showPendingProposals &&
               candidatures.map((item) => (
-                <TableRow
+                <TableRowComponent
                   key={item.id}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 }
                   }}
-                >
-                  <TableCell component="th" scope="row">
-                    {item.user.name}
-                  </TableCell>
-                  <TableCell align="right">{item.badge_version}</TableCell>
-                  <TableCell align="right">
-                    {item.badges_version.title}
-                  </TableCell>
-                  <TableCell align="right">
-                    {item.proposal_description}
-                  </TableCell>
-                  <TableCell align="right">{item.userByManager.name}</TableCell>
-                  <TableCell align="right">
-                    {item.manager_badge_candidature_proposal_responses.length >
-                      0 &&
-                      (item.manager_badge_candidature_proposal_responses[0]
-                        .is_approved
-                        ? "Approved"
-                        : "Rejected")}
-                  </TableCell>
-                </TableRow>
+                  component="th"
+                  scope="row"
+                  align="right"
+                  item={item}
+                  additionalCell={
+                    <TableCell align="right">
+                      {item.manager_badge_candidature_proposal_responses.length > 0 &&
+                        (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
+                    </TableCell>
+                  }
+                />
               ))}
           </TableBody>
         </Table>
