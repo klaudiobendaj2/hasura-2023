@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { AuthContext } from "../state/with-auth";
 import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
-
 import { GET_ENGINEERS } from "../state/queries-mutations.graphql";
 import { useNavigate } from "react-router-dom";
 import LoadableCurtain from "../components/LoadableCurtain";
@@ -89,9 +88,9 @@ const AssociatedEngineers = () => {
                   </Typography>
                   <Typography
                     color="textSecondary"
-                    sx={{ mb: 1, marginBottom: "10px" }}
+                    sx={{ mb: 1 }}
                   >
-                    Roles: {engineer.roles.join("/")}
+                    Roles: {engineer.roles.join(", ")}
                   </Typography>
                   <ButtonComponent
                     content={"Add Proposal"}
