@@ -164,7 +164,7 @@ const AddCandidatureProposal = () => {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
-          navigate("/managers/CandidatureProposals");
+          navigate("/managers/ManagerCandidatureProposals");
         });
       } else {
         console.error(
