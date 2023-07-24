@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  Modal,
-  Fade,
-  Typography,
-  Backdrop,
-  TextField
-} from "@mui/material";
+import { Box, Grid, Modal, Fade, Typography, Backdrop, TextField } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
 
@@ -23,14 +15,7 @@ const style = {
   p: 4
 };
 
-const ModalComponent = ({
-  handleClose,
-  textAreaValue,
-  getTextAreaValue,
-  open,
-  onDisapproveClick,
-  itemId
-}) => {
+const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, onDisapproveClick, itemId }) => {
   const {
     register,
     handleSubmit,

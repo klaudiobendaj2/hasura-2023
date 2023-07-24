@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Box } from "@mui/material";
-import ProposalTable from "../../UI/ProposalTable";
-import DropDownComponent from "../../UI/DropDownComponent";
+import ProposalTable from "../../components/ProposalTable";
+import DropDownComponent from "../../components/DropDownComponent";
 import {
   GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS,
   APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,

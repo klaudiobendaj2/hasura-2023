@@ -121,7 +121,6 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
         manager: { _eq: $managerId }
         }
         ]
-        
       }
     ) {
       id
