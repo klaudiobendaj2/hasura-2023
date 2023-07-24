@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
@@ -6,6 +6,7 @@ import { GET_CANDIDATURE_PROPOSALS_BY_MANAGER } from "../../state/queries-mutati
 import { Typography } from "@mui/material";
 import ButtonComponent from "../../UI/ButtonComponent";
 import { useNavigate } from "react-router-dom";
+import TablePagination from "@mui/material/TablePagination";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
@@ -16,8 +17,20 @@ const ManagerCandidatureProposals = () => {
   });
   const navigate = useNavigate();
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   if (loading) {
@@ -38,7 +51,7 @@ const ManagerCandidatureProposals = () => {
         handleClick={() => onButtonClick()}
         content="Create new proposal"
         sx={{
-          position: "fixed",
+          // position: "fixed",
           top: "130px",
           marginBottom: "30px",
           right: "55px"
@@ -60,7 +73,7 @@ const ManagerCandidatureProposals = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {candidatures.map((item) => (
+              {candidatures.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
                 <TableRow key={item.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row">
                     {item.badge_version}
@@ -86,6 +99,15 @@ const ManagerCandidatureProposals = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={candidatures.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Box>
     </>
   );
