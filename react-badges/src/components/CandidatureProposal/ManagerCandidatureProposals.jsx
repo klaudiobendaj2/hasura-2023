@@ -1,23 +1,24 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
 import { GET_CANDIDATURE_PROPOSALS_BY_MANAGER } from "../../state/queries-mutations.graphql";
 import { Typography } from "@mui/material";
+import ButtonComponent from "../../UI/ButtonComponent";
+import { useNavigate } from "react-router-dom";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
-  console.log(typeof managerId);
   const { loading, error, data } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
     variables: {
       managerId: managerId
     }
   });
-  useEffect(() => {
-    // if(data){
-    console.log(data);
-    // }
-  }, [data]);
+  const navigate = useNavigate();
+
+  const onButtonClick = () => {
+    navigate("/managers/AddCandidatureProposal");
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,10 +42,10 @@ const ManagerCandidatureProposals = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Badge Version</TableCell>
-                <TableCell align="right">Engineer</TableCell>
-                <TableCell align="right">Proposal Description</TableCell>
-                <TableCell align="right">Status</TableCell>
-                <TableCell align="right">Disaproval Motivation</TableCell>
+                <TableCell>Engineer</TableCell>
+                <TableCell>Proposal Description</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Disaproval Motivation</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -53,16 +54,16 @@ const ManagerCandidatureProposals = () => {
                   <TableCell component="th" scope="row">
                     {item.badge_version}
                   </TableCell>
-                  <TableCell align="right">{item.userByEngineer.name}</TableCell>
-                  <TableCell align="right">{item.proposal_description}</TableCell>
-                  <TableCell align="right">
+                  <TableCell>{item.userByEngineer.name}</TableCell>
+                  <TableCell>{item.proposal_description}</TableCell>
+                  <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0
                       ? item.engineer_badge_candidature_proposal_responses[0].is_approved
                         ? "Approved"
                         : "Disapproved"
                       : "Pending"}
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0
                       ? item.engineer_badge_candidature_proposal_responses[0].is_approved === true
                         ? "---"
@@ -75,6 +76,17 @@ const ManagerCandidatureProposals = () => {
           </Table>
         </TableContainer>
       </Box>
+      <ButtonComponent
+        variant="contained"
+        handleClick={() => onButtonClick()}
+        content="Create new proposal"
+        sx={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px"
+          // Add any other custom styles you want to apply to the button
+        }}
+      />
     </>
   );
 };
