@@ -13,7 +13,7 @@ import ManagerCandidatureProposals from "./components/CandidatureProposal/Manage
 import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
-
+import './App.css';
 const managerMenuItems = [
   {
     link: "managers/Badges",

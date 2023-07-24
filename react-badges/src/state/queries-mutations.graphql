@@ -1,227 +1,110 @@
 import { gql } from "@apollo/client";
 
-
-
-
 export const GET_ENGINEERS = gql`
-
   mutation GetEngineersByManager($managerId: Int!) {
-
     get_engineers_by_manager(args: { manager_id: $managerId }) {
-
       name
-
       roles
-
       id
-
     }
-
   }
-
 `;
-
-
-
 
 export const INSERT_CANDIDATURE_PROPOSAL = gql`
-
   mutation AddCandidatureProposal($badgeId: Int!, $badgeVersion: timestamp!, $engineer: Int!, $proposalDescription: String!, $createdBy: Int!) {
-
     insert_manager_to_engineer_badge_candidature_proposals(objects: {
-
       badge_id: $badgeId,
-
       badge_version: $badgeVersion,
-
       engineer: $engineer,
-
       proposal_description: $proposalDescription,
-
       created_by: $createdBy
-
     }) {
-
       returning {
-
         badge_id
-
         badge_version
-
         engineer
-
         proposal_description
-
         created_by
-
       }
-
     }
-
   }
-
 `;
-
-
-
 
 export const GET_BADGES_VERSIONS = gql`
-
   query GetLatestBadgesVersion {
-
     badges_versions_last {
-
       id
-
       created_at
-
       title
-
     }
-
   }
-
   `;
 
-
-
-
   export const GET_BADGES = gql`
-
   query MyQuery {
-
     badges_versions {
-
       title
-
       description
-
       created_at
-
     }
-
     badges_versions_last {
-
       title
-
       description
-
       created_at
-
     }
-
   }
-
 `;
-
-
-
 
 export const GET_ISSUING_REQUESTS = gql`
-
   mutation MyMutation($managerId: Int!) {
-
     get_issuing_requests_for_manager(args: { managerid: $managerId }) {
-
       badge_id
-
       badge_title
-
       candidature_evidences
-
       engineer_id
-
       engineer_name
-
       id
-
       is_issued
-
       manager_id
-
       badge_description
-
       badge_version
-
       created_at
-
     }
-
   }
-
 `;
-
-
-
 
 export const REJECT_ISSUING_REQUEST = gql`
-
   mutation RejectIssuingRequest($id: Int!, $rejectionDescription: String!) {
-
     update_issuing_requests(
-
       _set: {
-
         is_approved: false
-
         disapproval_motivation: $rejectionDescription
-
       }
-
       where: { request_id: { _eq: $id } }
-
     ) {
-
       returning {
-
         disapproval_motivation
-
         id
-
         is_approved
-
         request_id
-
       }
-
     }
-
   }
-
 `;
 
-
-
-
 export const APPROVE_ISSUING_REQUEST = gql`
-
   mutation ApproveIssuingRequest($id: Int!, $isApproved: Boolean!) {
-
     update_issuing_requests(
-
       _set: { is_approved: $isApproved, disapproval_motivation: null }
-
-
-
-
       where: { request_id: { _eq: $id } }
-
     ) {
-
       returning {
-
         id
-
         is_approved
-
         request_id
-
       }
-
     }
-
   }
-
 `;
 
 export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
@@ -238,7 +121,6 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
         manager: { _eq: $managerId }
         }
         ]
-        
       }
     ) {
       id

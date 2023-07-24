@@ -107,7 +107,10 @@ const AddCandidatureProposal = () => {
           title: "Success!",
           text: "Proposal sent successfully!",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
+          customClass: {
+            container: 'custom-swal-container'
+          }
         }).then(() => {
           navigate("/managers/CandidatureProposals");
         });

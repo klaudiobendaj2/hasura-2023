@@ -40,6 +40,7 @@ const ApprovalRejectionIssues = () => {
     handleSubmit,
     formState: { errors }
   } = useForm({ mode: "onChange" });
+  
   const handleApprovalClick = async (id) => {
     try {
       await approveIssuingRequest({
@@ -55,7 +56,10 @@ const ApprovalRejectionIssues = () => {
         icon: "success",
         text: "The issue request was approved!",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
+        customClass: {
+          container: 'custom-swal-container'
+        }
       });
 
       const updatedIssueRequests = issueRequests.map((issue) => {
@@ -83,7 +87,10 @@ const ApprovalRejectionIssues = () => {
     Swal.fire({
       text: "The issue request was not approved!",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
+      customClass: {
+        container: 'custom-swal-container'
+      }
     });
     try {
       await rejectIssuingRequest({
