@@ -1,19 +1,20 @@
 import React, { useContext } from "react";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
-import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
+import AssociatedEngineers from "./views/manager/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-import AvailableBadges from "./Badges/AvailableBadges";
-import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
+import AvailableBadges from "./views/manager/AvailableBadges";
+import CandidatureProposals from "./views/manager/CandidatureProposals";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import RuleIcon from "@mui/icons-material/Rule";
-import ApprovalRejectionIssues from "./IssueRequests/ApprovalRejectionIssues";
-import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
-import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
+import ApprovalRejectionIssues from "./views/manager/ApprovalRejectionIssues";
+import ManagerCandidatureProposals from "./views/manager/ManagerCandidatureProposals";
+import AddCandidatureProposal from "./views/manager/AddCandidatureProposal";
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
 import './App.css';
+
 const managerMenuItems = [
   {
     link: "managers/Badges",
@@ -65,7 +66,7 @@ const AppManager: React.FC = () => {
           element: <AvailableBadges />
         },
         {
-          path: "managers/AddCandidatureProposal/:engineerId/:engineerName",
+          path: "managers/AddCandidatureProposal/:engineerId",
           element: <AddCandidatureProposal />
         },
         {

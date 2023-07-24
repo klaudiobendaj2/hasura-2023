@@ -4,7 +4,7 @@ import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
 import { GET_CANDIDATURE_PROPOSALS_BY_MANAGER } from "../../state/queries-mutations.graphql";
 import { Typography } from "@mui/material";
-import ButtonComponent from "../../UI/ButtonComponent";
+import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 
 const ManagerCandidatureProposals = () => {
@@ -92,4 +92,3 @@ const ManagerCandidatureProposals = () => {
 };
 
 export default ManagerCandidatureProposals;
-

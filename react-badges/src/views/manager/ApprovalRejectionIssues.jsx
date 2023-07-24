@@ -1,38 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
-import { AuthContext } from "../state/with-auth";
-import {
-  TextField,
-  Alert,
-  AlertTitle,
-  Typography,
-  Card,
-  CardContent,
-  FormHelperText,
-  Box,
-  Grid
-} from "@mui/material";
-import {
-  GET_ISSUING_REQUESTS,
-  REJECT_ISSUING_REQUEST,
-  APPROVE_ISSUING_REQUEST
-} from "../state/queries-mutations.graphql";
+import { AuthContext } from "../../state/with-auth";
+import { TextField, Alert, AlertTitle, Typography, Card, CardContent, FormHelperText, Box, Grid } from "@mui/material";
+import { GET_ISSUING_REQUESTS, REJECT_ISSUING_REQUEST, APPROVE_ISSUING_REQUEST } from "../../state/queries-mutations.graphql";
 import Swal from "sweetalert2";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useForm } from "react-hook-form";
-import ButtonComponent from "../UI/ButtonComponent";
-import CenteredLayout from "../layouts/CenteredLayout";
-import LoadableCurtain from "../components/LoadableCurtain";
+import ButtonComponent from "../../components/ButtonComponent";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const ApprovalRejectionIssues = () => {
   const { managerId } = useContext(AuthContext);
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const [getExistingIssues, { loading, error, data }] = useMutation(
-    GET_ISSUING_REQUESTS,
-    { variables: { managerId } }
-  );
+  const [getExistingIssues, { loading, error, data }] = useMutation(GET_ISSUING_REQUESTS, { variables: { managerId } });
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
   const {
@@ -40,7 +23,7 @@ const ApprovalRejectionIssues = () => {
     handleSubmit,
     formState: { errors }
   } = useForm({ mode: "onChange" });
-  
+
   const handleApprovalClick = async (id) => {
     try {
       await approveIssuingRequest({
@@ -58,7 +41,7 @@ const ApprovalRejectionIssues = () => {
         showConfirmButton: false,
         timer: 1500,
         customClass: {
-          container: 'custom-swal-container'
+          container: "custom-swal-container"
         }
       });
 
@@ -89,7 +72,7 @@ const ApprovalRejectionIssues = () => {
       showConfirmButton: false,
       timer: 1500,
       customClass: {
-        container: 'custom-swal-container'
+        container: "custom-swal-container"
       }
     });
     try {
@@ -117,12 +100,10 @@ const ApprovalRejectionIssues = () => {
   }, [getExistingIssues]);
   useEffect(() => {
     if (data && data.get_issuing_requests_for_manager) {
-      const updatedIssueRequests = data.get_issuing_requests_for_manager.map(
-        (issue) => ({
-          ...issue,
-          showRejectionTextArea: false
-        })
-      );
+      const updatedIssueRequests = data.get_issuing_requests_for_manager.map((issue) => ({
+        ...issue,
+        showRejectionTextArea: false
+      }));
       setIssueRequests(updatedIssueRequests);
     }
   }, [data]);
@@ -139,14 +120,7 @@ const ApprovalRejectionIssues = () => {
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12}>
-        <Typography
-          variant="h2"
-          sx={{ marginTop: "20px" }}
-          align="center"
-          fontFamily="monosp"
-          fontWeight="bold"
-          gutterBottom
-        >
+        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
           Existing Issues
         </Typography>
       </Grid>
@@ -187,12 +161,7 @@ const ApprovalRejectionIssues = () => {
                   }}
                 />
 
-                <Typography
-                  textAlign="justify"
-                  variant="body1"
-                  component="p"
-                  padding="20px"
-                >
+                <Typography textAlign="justify" variant="body1" component="p" padding="20px">
                   {issue.badge_description}
                 </Typography>
                 <Typography variant="body2">
@@ -203,12 +172,7 @@ const ApprovalRejectionIssues = () => {
                   <strong> Eng. {issue.engineer_name}</strong>
                 </Typography>
               </CardContent>
-              <Box
-                justifyContent="center"
-                display="flex"
-                alignItems="center"
-                padding="20px"
-              >
+              <Box justifyContent="center" display="flex" alignItems="center" padding="20px">
                 <ButtonComponent
                   variant="contained"
                   color="primary"
@@ -232,29 +196,23 @@ const ApprovalRejectionIssues = () => {
                     rows={4}
                     variant="outlined"
                     sx={{
-                      marginBottom:"10px"
+                      marginBottom: "10px"
                     }}
                     fullWidth
                     {...register("rejectionDescription", {
                       required: "Please enter a rejection description."
                     })}
                     error={!!errors.rejectionDescription}
-                    
                   />
-                  {errors.rejectionDescription && (
-                    <FormHelperText error>
-                      {errors.rejectionDescription.message}
-                    </FormHelperText>
-                  )}
+                  {errors.rejectionDescription && <FormHelperText error>{errors.rejectionDescription.message}</FormHelperText>}
                   <ButtonComponent
                     variant="contained"
                     color="success"
                     handleClick={handleSubmit(handleRejectionSubmit)}
                     content="Submit"
                     sx={{
-                      marginLeft: '730px',
+                      marginLeft: "720px"
                     }}
-                    
                   />
                 </CardContent>
               )}

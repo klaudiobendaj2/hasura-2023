@@ -4,8 +4,8 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/system";
-import { GET_BADGES } from "../state/queries-mutations.graphql";
-import ButtonComponent from "../UI/ButtonComponent";
+import { GET_BADGES } from "../../state/queries-mutations.graphql";
+import ButtonComponent from "../../components/ButtonComponent";
 
 const BadgeList = () => {
   const [showAll, setShowAll] = useState(false);
@@ -38,19 +38,13 @@ const BadgeList = () => {
     height: "400px",
     border: "3px solid #1976d2",
     borderRadius: "10px",
-    boxShadow: "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
+    boxShadow:
+      "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
   });
 
   return (
     <div>
-      <Typography
-        variant="h2"
-        align="center"
-        padding="30px"
-        fontFamily="monosp"
-        fontWeight="bold"
-        gutterBottom
-      >
+      <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold" gutterBottom>
         Available Badges
       </Typography>
       <StyledRoot>
@@ -60,12 +54,7 @@ const BadgeList = () => {
               <Typography display="flex" justifyContent="center" gutterBottom>
                 <strong>{badge.title}</strong>
               </Typography>
-              <Typography
-                textAlign="justify"
-                variant="body1"
-                component="p"
-                padding="20px"
-              >
+              <Typography textAlign="justify" variant="body1" component="p" padding="20px">
                 {badge.description}
               </Typography>
               <Typography marginLeft="50px" color="text.secondary">
