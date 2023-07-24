@@ -224,11 +224,15 @@ const ApprovalRejectionIssues = () => {
                     multiline
                     rows={4}
                     variant="outlined"
+                    sx={{
+                      marginBottom:"10px"
+                    }}
                     fullWidth
                     {...register("rejectionDescription", {
                       required: "Please enter a rejection description."
                     })}
                     error={!!errors.rejectionDescription}
+                    
                   />
                   {errors.rejectionDescription && (
                     <FormHelperText error>

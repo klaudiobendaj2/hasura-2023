@@ -64,7 +64,9 @@ const AddCandidatureProposal = () => {
 
       const engineerValue = data.selectedEngineer || engineerId;
       const engineer = engineersData?.get_engineers_by_manager.find(
-        (engineer) => engineer.id === parseInt(engineerValue) && engineer.name === engineerName
+        (engineer) =>
+          engineer.id === parseInt(engineerValue) &&
+          engineer.name === engineerName
       );
 
       if (!engineer) {
@@ -136,7 +138,18 @@ const AddCandidatureProposal = () => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+      style={{
+        height:"75vh",
+        marginTop:"7vh",
+        border: "3px solid #1976d2",
+        borderRadius: "10px",
+        boxShadow:
+          "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
+      }}
+    >
       <Typography
         component="h1"
         variant="h5"
@@ -248,7 +261,7 @@ const AddCandidatureProposal = () => {
               </FormHelperText>
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{marginTop:"3vh"}}>
             <Button type="submit" variant="contained" color="primary" fullWidth>
               Submit
             </Button>
