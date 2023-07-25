@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, Modal, Fade, Typography, Backdrop, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
@@ -22,17 +22,22 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: "onChange"
   });
 
-  console.log(errors);
-
   const onSubmitClick = (data) => {
     onDisapproveClick(itemId);
   };
-  console.log(textAreaValue);
+
+  useEffect(() => {
+    if (!open) {
+      reset();
+      getTextAreaValue("");
+    }
+  }, [open]);
 
   return (
     <Modal

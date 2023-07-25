@@ -13,14 +13,11 @@ import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
 
 const CandidatureProposals = () => {
-  const [open, setOpen] = useState(false);
   const [showPendingProposals, setShowPendingProposals] = useState(true);
   const [textAreaValue, setTextAreaValue] = useState("");
   const [isApprovedFilter, setIsApprovedFilter] = useState(true);
   const { managerId } = useContext(AuthContext);
   const currentTimestamp = new Date().toISOString();
-  const handleClose = () => setOpen(false);
-
   const handleShowPending = () => {
     setShowPendingProposals(true);
   };
@@ -89,7 +86,7 @@ const CandidatureProposals = () => {
     });
     setTextAreaValue("");
     await getPendingProposals();
-    handleClose();
+    // handleClose();
   };
 
   const getTextAreaValue = (item) => {
@@ -103,16 +100,20 @@ const CandidatureProposals = () => {
       </CenteredLayout>
     );
   }
-  if (pendingLoading) return <div>Loading</div>;
+  if (pendingLoading) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Pending Proposals" />
+      </CenteredLayout>
+    );
+  }
   if (loading2) return <div>Loading...</div>;
-
   if (error) return <div>Error...{error}</div>;
   if (pendingError) return <div>Error...{error}</div>;
   if (error2) return <div>Error...{error}</div>;
 
   const candidatures = data?.engineer_to_manager_badge_candidature_proposals || [];
   const pendingProposals = pendingData?.get_engineers_pending_proposals_for_managers || [];
-
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
