@@ -7,6 +7,8 @@ import { Typography } from "@mui/material";
 import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
@@ -34,7 +36,11 @@ const ManagerCandidatureProposals = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Manager's Proposals" />
+      </CenteredLayout>
+    );
   }
 
   if (error) {
@@ -64,7 +70,7 @@ const ManagerCandidatureProposals = () => {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
+              <TableRow>
                 <TableCell>Engineer</TableCell>
                 <TableCell>Badge Version</TableCell>
                 <TableCell>Proposal Description</TableCell>
