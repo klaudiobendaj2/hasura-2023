@@ -57,7 +57,6 @@ const AssociatedEngineers = () => {
         padding="30px"
         fontFamily="monosp"
         fontWeight="bold"
-        gutterBottom
       >
         List of Engineers
       </Typography>
