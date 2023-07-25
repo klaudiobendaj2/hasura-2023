@@ -10,8 +10,10 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
+  border: "3px solid #1976d2",
+  borderRadius: "25px",
+  boxShadow:
+    "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)",
   p: 4
 };
 
@@ -47,10 +49,10 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Typography id="transition-modal-title" variant="h6" component="h2">
+          <Typography id="transition-modal-title" variant="h6" component="h2" align="center" mb={2}>
             Add a disapproval motivation
           </Typography>
-          <Grid container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={2} justifyContent="center" alignItems="center">
             <Grid item>
               <TextField
                 label="Disapproval Motivation"
@@ -71,8 +73,16 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline
-                rows={3}
-                sx={{ style: { borderRadius: "8px" } }}
+                rows={2}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "10px",
+                    transition: "border-color 0.3s",
+                    "&:hover, &:focus": {
+                      borderColor: "blue"
+                    }
+                  }
+                }}
               />
             </Grid>
             <Grid item>
