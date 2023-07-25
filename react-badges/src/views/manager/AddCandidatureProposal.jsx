@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import { GET_BADGES_VERSIONS, INSERT_CANDIDATURE_PROPOSAL, GET_ENGINEERS } from "../../state/queries-mutations.graphql";
+import {
+  GET_BADGES_VERSIONS,
+  INSERT_CANDIDATURE_PROPOSAL,
+  GET_ENGINEERS,
+  GET_CANDIDATURE_PROPOSALS_BY_MANAGER
+} from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
@@ -19,6 +24,7 @@ import {
 import LoadableCurtain from "../../components/LoadableCurtain";
 import { useForm, Controller } from "react-hook-form";
 import CenteredLayout from "../../layouts/CenteredLayout";
+
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
   const { engineerId } = useParams();
@@ -30,7 +36,9 @@ const AddCandidatureProposal = () => {
     watch,
     setValue
   } = useForm({ mode: "onChange" });
+
   const { loading: versionsLoading, error: versionsError, data: versionsData } = useQuery(GET_BADGES_VERSIONS);
+
   const [addCandidatureProposal, { loading: addLoading, error: addError }] = useMutation(INSERT_CANDIDATURE_PROPOSAL);
   const [getEngineersByManager, { loading: engineersLoading, error: engineersError, data: engineersData }] = useMutation(
     GET_ENGINEERS,
@@ -39,6 +47,20 @@ const AddCandidatureProposal = () => {
     }
   );
 
+  const {
+    loading,
+    error,
+    data: managerProposalsData
+  } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
+    variables: {
+      managerId: managerId
+    }
+  });
+
+  // useEffect(() => {
+  //   console.log("dataaa", managerProposalsData);
+  // }, []);
+
   useEffect(() => {
     getEngineersByManager();
   }, [getEngineersByManager]);
@@ -46,13 +68,13 @@ const AddCandidatureProposal = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-
   const [engineerExists, setEngineerExists] = useState(true);
 
   useEffect(() => {
     if (engineerId) {
       if (engineersData) {
         const validEngineer = engineersData.get_engineers_by_manager.find((engineer) => engineer.id === parseInt(engineerId));
+
         if (!validEngineer) {
           setEngineerExists(false);
           Swal.fire({
@@ -69,6 +91,7 @@ const AddCandidatureProposal = () => {
           });
         } else {
           setValue("engineerName", validEngineer.name);
+
           setEngineerExists(true);
         }
       }
@@ -82,11 +105,35 @@ const AddCandidatureProposal = () => {
       const selectedBadge = versionsData?.badges_versions_last.find(
         (version) => version.id === parseInt(data.selectedBadgeVersion)
       );
+
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
+      const existingProposal = managerProposalsData.manager_to_engineer_badge_candidature_proposals.some(
+        (proposal) => proposal.badge_version === badgeVersion && proposal.engineer === engineerValue
+      );
 
-      if (badgeId && badgeVersion && engineerValue && managerId && proposalDescription) {
+      const approvedProposal = managerProposalsData.manager_to_engineer_badge_candidature_proposals?.filter((proposal) => {
+        const responses = proposal.engineer_badge_candidature_proposal_responses;
+
+        if (Array.isArray(responses) && responses.length > 0) {
+          const isApprovedValuesExist = responses.some((response) => response.is_approved === false);
+          return isApprovedValuesExist;
+        }
+        return false;
+      });
+
+      console.log("exprop", existingProposal);
+      console.log("appprop", approvedProposal);
+
+      if (
+        badgeId &&
+        badgeVersion &&
+        engineerValue &&
+        managerId &&
+        proposalDescription &&
+        (!existingProposal || approvedProposal.length > 0)
+      ) {
         await addCandidatureProposal({
           variables: {
             badgeId: badgeId,
@@ -96,7 +143,9 @@ const AddCandidatureProposal = () => {
             createdBy: managerId
           }
         });
+
         console.log("Candidature proposal added successfully!");
+
         console.log("Data:", {
           badgeId: badgeId,
           badgeVersion: badgeVersion,
@@ -108,17 +157,27 @@ const AddCandidatureProposal = () => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!",
+          text: "Proposal sent successfully!",
           showConfirmButton: false,
           timer: 1500,
           customClass: {
             container: "custom-swal-container"
           }
         }).then(() => {
-          navigate("/managers/CandidatureProposals");
+          navigate("/managers/ManagerCandidatureProposals");
         });
       } else {
-        console.error("Failed to retrieve badge ID or badge version for the selected version.");
+        console.error("Proposal for this badge to this engineer has already been sent.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Proposal for this badge to this engineer has already been sent.",
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        });
       }
     } catch (error) {
       console.error("Error adding candidature proposal:", error);
@@ -154,14 +213,16 @@ const AddCandidatureProposal = () => {
           "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
       }}
     >
-      <Typography component="h1" variant="h5" style={{ margin: "50px", textAlign: "center" }}>
+      <Typography component="h1" variant="h5" style={{ margin: "50px", textAlign: "center", fontWeight:"bold" }}>
         Add Candidature Proposal
       </Typography>
+
       <Grid container spacing={2}>
         {engineerExists && pathname === "/managers/AddCandidatureProposal" ? (
           <Grid item xs={12}>
             <FormControl variant="outlined" fullWidth error={!!errors.selectedEngineer}>
               <InputLabel id="engineer-label">Select Engineer</InputLabel>
+
               <Controller
                 name="selectedEngineer"
                 control={control}
@@ -177,6 +238,7 @@ const AddCandidatureProposal = () => {
                   </Select>
                 )}
               />
+
               {errors.selectedEngineer && <FormHelperText error>{errors.selectedEngineer.message}</FormHelperText>}
             </FormControl>
           </Grid>
@@ -192,9 +254,11 @@ const AddCandidatureProposal = () => {
             />
           </Grid>
         )}
+
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth error={!!errors.selectedBadgeVersion}>
             <InputLabel id="badgeVersion-label">Select a Badge Version</InputLabel>
+
             <Controller
               name="selectedBadgeVersion"
               control={control}
@@ -210,9 +274,11 @@ const AddCandidatureProposal = () => {
                 </Select>
               )}
             />
+
             {errors.selectedBadgeVersion && <FormHelperText error>{errors.selectedBadgeVersion.message}</FormHelperText>}
           </FormControl>
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             id="proposalDescription"
@@ -226,8 +292,10 @@ const AddCandidatureProposal = () => {
             })}
             error={!!errors.proposalDescription}
           />
+
           {errors.proposalDescription && <FormHelperText error>{errors.proposalDescription.message}</FormHelperText>}
         </Grid>
+
         <Grid item xs={12}>
           <Button
             variant="contained"
