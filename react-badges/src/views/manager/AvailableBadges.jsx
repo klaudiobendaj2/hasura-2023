@@ -70,9 +70,10 @@ const BadgeList = () => {
           </StyledCard>
         ))}
       </StyledRoot>
+      <div style={{display:'flex', justifyContent:'center', marginTop:'1rem'}}>
       <ButtonComponent
         sx={{
-          marginLeft: "550px",
+          alignItems: "center",
           display: "flex",
           justifyContent: "center",
           marginTop: "1rem"
@@ -81,6 +82,7 @@ const BadgeList = () => {
         handleClick={handleFilterClick}
         variant="contained"
       />
+      </div>
     </div>
   );
 };
