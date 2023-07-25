@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
 import AppEntrypoint, { ManagerIcon } from "./containers/AppEntrypoint";
-import AssociatedEngineers from "./associated engineers/AssociatedEngineers";
+import AssociatedEngineers from "./views/manager/AssociatedEngineers";
 import { DrawerMenu } from "./layouts/BasicLayout";
-import AvailableBadges from "./Badges/AvailableBadges";
-import CandidatureProposals from "./components/CandidatureProposal/CandidatureProposals";
+import AvailableBadges from "./views/manager/AvailableBadges";
+import CandidatureProposals from "./views/manager/CandidatureProposals";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import RuleIcon from "@mui/icons-material/Rule";
-import ApprovalRejectionIssues from "./IssueRequests/ApprovalRejectionIssues";
-import ManagerCandidatureProposals from "./components/CandidatureProposal/ManagerCandidatureProposals";
-import AddCandidatureProposal from "./components/CandidatureProposal/AddCandidatureProposal";
-import "./App.css";
+import ApprovalRejectionIssues from "./views/manager/ApprovalRejectionIssues";
+import ManagerCandidatureProposals from "./views/manager/ManagerCandidatureProposals";
+import AddCandidatureProposal from "./views/manager/AddCandidatureProposal";
 import { AuthContext } from "./state/with-auth";
 import { users } from "./views/LoginView";
+import './App.css';
 
 const managerMenuItems = [
   {
@@ -46,48 +46,48 @@ const managerMenuItems = [
 const AppManager: React.FC = () => {
   const { managerId } = useContext(AuthContext);
   const manager = users.find((user) => user.id === managerId);
-  console.log('managerid', typeof managerId);
+  console.log("managerid", typeof managerId);
 
   return (
     <AppEntrypoint
-      icon={<ManagerIcon/>}
+      icon={<ManagerIcon />}
       title={`${manager?.name} (Manager)`}
       defaultRoute="managers/Badges"
-      drawerContents={[<DrawerMenu title="Manager:" items={managerMenuItems} />]}
-      mobileUtils={managerMenuItems}
+      drawerContents={[
+        <DrawerMenu title="Manager:" items={managerMenuItems} />
+      ]}
       routes={[
         {
           path: "managers/AssociatedEngineers",
-          element: <AssociatedEngineers />,
+          element: <AssociatedEngineers />
         },
         {
           path: "managers/badges",
-          element: <AvailableBadges />,
+          element: <AvailableBadges />
         },
         {
           path: 'managers/AddCandidatureProposal/:engineerId',
           element: <AddCandidatureProposal />,      
         },
         {
-          path: 'managers/AddCandidatureProposal',
-          element: <AddCandidatureProposal />,      
+          path: "managers/AddCandidatureProposal",
+          element: <AddCandidatureProposal />
         },
         {
           path: "managers/CandidatureProposals",
-          element: <CandidatureProposals />,
+          element: <CandidatureProposals />
         },
         {
           path: "managers/ManagerCandidatureProposals",
-          element: <ManagerCandidatureProposals />,
+          element: <ManagerCandidatureProposals />
         },
         {
           path: "managers/IssuingRequest",
-          element: <ApprovalRejectionIssues />,
-        },
+          element: <ApprovalRejectionIssues />
+        }
       ]}
     />
   );
 };
-
 
 export default AppManager;

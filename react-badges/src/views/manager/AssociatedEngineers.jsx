@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { AuthContext } from "../state/with-auth";
+import { AuthContext } from "../../state/with-auth";
 import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
-import ProposalButton from "./ProposalButton";
-import { GET_ENGINEERS } from "../state/queries-mutations.graphql";
+import { GET_ENGINEERS } from "../../state/queries-mutations.graphql";
 import { useNavigate } from "react-router-dom";
-import LoadableCurtain from "../components/LoadableCurtain";
-import CenteredLayout from "../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import ButtonComponent from "../../components/ButtonComponent";
 
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
@@ -59,7 +59,11 @@ const AssociatedEngineers = () => {
         {data &&
           data.get_engineers_by_manager.map((engineer) => (
             <Grid item key={engineer.id} xs={12} sm={3}>
-              <Card sx={{ width: "90%", marginLeft: "20px" }}>
+              <Card sx={{
+                  width: "90%",
+                  marginLeft: "20px",
+                  boxShadow: "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
+                }}>
                 <CardContent
                   sx={{
                     display: "flex",
@@ -90,7 +94,6 @@ const AssociatedEngineers = () => {
                     onClick={() =>
                       handleProposalClick(engineer.id)
                     }
-                    id={engineer.id}
                   />
                 </CardContent>
               </Card>
