@@ -6,7 +6,8 @@ import {
   INSERT_CANDIDATURE_PROPOSAL,
   GET_ENGINEERS,
   GET_BADGE_CANDIDATURE_REQUESTS,
-  GET_PENDING_PROPOSALS
+  GET_PENDING_PROPOSALS,
+  GET_ENGINEERS_PENDING_PROPOSALS
 } from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -46,11 +47,18 @@ const AddCandidatureProposal = () => {
     }
   );
   const [getPendingProposals, { loading: pendingProposalsLoading, error: pendingProposalsError, data: pendingProposalsData }] =
-    useMutation(GET_PENDING_PROPOSALS, {
+    useMutation(GET_ENGINEERS_PENDING_PROPOSALS, {
       variables: {
         managerId: managerId
       }
     });
+
+    const [getEngineersPendingProposals, { loading: engineersPendingProposalsLoading, error: engineersPendingProposalsError, data: engineersPendingProposalsData }] =
+    useMutation(GET_PENDING_PROPOSALS, {
+      variables: {
+        managerId: managerId
+      }
+    }); 
 
   const {
     loading: candidatureLoading,
@@ -65,8 +73,10 @@ const AddCandidatureProposal = () => {
   useEffect(() => {
     getEngineersByManager();
     getPendingProposals();
-  }, [getEngineersByManager, getPendingProposals]);
+    getEngineersPendingProposals();
+  }, [getEngineersByManager, getPendingProposals,getEngineersPendingProposals]);
 
+  console.log("pending:",engineersPendingProposalsData);
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -102,6 +112,7 @@ const AddCandidatureProposal = () => {
       setEngineerExists(true);
     }
   }, [engineerId, engineersData, setValue, pathname]);
+  console.log("PENDINDDATA",pendingProposalsData);
 
   const handleFormSubmit = async (data) => {
     try {
@@ -112,18 +123,55 @@ const AddCandidatureProposal = () => {
       const badgeVersion = selectedBadge?.created_at;
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
 
-      const existingProposal = pendingProposalsData.get_managers_pending_proposals_for_engineers.some(
+
+      const existingProposal = pendingProposalsData?.get_managers_pending_proposals_for_engineers.some(
         (proposal) => proposal.badge_version === badgeVersion && proposal.engineer === engineerValue
       );
 
       if (existingProposal) {
-        console.error("This combo exists on the manager proposals");
+        console.error("There is already a pending proposal for this badge.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "There is already a pending proposal for this badge.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        })
       } else if (
         candidatureRequestData?.badge_candidature_request.some(
           (request) => request.badge_version === badgeVersion && request.engineer_id === engineerValue
         )
       ) {
-        console.error("A proposal for this badge version to this engineer already exists.");
+        console.error("This proposal is accepted and ongoing.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "This proposal is accepted and ongoing.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        })
+      } else if (
+        engineersPendingProposalsData?.get_engineers_pending_proposals_for_managers.some(
+          (proposal) => proposal.badge_version === badgeVersion && proposal.created_by === engineerValue
+        )
+      ) {
+        console.error("The engineer has already applied for this badge.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "The engineer has already applied for this badge.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        })
       } else {
         await addCandidatureProposal({
           variables: {
@@ -164,7 +212,7 @@ const AddCandidatureProposal = () => {
     return <Typography variant="body1">Manager ID not available.</Typography>;
   }
 
-  if (versionsLoading || addLoading || engineersLoading || candidatureLoading) {
+  if (versionsLoading || addLoading || engineersLoading || candidatureLoading || pendingProposalsLoading || engineersPendingProposalsLoading) {
     return (
       <CenteredLayout>
         <LoadableCurtain text="Add Candidature Proposal" />
@@ -172,8 +220,8 @@ const AddCandidatureProposal = () => {
     );
   }
 
-  if (versionsError || addError) {
-    return <Typography variant="body1">Error: {versionsError?.message || addError?.message}</Typography>;
+  if (versionsError || addError || engineersError || pendingProposalsError || engineersPendingProposalsError || candidatureError ) {
+    return <Typography variant="body1">Error: {versionsError?.message || addError?.message || engineersError?.message || pendingProposalsError?.message || engineersPendingProposalsError?.message || candidatureError?.message}</Typography>;
   }
 
   return (
