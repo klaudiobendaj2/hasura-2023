@@ -335,3 +335,13 @@ export const GET_CANDIDATURE_PROPOSALS_BY_MANAGER = gql`
     }
   }
 `;
+
+export const GET_BADGE_CANDIDATURE_REQUESTS = gql`
+ query GetCandidatureRequests($managerId: Int!) {
+  badge_candidature_request(where: {manager_id: {_eq: $managerId}}) {
+    badge_version
+    engineer_id
+    badge_id
+  }
+}
+`;

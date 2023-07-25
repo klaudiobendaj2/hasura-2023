@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import { GET_BADGES_VERSIONS,INSERT_CANDIDATURE_PROPOSAL,GET_ENGINEERS,GET_CANDIDATURE_PROPOSALS_BY_MANAGER} from "../../state/queries-mutations.graphql";
+import { GET_BADGES_VERSIONS,INSERT_CANDIDATURE_PROPOSAL,GET_ENGINEERS,GET_CANDIDATURE_PROPOSALS_BY_MANAGER,GET_BADGE_CANDIDATURE_REQUESTS } from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
@@ -19,6 +19,7 @@ import {
 import LoadableCurtain from "../LoadableCurtain";
 import { useForm, Controller } from "react-hook-form";
 import CenteredLayout from "../../layouts/CenteredLayout";
+
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
   const { engineerId } = useParams();
@@ -46,9 +47,18 @@ const AddCandidatureProposal = () => {
   const {
     loading,
     error,
-    data: managerProposalsData,
-    refetch: refetchManagerProposals
+    data: managerProposalsData
   } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
+    variables: {
+      managerId: managerId
+    }
+  });
+
+  const {
+    loading: candidatureLoading,
+    error:candidatureError,
+    data: candidatureRequestData
+  } = useQuery(GET_BADGE_CANDIDATURE_REQUESTS , {
     variables: {
       managerId: managerId
     }
@@ -59,7 +69,9 @@ const AddCandidatureProposal = () => {
   }, [getEngineersByManager]);
 
   const navigate = useNavigate();
+
   const location = useLocation();
+
   const pathname = location.pathname;
 
   const [engineerExists, setEngineerExists] = useState(true);
@@ -91,6 +103,9 @@ const AddCandidatureProposal = () => {
     }
   }, [engineerId, engineersData, setValue, pathname]);
 
+
+  console.log("candidaturess:", candidatureRequestData);
+
   const handleFormSubmit = async (data) => {
     try {
       const selectedBadge = versionsData?.badges_versions_last.find(
@@ -99,7 +114,7 @@ const AddCandidatureProposal = () => {
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
-
+      
       const existingProposal =
         managerProposalsData.manager_to_engineer_badge_candidature_proposals.some(
           (proposal) =>
@@ -107,30 +122,21 @@ const AddCandidatureProposal = () => {
             proposal.engineer === engineerValue
         );
 
-      const approvedProposal =
-        managerProposalsData.manager_to_engineer_badge_candidature_proposals?.filter(
-          (proposal) => {
-            const responses =
-              proposal.engineer_badge_candidature_proposal_responses;
-            if (Array.isArray(responses) && responses.length > 0) {
-              const isApprovedValuesExist = responses.some(
-                (response) => response.is_approved === false
-              );
-              return isApprovedValuesExist;
-            }
-            return false;
-          }
+        if(existingProposal){
+          console.error("This combo exists on the manager proposals");
+        }
+
+        const requestExists = candidatureRequestData?.badge_candidature_request.some(
+          (request) =>
+            request.badge_version === badgeVersion && request.engineer_id === engineerValue
         );
-      console.log("exprop", existingProposal);
-      console.log("appprop", approvedProposal);
-      if (
-        badgeId &&
-        badgeVersion &&
-        engineerValue &&
-        managerId &&
-        proposalDescription &&
-        (!existingProposal || approvedProposal.length > 0)
-      ) {
+          
+          if (requestExists) {
+            console.error("A proposal for this badge version to this engineer already exists.");
+            return;
+          }
+
+      if (!existingProposal || !requestExists) {
         await addCandidatureProposal({
           variables: {
             badgeId: badgeId,
@@ -157,7 +163,6 @@ const AddCandidatureProposal = () => {
         }).then(() => {
           navigate("/managers/ManagerCandidatureProposals");
         });
-        refetchManagerProposals();
       } else {
         console.error(
           "Proposal for this badge to this engineer has already been sent."
@@ -172,7 +177,7 @@ const AddCandidatureProposal = () => {
     return <Typography variant="body1">Manager ID not available.</Typography>;
   }
 
-  if (versionsLoading || addLoading || engineersLoading) {
+  if (versionsLoading || addLoading || engineersLoading || candidatureLoading) {
     return (
       <CenteredLayout>
         <LoadableCurtain text="Add Candidature Proposal" />
@@ -197,6 +202,7 @@ const AddCandidatureProposal = () => {
       >
         Add Candidature Proposal
       </Typography>
+
       <Grid container spacing={2}>
         {engineerExists && pathname === "/managers/AddCandidatureProposal" ? (
           <Grid item xs={12}>
@@ -244,6 +250,7 @@ const AddCandidatureProposal = () => {
             />
           </Grid>
         )}
+
         <Grid item xs={12}>
           <FormControl
             variant="outlined"
@@ -279,6 +286,7 @@ const AddCandidatureProposal = () => {
             )}
           </FormControl>
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             id="proposalDescription"
