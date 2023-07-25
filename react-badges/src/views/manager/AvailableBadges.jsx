@@ -60,7 +60,7 @@ const BadgeList = () => {
               <Typography display="flex" justifyContent="center" gutterBottom>
                 <strong>{badge.title}</strong>
               </Typography>
-              <Typography textAlign="justify" varian t="body1" component="p" padding="20px">
+              <Typography textAlign="justify" variant="body1" component="p" padding="20px">
                 {badge.description}
               </Typography>
               <Typography marginLeft="50px" color="text.secondary">

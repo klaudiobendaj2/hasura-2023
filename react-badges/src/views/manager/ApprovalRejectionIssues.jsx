@@ -205,15 +205,17 @@ const ApprovalRejectionIssues = () => {
                     error={!!errors.rejectionDescription}
                   />
                   {errors.rejectionDescription && <FormHelperText error>{errors.rejectionDescription.message}</FormHelperText>}
-                  <ButtonComponent
-                    variant="contained"
-                    color="success"
-                    handleClick={handleSubmit(handleRejectionSubmit)}
-                    content="Submit"
-                    sx={{
-                      marginLeft: "720px"
-                    }}
-                  />
+                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <ButtonComponent
+                      variant="contained"
+                      color="success"
+                      handleClick={handleSubmit(handleRejectionSubmit)}
+                      content="Submit"
+                      sx={{
+                        width: "100px"
+                      }}
+                    />
+                  </div>
                 </CardContent>
               )}
             </Card>
