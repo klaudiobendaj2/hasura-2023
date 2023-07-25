@@ -46,7 +46,6 @@ const managerMenuItems = [
 const AppManager: React.FC = () => {
   const { managerId } = useContext(AuthContext);
   const manager = users.find((user) => user.id === managerId);
-  console.log("managerid", typeof managerId);
 
   return (
     <AppEntrypoint

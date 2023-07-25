@@ -64,17 +64,19 @@ const BadgeList = () => {
           </StyledCard>
         ))}
       </StyledRoot>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
       <ButtonComponent
         sx={{
-          marginLeft: "550px",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "1rem"
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '1rem',
         }}
-        content={showAll ? "Show Latest Badges" : "Show All Badges"}
+        content={showAll ? 'Show Latest Badges' : 'Show All Badges'}
         handleClick={handleFilterClick}
         variant="contained"
       />
+    </div>
     </div>
   );
 };
