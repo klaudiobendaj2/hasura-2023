@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Grid, Modal, Fade, Typography, Backdrop, TextField } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
 
 const style = {
@@ -8,10 +8,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
+  height: 320,
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
+  border: "3px solid #1976d2",
+  borderRadius: "25px",
+  boxShadow:
+    "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)",
   p: 4
 };
 
@@ -47,10 +50,10 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Typography id="transition-modal-title" variant="h6" component="h2">
+          <Typography id="transition-modal-title" variant="h6" component="h2" align="center" mb={2} fontSize="20px">
             Add a disapproval motivation
           </Typography>
-          <Grid container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={2} justifyContent="center" alignItems="center">
             <Grid item>
               <TextField
                 label="Disapproval Motivation"
@@ -63,25 +66,37 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
                     message: "It should contain at least 5 characters!"
                   },
                   maxLength: {
-                    value: 10,
-                    message: "Max 10 characters allowed!"
+                    value: 150,
+                    message: "Max 150 characters allowed!"
                   }
                 })}
                 onChange={(e) => getTextAreaValue(e.target.value)}
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline
-                rows={3}
-                sx={{ style: { borderRadius: "8px" } }}
+                rows={4}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    borderRadius: "10px",
+                    // fontSize: "20px",
+                    width: "60vh",
+                    height: "20vh",
+                    transition: "border-color 0.3s",
+                    "&:hover, &:focus": {
+                      borderColor: "blue"
+                    }
+                  }
+                }}
               />
             </Grid>
             <Grid item>
               <ButtonComponent
                 type="submit"
-                variant="outlined"
+                variant="contained"
                 color="success"
                 handleClick={handleSubmit(onSubmitClick)}
                 content="Submit"
+                size="large"
               />
             </Grid>
           </Grid>
