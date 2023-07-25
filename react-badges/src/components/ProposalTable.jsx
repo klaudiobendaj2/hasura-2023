@@ -27,7 +27,7 @@ const ProposalTable = ({
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
+            <TableRow>
               <TableCell>Applicants</TableCell>
               <TableCell>Badge Version</TableCell>
               <TableCell>Badge Title</TableCell>
