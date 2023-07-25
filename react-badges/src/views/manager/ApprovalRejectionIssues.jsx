@@ -1,39 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useMutation } from "@apollo/client";
-import { AuthContext } from "../state/with-auth";
-import {
-  TextField,
-  Alert,
-  AlertTitle,
-  Typography,
-  Card,
-  CardContent,
-  FormHelperText,
-  Box,
-  Grid
-} from "@mui/material";
-import {
-  GET_ISSUING_REQUESTS,
-  REJECT_ISSUING_REQUEST,
-  APPROVE_ISSUING_REQUEST
-} from "../state/queries-mutations.graphql";
+import { AuthContext } from "../../state/with-auth";
+import { TextField, Alert, AlertTitle, Typography, Card, CardContent, FormHelperText, Box, Grid } from "@mui/material";
+import { GET_ISSUING_REQUESTS, REJECT_ISSUING_REQUEST, APPROVE_ISSUING_REQUEST } from "../../state/queries-mutations.graphql";
 import Swal from "sweetalert2";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useForm } from "react-hook-form";
-import ButtonComponent from "../UI/ButtonComponent";
-import CenteredLayout from "../layouts/CenteredLayout";
-import LoadableCurtain from "../components/LoadableCurtain";
-
+import ButtonComponent from "../../components/ButtonComponent";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const ApprovalRejectionIssues = () => {
   const { managerId } = useContext(AuthContext);
   const [issueRequests, setIssueRequests] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const [getExistingIssues, { loading, error, data }] = useMutation(
-    GET_ISSUING_REQUESTS,
-    { variables: { managerId } }
-  );
+  const [getExistingIssues, { loading, error, data }] = useMutation(GET_ISSUING_REQUESTS, { variables: { managerId } });
   const [rejectIssuingRequest] = useMutation(REJECT_ISSUING_REQUEST);
   const [approveIssuingRequest] = useMutation(APPROVE_ISSUING_REQUEST);
   const {
@@ -57,7 +39,10 @@ const ApprovalRejectionIssues = () => {
         icon: "success",
         text: "The issue request was approved!",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
+        customClass: {
+          container: "custom-swal-container"
+        }
       });
 
       const updatedIssueRequests = issueRequests.map((issue) => {
@@ -71,7 +56,6 @@ const ApprovalRejectionIssues = () => {
       console.error("Error approving issuing request:", error);
     }
   };
-
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
     const updatedIssueRequests = issueRequests.map((issue) => {
@@ -82,12 +66,14 @@ const ApprovalRejectionIssues = () => {
     });
     setIssueRequests(updatedIssueRequests);
   };
-
   const handleRejectionSubmit = async (data) => {
     Swal.fire({
       text: "The issue request was not approved!",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
+      customClass: {
+        container: "custom-swal-container"
+      }
     });
     try {
       await rejectIssuingRequest({
@@ -96,7 +82,6 @@ const ApprovalRejectionIssues = () => {
           rejectionDescription: data.rejectionDescription
         }
       });
-
       setSelectedRequestId(null);
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === selectedRequestId) {
@@ -110,19 +95,15 @@ const ApprovalRejectionIssues = () => {
       console.error("Error rejecting issuing request:", error);
     }
   };
-
   useEffect(() => {
     getExistingIssues();
   }, [getExistingIssues]);
-
   useEffect(() => {
     if (data && data.get_issuing_requests_for_manager) {
-      const updatedIssueRequests = data.get_issuing_requests_for_manager.map(
-        (issue) => ({
-          ...issue,
-          showRejectionTextArea: false
-        })
-      );
+      const updatedIssueRequests = data.get_issuing_requests_for_manager.map((issue) => ({
+        ...issue,
+        showRejectionTextArea: false
+      }));
       setIssueRequests(updatedIssueRequests);
     }
   }, [data]);
@@ -133,16 +114,13 @@ const ApprovalRejectionIssues = () => {
       </CenteredLayout>
     );
   }
-
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-
-
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="h2" sx={{marginTop:"20px"}} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
+        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
           Existing Issues
         </Typography>
       </Grid>
@@ -155,17 +133,34 @@ const ApprovalRejectionIssues = () => {
         </Grid>
       ) : (
         issueRequests.map((issue) => (
-          <Grid item key={issue.id} xs={12} sm={8} >
-            <Card variant="outlined">
-              <CardContent sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}>
+          <Grid item key={issue.id} xs={12} sm={8}>
+            <Card
+              variant="outlined"
+              sx={{
+                borderRadius: "10px",
+                boxShadow:
+                  "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
+              }}
+            >
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
                 <Typography display="flex" justifyContent="center" gutterBottom>
                   <strong>{issue.badge_title}</strong>
                 </Typography>
+                <hr
+                  style={{
+                    border: "1px solid #1976D2",
+                    margin: "10px auto",
+                    width: "100%"
+                  }}
+                />
+
                 <Typography textAlign="justify" variant="body1" component="p" padding="20px">
                   {issue.badge_description}
                 </Typography>
@@ -185,7 +180,6 @@ const ApprovalRejectionIssues = () => {
                   sx={{ marginRight: "10px" }}
                   content={<DoneOutlinedIcon />}
                 />
-  
                 <ButtonComponent
                   variant="contained"
                   color="error"
@@ -201,23 +195,24 @@ const ApprovalRejectionIssues = () => {
                     multiline
                     rows={4}
                     variant="outlined"
+                    sx={{
+                      marginBottom: "10px"
+                    }}
                     fullWidth
                     {...register("rejectionDescription", {
                       required: "Please enter a rejection description."
                     })}
                     error={!!errors.rejectionDescription}
                   />
-                  {errors.rejectionDescription && (
-                    <FormHelperText error>
-                      {errors.rejectionDescription.message}
-                    </FormHelperText>
-                  )}
-                  
+                  {errors.rejectionDescription && <FormHelperText error>{errors.rejectionDescription.message}</FormHelperText>}
                   <ButtonComponent
                     variant="contained"
                     color="success"
                     handleClick={handleSubmit(handleRejectionSubmit)}
                     content="Submit"
+                    sx={{
+                      marginLeft: "720px"
+                    }}
                   />
                 </CardContent>
               )}
@@ -228,6 +223,4 @@ const ApprovalRejectionIssues = () => {
     </Grid>
   );
 };
-
 export default ApprovalRejectionIssues;
-

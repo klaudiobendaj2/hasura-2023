@@ -1,28 +1,33 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
 import ModalComponent from "./ModalComponent";
-import ButtonComponent from "../UI/ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import TableRowComponent from "./TableRowComponent";
+import { useState } from "react";
 
 const ProposalTable = ({
   showPendingProposals,
   pendingProposals,
-  handleOpen,
-  handleClose,
   textAreaValue,
   getTextAreaValue,
-  open,
   candidatures,
   onApproveClick,
   onDisapproveClick
 }) => {
+  const [open, setOpen] = useState(false);
+  const hasApprovedCandidature = candidatures.map(
+    (candidature) => candidature.manager_badge_candidature_proposal_responses[0]?.is_approved
+  );
+  const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table>
           <TableHead>
-            <TableRow>
+            <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
               <TableCell>Applicants</TableCell>
               <TableCell>Badge Version</TableCell>
               <TableCell>Badge Title</TableCell>
@@ -30,6 +35,7 @@ const ProposalTable = ({
               <TableCell align={showPendingProposals ? "center" : "left"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>
+              {!showPendingProposals && areAllCandidaturesApproved && <TableCell>Disapproval Motivation</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -47,7 +53,7 @@ const ProposalTable = ({
                   additionalCell={
                     <>
                       <TableCell align="right">
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", marginLeft: "51px" }}>
                           <ButtonComponent
                             variant="contained"
                             color="success"
@@ -86,10 +92,16 @@ const ProposalTable = ({
                   scope="row"
                   item={item}
                   additionalCell={
-                    <TableCell>
+                    <>
+                      <TableCell>
+                        {item.manager_badge_candidature_proposal_responses.length > 0 &&
+                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
+                      </TableCell>
                       {item.manager_badge_candidature_proposal_responses.length > 0 &&
-                        (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
-                    </TableCell>
+                      item.manager_badge_candidature_proposal_responses[0].is_approved ? null : (
+                        <TableCell>{item.manager_badge_candidature_proposal_responses[0].disapproval_motivation}</TableCell>
+                      )}
+                    </>
                   }
                 />
               ))}

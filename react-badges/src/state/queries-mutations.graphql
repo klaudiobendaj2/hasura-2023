@@ -121,7 +121,6 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
         manager: { _eq: $managerId }
         }
         ]
-        
       }
     ) {
       id
@@ -142,6 +141,7 @@ export const GET_CANDIDATURE_PROPOSALS_BY_ENGINEERS = gql`
         response_id
         is_approved
         proposal_id
+        disapproval_motivation
       }
     }
   }
