@@ -170,7 +170,7 @@ BEGIN
     FROM engineer_to_manager_badge_candidature_proposals
     WHERE id = NEW.proposal_id;
 
-  ELSE IF TG_TABLE_NAME = 'engineer_badge_candidature_proposal_response' AND NEW.is_approved = TRUE THEN
+  ELSIF TG_TABLE_NAME = 'engineer_badge_candidature_proposal_response' AND NEW.is_approved = TRUE THEN
     SELECT badge_id, badge_version
     INTO proposal_badge_id, proposal_badge_version
     FROM manager_to_engineer_badge_candidature_proposals

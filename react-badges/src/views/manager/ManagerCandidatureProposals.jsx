@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
@@ -12,7 +12,7 @@ import LoadableCurtain from "../../components/LoadableCurtain";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
-  const { loading, error, data } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
+  const { loading, error, data, refetch } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
     variables: {
       managerId: managerId
     }
@@ -21,6 +21,10 @@ const ManagerCandidatureProposals = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+    refetch();
+  },[data])
 
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");

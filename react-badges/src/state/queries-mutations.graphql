@@ -228,3 +228,11 @@ export const GET_BADGE_CANDIDATURE_REQUESTS = gql`
   }
 }
 `;
+export const GET_PENDING_PROPOSALS = gql`
+mutation GetPendingProposals($managerId: Int!) {
+  get_managers_pending_proposals_for_engineers(args: {managerid: $managerId}) {
+    badge_version
+    engineer
+  }
+}
+`;
