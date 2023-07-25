@@ -64,7 +64,7 @@ const ManagerCandidatureProposals = () => {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <TableRow>
+              <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
                 <TableCell>Engineer</TableCell>
                 <TableCell>Badge Version</TableCell>
                 <TableCell>Proposal Description</TableCell>

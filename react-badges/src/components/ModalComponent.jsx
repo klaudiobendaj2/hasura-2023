@@ -8,7 +8,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 600,
+  height: 320,
   bgcolor: "background.paper",
   border: "3px solid #1976d2",
   borderRadius: "25px",
@@ -49,7 +50,7 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Typography id="transition-modal-title" variant="h6" component="h2" align="center" mb={2}>
+          <Typography id="transition-modal-title" variant="h6" component="h2" align="center" mb={2} fontSize="20px">
             Add a disapproval motivation
           </Typography>
           <Grid container direction="column" spacing={2} justifyContent="center" alignItems="center">
@@ -73,10 +74,13 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline
-                rows={2}
+                rows={4}
                 sx={{
                   "& .MuiInputBase-root": {
                     borderRadius: "10px",
+                    // fontSize: "20px",
+                    width: "60vh",
+                    height: "20vh",
                     transition: "border-color 0.3s",
                     "&:hover, &:focus": {
                       borderColor: "blue"
@@ -88,10 +92,11 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
             <Grid item>
               <ButtonComponent
                 type="submit"
-                variant="outlined"
+                variant="contained"
                 color="success"
                 handleClick={handleSubmit(onSubmitClick)}
                 content="Submit"
+                size="large"
               />
             </Grid>
           </Grid>

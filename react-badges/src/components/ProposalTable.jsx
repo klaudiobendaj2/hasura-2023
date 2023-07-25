@@ -4,30 +4,30 @@ import ButtonComponent from "./ButtonComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import TableRowComponent from "./TableRowComponent";
+import { useState } from "react";
 
 const ProposalTable = ({
   showPendingProposals,
   pendingProposals,
-  handleOpen,
-  handleClose,
   textAreaValue,
   getTextAreaValue,
-  open,
   candidatures,
   onApproveClick,
   onDisapproveClick
 }) => {
-  console.log(candidatures);
+  const [open, setOpen] = useState(false);
   const hasApprovedCandidature = candidatures.map(
     (candidature) => candidature.manager_badge_candidature_proposal_responses[0]?.is_approved
   );
   const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table>
           <TableHead>
-            <TableRow>
+            <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
               <TableCell>Applicants</TableCell>
               <TableCell>Badge Version</TableCell>
               <TableCell>Badge Title</TableCell>
@@ -53,7 +53,7 @@ const ProposalTable = ({
                   additionalCell={
                     <>
                       <TableCell align="right">
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", marginLeft: "51px" }}>
                           <ButtonComponent
                             variant="contained"
                             color="success"
