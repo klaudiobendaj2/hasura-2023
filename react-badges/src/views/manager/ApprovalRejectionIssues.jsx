@@ -120,7 +120,7 @@ const ApprovalRejectionIssues = () => {
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
+        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontWeight="bold" gutterBottom>
           Existing Issues
         </Typography>
       </Grid>

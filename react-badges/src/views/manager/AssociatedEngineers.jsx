@@ -49,7 +49,6 @@ const AssociatedEngineers = () => {
         variant="h2"
         align="center"
         padding="30px"
-        fontFamily="monosp"
         fontWeight="bold"
         gutterBottom
       >

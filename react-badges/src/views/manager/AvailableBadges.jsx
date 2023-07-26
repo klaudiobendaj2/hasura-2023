@@ -48,10 +48,11 @@ const BadgeList = () => {
       "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
   });
 
+  const showBadges = showAll ? "All available badges" : "Badges' latest versions";
   return (
     <div>
-      <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold" gutterBottom>
-        Available Badges
+      <Typography variant="h2" align="center" padding="30px" fontWeight="bold" gutterBottom>
+        {showBadges}
       </Typography>
       <StyledRoot>
         {badges.map((badge, index) => (
@@ -70,18 +71,18 @@ const BadgeList = () => {
           </StyledCard>
         ))}
       </StyledRoot>
-      <div style={{display:'flex', justifyContent:'center', marginTop:'1rem'}}>
-      <ButtonComponent
-        sx={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "1rem"
-        }}
-        content={showAll ? "Show Latest Badges" : "Show All Badges"}
-        handleClick={handleFilterClick}
-        variant="contained"
-      />
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+        <ButtonComponent
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "1rem"
+          }}
+          content={showAll ? "Show Latest Badges" : "Show All Badges"}
+          handleClick={handleFilterClick}
+          variant="contained"
+        />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
+import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
 import ModalComponent from "./ModalComponent";
 import ButtonComponent from "./ButtonComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import TableRowComponent from "./TableRowComponent";
-import { useState } from "react";
+import ColorChips from "./ColorChips"; 
 
 const ProposalTable = ({
   showPendingProposals,
@@ -22,6 +23,7 @@ const ProposalTable = ({
   const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -32,7 +34,7 @@ const ProposalTable = ({
               <TableCell>Badge Version</TableCell>
               <TableCell>Badge Title</TableCell>
               <TableCell>Proposal Description</TableCell>
-              <TableCell align={showPendingProposals ? "center" : "left"}>
+              <TableCell align={showPendingProposals ? "center" : "center"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>
               {!showPendingProposals && areAllCandidaturesApproved && <TableCell>Disapproval Motivation</TableCell>}
@@ -95,7 +97,11 @@ const ProposalTable = ({
                     <>
                       <TableCell>
                         {item.manager_badge_candidature_proposal_responses.length > 0 &&
-                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
+                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? (
+                            <ColorChips label="Approved" color="success"/>
+                          ) : (
+                            <ColorChips label="Rejected" color="error" />
+                          ))}
                       </TableCell>
                       {item.manager_badge_candidature_proposal_responses.length > 0 &&
                       item.manager_badge_candidature_proposal_responses[0].is_approved ? null : (
@@ -111,4 +117,5 @@ const ProposalTable = ({
     </>
   );
 };
+
 export default ProposalTable;
