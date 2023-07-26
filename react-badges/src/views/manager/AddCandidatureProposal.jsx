@@ -1,7 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
-import { GET_BADGES_VERSIONS, INSERT_CANDIDATURE_PROPOSAL, GET_ENGINEERS } from "../../state/queries-mutations.graphql";
+import {
+  GET_BADGES_VERSIONS,
+  INSERT_CANDIDATURE_PROPOSAL,
+  GET_ENGINEERS,
+  GET_BADGE_CANDIDATURE_REQUESTS,
+  GET_PENDING_PROPOSALS,
+  GET_ENGINEERS_PENDING_PROPOSALS,
+  GET_ISSUING_REQUESTS_FOR_ENGINEERS
+} from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import {
@@ -19,6 +27,7 @@ import {
 import LoadableCurtain from "../../components/LoadableCurtain";
 import { useForm, Controller } from "react-hook-form";
 import CenteredLayout from "../../layouts/CenteredLayout";
+
 const AddCandidatureProposal = () => {
   const { managerId } = useContext(AuthContext);
   const { engineerId } = useParams();
@@ -38,13 +47,54 @@ const AddCandidatureProposal = () => {
       variables: { managerId }
     }
   );
+  const [getEngineersPendingProposals, { loading: engineersPendingProposalsLoading, error: engineersPendingProposalsError, data: engineersPendingProposalsData }] =
+    useMutation(GET_ENGINEERS_PENDING_PROPOSALS, {
+      variables: {
+        managerId: managerId
+      }
+    });
+
+    const [getManagersPendingProposals, { loading: managersPendingProposalsLoading, error: managersPendingProposalsError, data: managersPendingProposalsData }] =
+    useMutation(GET_PENDING_PROPOSALS, {
+      variables: {
+        managerId: managerId
+      }
+    }); 
+
+  const {
+    loading: candidatureLoading,
+    error: candidatureError,
+    data: candidatureRequestData
+  } = useQuery(GET_BADGE_CANDIDATURE_REQUESTS, {
+    variables: {
+      managerId: managerId
+    }
+  });
+
+  const {
+    loading: issuingRequestsLoading,
+    error: issuingRequestsError,
+    data: issuingRequestsData,
+  } = useQuery(GET_ISSUING_REQUESTS_FOR_ENGINEERS, {
+    variables: {
+      managerId: managerId
+    }
+  });
 
   useEffect(() => {
     getEngineersByManager();
-  }, [getEngineersByManager]);
-
+    getManagersPendingProposals();
+    getEngineersPendingProposals();
+  }, [getEngineersByManager, getManagersPendingProposals,getEngineersPendingProposals]);
+  
+  console.log("pending:",engineersPendingProposalsData);
+  console.log("PENDINDDATA",managersPendingProposalsData);
+  console.log(("issuing requests:" , issuingRequestsData));
+  
   const navigate = useNavigate();
+
   const location = useLocation();
+
   const pathname = location.pathname;
 
   const [engineerExists, setEngineerExists] = useState(true);
@@ -76,6 +126,23 @@ const AddCandidatureProposal = () => {
       setEngineerExists(true);
     }
   }, [engineerId, engineersData, setValue, pathname]);
+  
+
+  if (!managerId) {
+    return <Typography variant="body1">Manager ID not available.</Typography>;
+  }
+
+  if (versionsLoading || addLoading || engineersLoading || candidatureLoading || managersPendingProposalsLoading || engineersPendingProposalsLoading || issuingRequestsLoading) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Add Candidature Proposal" />
+      </CenteredLayout>
+    );
+  }
+
+  if (versionsError || addError || engineersError || managersPendingProposalsError || engineersPendingProposalsError || candidatureError || issuingRequestsError ) {
+    return <Typography variant="body1">Error: {versionsError?.message || addError?.message || engineersError?.message || pendingProposalsError?.message || engineersPendingProposalsError?.message || candidatureError?.message}</Typography>;
+  }
 
   const handleFormSubmit = async (data) => {
     try {
@@ -86,7 +153,98 @@ const AddCandidatureProposal = () => {
       const badgeVersion = selectedBadge?.created_at;
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
 
-      if (badgeId && badgeVersion && engineerValue && managerId && proposalDescription) {
+      const existingManagerProposal = managersPendingProposalsData?.get_managers_pending_proposals_for_engineers.some(
+        (proposal) => proposal.badge_version === badgeVersion && proposal.engineer === engineerValue
+      );
+
+      if (existingManagerProposal) { 
+        console.error("There is already a pending proposal for this badge.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "There is already a pending proposal for this badge.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        }).then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
+      } else if (
+        candidatureRequestData?.badge_candidature_request.some(
+          (request) => request.badge_version === badgeVersion && request.engineer_id === engineerValue && request.is_issued === false
+        )
+      ) {
+        console.error("This proposal is accepted and ongoing.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "This proposal is accepted and ongoing.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        }).then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
+      } else if (
+        engineersPendingProposalsData?.get_engineers_pending_proposals_for_managers.some(
+          (proposal) => proposal.badge_version === badgeVersion && proposal.created_by === engineerValue
+        )
+      ) {
+        console.error("The engineer has already applied for this badge.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "The engineer has already applied for this badge.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        }).then(() => {
+          navigate("/managers/CandidatureProposals");
+        });
+      } else if (
+        issuingRequestsData?.issuing_requests.some(
+          (request) => request.badge_candidature_request.badge_version === badgeVersion && request.badge_candidature_request.engineer_id === engineerValue && request.is_approved === true
+        )
+      ) {
+        console.error("The engineer has already acclaimed the badge.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "The engineer has already acclaimed the badge.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        }).then(() => {
+          navigate("/managers/IssuingRequest");
+        });
+      } else if(
+        issuingRequestsData?.issuing_requests.some(
+          (request) => request.badge_candidature_request.badge_version === badgeVersion && request.badge_candidature_request.engineer_id === engineerValue && request.is_approved === null
+        )
+      ) 
+      {
+        console.error("The engineer has an issue request.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "The engineer has an issue request.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            container: "custom-swal-container"
+          }
+        }).then(() => {
+          navigate("/managers/IssuingRequest");
+        });
+      } else{
         await addCandidatureProposal({
           variables: {
             badgeId: badgeId,
@@ -104,42 +262,23 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Proposal sent successfully to engineer!",
+          text: "Proposal sent successfully!",
           showConfirmButton: false,
           timer: 1500,
           customClass: {
             container: "custom-swal-container"
           }
         }).then(() => {
-          navigate("/managers/CandidatureProposals");
+          navigate("/managers/ManagerCandidatureProposals");
         });
-      } else {
-        console.error("Failed to retrieve badge ID or badge version for the selected version.");
       }
     } catch (error) {
       console.error("Error adding candidature proposal:", error);
     }
   };
-
-  if (!managerId) {
-    return <Typography variant="body1">Manager ID not available.</Typography>;
-  }
-
-  if (versionsLoading || addLoading || engineersLoading) {
-    return (
-      <CenteredLayout>
-        <LoadableCurtain text="Add Candidature Proposal" />
-      </CenteredLayout>
-    );
-  }
-
-  if (versionsError || addError) {
-    return <Typography variant="body1">Error: {versionsError?.message || addError?.message}</Typography>;
-  }
 
   return (
     <Container
@@ -154,9 +293,10 @@ const AddCandidatureProposal = () => {
           "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
       }}
     >
-      <Typography component="h1" variant="h5" style={{ margin: "50px", textAlign: "center" }}>
+      <Typography component="h1" variant="h5" style={{ margin: "50px", textAlign: "center", fontWeight: "bold" }}>
         Add Candidature Proposal
       </Typography>
+
       <Grid container spacing={2}>
         {engineerExists && pathname === "/managers/AddCandidatureProposal" ? (
           <Grid item xs={12}>
@@ -192,6 +332,7 @@ const AddCandidatureProposal = () => {
             />
           </Grid>
         )}
+
         <Grid item xs={12}>
           <FormControl variant="outlined" fullWidth error={!!errors.selectedBadgeVersion}>
             <InputLabel id="badgeVersion-label">Select a Badge Version</InputLabel>
@@ -213,6 +354,7 @@ const AddCandidatureProposal = () => {
             {errors.selectedBadgeVersion && <FormHelperText error>{errors.selectedBadgeVersion.message}</FormHelperText>}
           </FormControl>
         </Grid>
+
         <Grid item xs={12}>
           <TextField
             id="proposalDescription"
@@ -233,8 +375,8 @@ const AddCandidatureProposal = () => {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={handleSubmit(handleFormSubmit)}
             sx={{ marginTop: "3vh" }}
+            onClick={handleSubmit(handleFormSubmit)}
           >
             Submit
           </Button>

@@ -6,6 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/system";
 import { GET_BADGES } from "../../state/queries-mutations.graphql";
 import ButtonComponent from "../../components/ButtonComponent";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const BadgeList = () => {
   const [showAll, setShowAll] = useState(false);
@@ -17,7 +19,11 @@ const BadgeList = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Available Badges" />
+      </CenteredLayout>
+    );
   }
 
   if (error) {
@@ -64,9 +70,10 @@ const BadgeList = () => {
           </StyledCard>
         ))}
       </StyledRoot>
+      <div style={{display:'flex', justifyContent:'center', marginTop:'1rem'}}>
       <ButtonComponent
         sx={{
-          marginLeft: "550px",
+          alignItems: "center",
           display: "flex",
           justifyContent: "center",
           marginTop: "1rem"
@@ -75,6 +82,7 @@ const BadgeList = () => {
         handleClick={handleFilterClick}
         variant="contained"
       />
+      </div>
     </div>
   );
 };

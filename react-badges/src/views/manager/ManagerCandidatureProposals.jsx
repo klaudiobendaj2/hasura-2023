@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
@@ -28,6 +28,10 @@ const ManagerCandidatureProposals = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+    refetch();
+  },[data])
 
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");
