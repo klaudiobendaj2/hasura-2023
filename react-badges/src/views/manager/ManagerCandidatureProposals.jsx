@@ -63,11 +63,10 @@ const ManagerCandidatureProposals = () => {
   }
 
   const candidatures = data.manager_to_engineer_badge_candidature_proposals;
-  console.log(candidatures);
 
   return (
     <>
-      <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold" gutterBottom>
+      <Typography variant="h2" align="center" padding="30px" fontWeight="bold" gutterBottom>
         Manager's Proposals
       </Typography>
       <Box sx={{ width: "90%", margin: "0 auto", position: "relative", marginTop: "20px" }}>
@@ -90,7 +89,7 @@ const ManagerCandidatureProposals = () => {
                 <TableCell>Badge Version</TableCell>
                 <TableCell>Proposal Description</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Disaproval Motivation</TableCell>
+                <TableCell>Disapproval Motivation</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -104,18 +103,12 @@ const ManagerCandidatureProposals = () => {
                   <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0 ? (
                       item.engineer_badge_candidature_proposal_responses[0].is_approved ? (
-                        <Stack>
-                          <Chip label="Approved" color="success" variant="outlined" />
-                        </Stack>
+                        <span style={{ color: "green" }}>Approved</span>
                       ) : (
-                        <Stack>
-                          <Chip label="Disapproved" color="error" variant="outlined" />
-                        </Stack>
+                        <span style={{ color: "red" }}>Disapproved</span>
                       )
                     ) : (
-                      <Stack>
-                        <Chip label="Pending" color="warning" variant="outlined" />
-                      </Stack>
+                      <span style={{ color: "orange" }}>Pending</span>
                     )}
                   </TableCell>
                   <TableCell>
