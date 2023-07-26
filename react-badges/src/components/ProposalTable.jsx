@@ -5,17 +5,9 @@ import ButtonComponent from "./ButtonComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import TableRowComponent from "./TableRowComponent";
-import ColorChips from "./ColorChips"; 
+import ColorChips from "./ColorChips";
 
-const ProposalTable = ({
-  showPendingProposals,
-  pendingProposals,
-  textAreaValue,
-  getTextAreaValue,
-  candidatures,
-  onApproveClick,
-  onDisapproveClick
-}) => {
+const ProposalTable = ({ showPendingProposals, pendingProposals, candidatures, onApproveClick, onDisapproveClick }) => {
   const [open, setOpen] = useState(false);
   const hasApprovedCandidature = candidatures.map(
     (candidature) => candidature.manager_badge_candidature_proposal_responses[0]?.is_approved
@@ -70,8 +62,6 @@ const ProposalTable = ({
                         </Box>
                       </TableCell>
                       <ModalComponent
-                        textAreaValue={textAreaValue}
-                        getTextAreaValue={getTextAreaValue}
                         open={open}
                         onDisapproveClick={onDisapproveClick}
                         itemId={item.id}
@@ -96,7 +86,7 @@ const ProposalTable = ({
                       <TableCell>
                         {item.manager_badge_candidature_proposal_responses.length > 0 &&
                           (item.manager_badge_candidature_proposal_responses[0].is_approved ? (
-                            <ColorChips label="Approved" color="success"/>
+                            <ColorChips label="Approved" color="success" />
                           ) : (
                             <ColorChips label="Rejected" color="error" />
                           ))}
