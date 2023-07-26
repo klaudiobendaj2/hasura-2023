@@ -63,8 +63,8 @@ const AppManager: React.FC = () => {
           element: <AvailableBadges />
         },
         {
-          path: "managers/AddCandidatureProposal/:engineerId",
-          element: <AddCandidatureProposal />
+          path: 'managers/AddCandidatureProposal/:engineerId',
+          element: <AddCandidatureProposal />,      
         },
         {
           path: "managers/AddCandidatureProposal",

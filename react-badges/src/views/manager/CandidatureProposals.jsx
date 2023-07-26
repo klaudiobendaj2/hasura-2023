@@ -9,6 +9,8 @@ import {
   APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER,
   GET_ENGINEERS_PENDING_PROPOSALS
 } from "../../state/queries-mutations.graphql";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const CandidatureProposals = () => {
   const [open, setOpen] = useState(false);
@@ -17,8 +19,6 @@ const CandidatureProposals = () => {
   const [isApprovedFilter, setIsApprovedFilter] = useState(true);
   const { managerId } = useContext(AuthContext);
   const currentTimestamp = new Date().toISOString();
-
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleShowPending = () => {
@@ -96,7 +96,13 @@ const CandidatureProposals = () => {
     setTextAreaValue(item);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Engineer's Proposals" />
+      </CenteredLayout>
+    );
+  }
   if (pendingLoading) return <div>Loading</div>;
   if (loading2) return <div>Loading...</div>;
 
@@ -129,9 +135,6 @@ const CandidatureProposals = () => {
           <ProposalTable
             showPendingProposals={showPendingProposals}
             pendingProposals={pendingProposals}
-            open={open}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
             textAreaValue={textAreaValue}
             getTextAreaValue={getTextAreaValue}
             candidatures={candidatures}

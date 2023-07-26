@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
@@ -7,10 +7,12 @@ import { Typography } from "@mui/material";
 import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
+import CenteredLayout from "../../layouts/CenteredLayout";
+import LoadableCurtain from "../../components/LoadableCurtain";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
-  const { loading, error, data } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
+  const { loading, error, data, refetch } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
     variables: {
       managerId: managerId
     }
@@ -19,6 +21,10 @@ const ManagerCandidatureProposals = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  useEffect(() => {
+    refetch();
+  },[data])
 
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");
@@ -34,7 +40,11 @@ const ManagerCandidatureProposals = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Manager's Proposals" />
+      </CenteredLayout>
+    );
   }
 
   if (error) {
@@ -64,7 +74,7 @@ const ManagerCandidatureProposals = () => {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <TableRow component={Box} sx={{ borderBottom: "2px solid black" }}>
+              <TableRow>
                 <TableCell>Engineer</TableCell>
                 <TableCell>Badge Version</TableCell>
                 <TableCell>Proposal Description</TableCell>
