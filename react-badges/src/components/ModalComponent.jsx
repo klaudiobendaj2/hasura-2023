@@ -18,25 +18,25 @@ const style = {
   p: 4
 };
 
-const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, itemId }) => {
+const ModalComponent = ({ setOpen, open, onDisapproveClick, itemId }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    getValues
   } = useForm({
     mode: "onChange"
   });
 
-  const onSubmitClick = (data) => {
-    getTextAreaValue(data.motivation);
-    onDisapproveClick(itemId);
+  const onSubmitClick = () => {
+    const motivation = getValues("motivation");
+    onDisapproveClick(itemId, motivation);
   };
 
   useEffect(() => {
     if (!open) {
       reset();
-      getTextAreaValue("");
     }
   }, [open]);
 
@@ -69,7 +69,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
               <TextField
                 label="Disapproval Motivation"
                 name="motivation"
-                // value={textAreaValue}
                 {...register("motivation", {
                   required: "This field is required!",
                   minLength: {
@@ -81,7 +80,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
                     message: "Max 150 characters allowed!"
                   }
                 })}
-                // onChange={(e) => getTextAreaValue(e.target.value)}
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline
@@ -89,7 +87,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
                 sx={{
                   "& .MuiInputBase-root": {
                     borderRadius: "10px",
-                    // fontSize: "20px",
                     width: "60vh",
                     height: "20vh",
                     transition: "border-color 0.3s",
