@@ -84,7 +84,6 @@ const BadgeList = () => {
       />
       </div>
     </div>
-    </div>
   );
 };
 
