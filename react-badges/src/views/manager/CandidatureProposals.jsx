@@ -79,7 +79,6 @@ const CandidatureProposals = () => {
     await getPendingProposals();
   };
 
-
   const onDisapproveClick = async (proposalId) => {
     await managerResponse({
       variables: {
@@ -90,7 +89,7 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
-    // setTextAreaValue("");
+    setTextAreaValue("");
     await getPendingProposals();
     // handleClose();
   };

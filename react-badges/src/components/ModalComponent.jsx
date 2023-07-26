@@ -29,8 +29,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
   });
 
   const onSubmitClick = (data) => {
-    console.log(getValues("motivation"))
-    getTextAreaValue(data.motivation);
     onDisapproveClick(itemId);
   };
 
@@ -70,7 +68,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
               <TextField
                 label="Disapproval Motivation"
                 name="motivation"
-                // value={textAreaValue}
                 {...register("motivation", {
                   required: "This field is required!",
                   minLength: {
@@ -82,7 +79,7 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
                     message: "Max 150 characters allowed!"
                   }
                 })}
-                // onChange={(e) => getTextAreaValue(e.target.value)}
+                onChange={(e) => getTextAreaValue(e.target.value)}
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline
