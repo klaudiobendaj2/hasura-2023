@@ -46,8 +46,13 @@ const AssociatedEngineers = () => {
         variant="h2"
         align="center"
         padding="30px"
+<<<<<<< HEAD
         fontFamily="monosp"
         fontWeight="bold"
+=======
+        fontWeight="bold"
+        gutterBottom
+>>>>>>> main
       >
         List of Engineers
       </Typography>
@@ -57,7 +62,7 @@ const AssociatedEngineers = () => {
             <Grid item key={engineer.id} xs={12} sm={3} >
               <Card sx={{
                   width: "90%",
-                  height: "300px",
+                  height:"300px",
                   marginLeft: "20px",
                   boxShadow:
                     "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
@@ -69,7 +74,7 @@ const AssociatedEngineers = () => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: "100%"
+                    height:"100%"
                   }}
                 >
                   <Avatar
@@ -82,7 +87,7 @@ const AssociatedEngineers = () => {
                   </Typography>
                   <Typography
                     color="textSecondary"
-                    sx={{ mb: 1 }}
+                    sx={{ mb: 1, marginBottom: "10px" }}
                   >
                     Roles: {engineer.roles.join(", ")}
                   </Typography>
