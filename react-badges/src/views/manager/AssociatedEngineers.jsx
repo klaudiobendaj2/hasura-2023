@@ -42,7 +42,13 @@ const AssociatedEngineers = () => {
 
   return (
     <div>
-      <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold">
+      <Typography
+        variant="h2"
+        align="center"
+        padding="30px"
+        fontWeight="bold"
+        gutterBottom
+      >
         List of Engineers
       </Typography>
       <Grid container rowSpacing={4} columnSpacing={2} justifyContent="center">
@@ -52,6 +58,7 @@ const AssociatedEngineers = () => {
               <Card
                 sx={{
                   width: "90%",
+                  height:"300px",
                   marginLeft: "20px",
                   boxShadow:
                     "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
@@ -62,7 +69,8 @@ const AssociatedEngineers = () => {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
+                    height:"100%"
                   }}
                 >
                   <Avatar
@@ -73,14 +81,19 @@ const AssociatedEngineers = () => {
                   <Typography variant="h5" component="h2" sx={{ marginBottom: "10px" }}>
                     {engineer.name}
                   </Typography>
-                  <Typography color="textSecondary" sx={{ mb: 1 }}>
+                  <Typography
+                    color="textSecondary"
+                    sx={{ mb: 1, marginBottom: "10px" }}
+                  >
                     Roles: {engineer.roles.join(", ")}
                   </Typography>
                   <ButtonComponent
                     content={"Add Proposal"}
                     sx={{ fontSize: "10px" }}
                     variant="contained"
-                    handleClick={() => handleProposalClick(engineer.id)}
+                    handleClick={() =>
+                      handleProposalClick(engineer.id)
+                    }
                   />
                 </CardContent>
               </Card>

@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { TextField, Alert, AlertTitle, Typography, Card, CardContent, FormHelperText, Box, Grid } from "@mui/material";
 import { GET_ISSUING_REQUESTS, REJECT_ISSUING_REQUEST, APPROVE_ISSUING_REQUEST } from "../../state/queries-mutations.graphql";
-import Swal from "sweetalert2";
+import SwalComponent from "../../components/SwalComponent";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useForm } from "react-hook-form";
@@ -35,16 +35,11 @@ const ApprovalRejectionIssues = () => {
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
-      Swal.fire({
-        icon: "success",
-        text: "The issue request was approved!",
-        showConfirmButton: false,
-        timer: 1500,
-        customClass: {
-          container: "custom-swal-container"
-        }
-      });
-
+      SwalComponent(
+        "The issue request was approved!",
+        "success",
+        "2500",
+      );
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === id) {
           return { ...issue, showRejectionTextArea: false };
@@ -67,14 +62,11 @@ const ApprovalRejectionIssues = () => {
     setIssueRequests(updatedIssueRequests);
   };
   const handleRejectionSubmit = async (data) => {
-    Swal.fire({
-      text: "The issue request was not approved!",
-      showConfirmButton: false,
-      timer: 1500,
-      customClass: {
-        container: "custom-swal-container"
-      }
-    });
+    SwalComponent(
+      "The issue request was not approved!",
+      "",
+      "2500",
+    );
     try {
       await rejectIssuingRequest({
         variables: {
@@ -120,7 +112,7 @@ const ApprovalRejectionIssues = () => {
   return (
     <Grid container spacing={2} justifyContent="center">
       <Grid item xs={12}>
-        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontFamily="monosp" fontWeight="bold" gutterBottom>
+        <Typography variant="h2" sx={{ marginTop: "20px" }} align="center" fontWeight="bold" gutterBottom>
           Existing Issues
         </Typography>
       </Grid>
