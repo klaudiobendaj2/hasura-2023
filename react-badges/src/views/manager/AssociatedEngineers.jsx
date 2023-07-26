@@ -46,13 +46,8 @@ const AssociatedEngineers = () => {
         variant="h2"
         align="center"
         padding="30px"
-<<<<<<< HEAD
-        fontFamily="monosp"
-        fontWeight="bold"
-=======
         fontWeight="bold"
         gutterBottom
->>>>>>> main
       >
         List of Engineers
       </Typography>
