@@ -29,7 +29,6 @@ const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, it
   });
 
   const onSubmitClick = (data) => {
-    console.log(getValues("motivation"))
     getTextAreaValue(data.motivation);
     onDisapproveClick(itemId);
   };
