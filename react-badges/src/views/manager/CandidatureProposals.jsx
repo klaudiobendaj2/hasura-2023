@@ -54,7 +54,6 @@ const CandidatureProposals = () => {
   );
 
   const getTextAreaValue = (item) => {
-    console.log(item);
     setTextAreaValue(item);
   };
 
@@ -103,7 +102,6 @@ const CandidatureProposals = () => {
     );
     setTextAreaValue("");
     await getPendingProposals();
-    // handleClose();
   };
 
   if (loading) {

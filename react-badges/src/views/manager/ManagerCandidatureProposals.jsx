@@ -9,13 +9,6 @@ import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import CancelIcon from "@mui/icons-material/Cancel";
-import MoodBadIcon from "@mui/icons-material/MoodBad";
-import BlockIcon from "@mui/icons-material/Block";
-import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
