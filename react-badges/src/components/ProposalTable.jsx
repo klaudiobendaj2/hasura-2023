@@ -5,6 +5,8 @@ import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import TableRowComponent from "./TableRowComponent";
 import { useState } from "react";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 const ProposalTable = ({
   showPendingProposals,
@@ -21,7 +23,6 @@ const ProposalTable = ({
   );
   const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   return (
     <>
       <TableContainer component={Paper}>
@@ -70,12 +71,12 @@ const ProposalTable = ({
                         </Box>
                       </TableCell>
                       <ModalComponent
-                        handleClose={handleClose}
                         textAreaValue={textAreaValue}
                         getTextAreaValue={getTextAreaValue}
                         open={open}
                         onDisapproveClick={onDisapproveClick}
                         itemId={item.id}
+                        setOpen={setOpen}
                       />
                     </>
                   }
@@ -95,7 +96,15 @@ const ProposalTable = ({
                     <>
                       <TableCell>
                         {item.manager_badge_candidature_proposal_responses.length > 0 &&
-                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? "Approved" : "Rejected")}
+                          (item.manager_badge_candidature_proposal_responses[0].is_approved ? (
+                            <Stack direction="row" spacing={1}>
+                              <Chip label="Approved" color="success" />
+                            </Stack>
+                          ) : (
+                            <Stack direction="row" spacing={1}>
+                              <Chip label="Rejected" />
+                            </Stack>
+                          ))}
                       </TableCell>
                       {item.manager_badge_candidature_proposal_responses.length > 0 &&
                       item.manager_badge_candidature_proposal_responses[0].is_approved ? null : (

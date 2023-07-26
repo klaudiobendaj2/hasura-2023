@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, Modal, Fade, Typography, Backdrop, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import ButtonComponent from "./ButtonComponent";
@@ -18,21 +18,33 @@ const style = {
   p: 4
 };
 
-const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, onDisapproveClick, itemId }) => {
+const ModalComponent = ({ setOpen, getTextAreaValue, open, onDisapproveClick, itemId }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm({
     mode: "onChange"
   });
 
-  console.log(errors);
-
   const onSubmitClick = (data) => {
+    console.log(getValues("motivation"))
+    getTextAreaValue(data.motivation);
     onDisapproveClick(itemId);
   };
-  console.log(textAreaValue);
+
+  useEffect(() => {
+    if (!open) {
+      reset();
+      getTextAreaValue("");
+    }
+  }, [open]);
+
+  const handleClose = () => {
+    reset({ motivation: "" });
+    setOpen(false);
+  };
 
   return (
     <Modal
@@ -58,7 +70,7 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
               <TextField
                 label="Disapproval Motivation"
                 name="motivation"
-                value={textAreaValue}
+                // value={textAreaValue}
                 {...register("motivation", {
                   required: "This field is required!",
                   minLength: {
@@ -70,7 +82,7 @@ const ModalComponent = ({ handleClose, textAreaValue, getTextAreaValue, open, on
                     message: "Max 150 characters allowed!"
                   }
                 })}
-                onChange={(e) => getTextAreaValue(e.target.value)}
+                // onChange={(e) => getTextAreaValue(e.target.value)}
                 error={!!errors.motivation}
                 helperText={errors.motivation?.message}
                 multiline

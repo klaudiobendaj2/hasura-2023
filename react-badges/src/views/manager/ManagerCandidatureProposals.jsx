@@ -9,6 +9,13 @@ import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import CancelIcon from "@mui/icons-material/Cancel";
+import MoodBadIcon from "@mui/icons-material/MoodBad";
+import BlockIcon from "@mui/icons-material/Block";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
@@ -38,6 +45,10 @@ const ManagerCandidatureProposals = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [data]);
 
   if (loading) {
     return (
@@ -91,15 +102,25 @@ const ManagerCandidatureProposals = () => {
                   <TableCell>{item.badge_version}</TableCell>
                   <TableCell>{item.proposal_description}</TableCell>
                   <TableCell>
-                    {item.engineer_badge_candidature_proposal_responses.length > 0
-                      ? item.engineer_badge_candidature_proposal_responses[0].is_approved
-                        ? "Approved"
-                        : "Disapproved"
-                      : "Pending"}
+                    {item.engineer_badge_candidature_proposal_responses.length > 0 ? (
+                      item.engineer_badge_candidature_proposal_responses[0].is_approved ? (
+                        <Stack>
+                          <Chip label="Approved" color="success" variant="outlined" />
+                        </Stack>
+                      ) : (
+                        <Stack>
+                          <Chip label="Disapproved" color="error" variant="outlined" />
+                        </Stack>
+                      )
+                    ) : (
+                      <Stack>
+                        <Chip label="Pending" color="warning" variant="outlined" />
+                      </Stack>
+                    )}
                   </TableCell>
                   <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0
-                      ? item.engineer_badge_candidature_proposal_responses[0].is_approved === true
+                      ? item.engineer_badge_candidature_proposal_responses[0].is_approved
                         ? "---"
                         : item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
                       : "---"}
