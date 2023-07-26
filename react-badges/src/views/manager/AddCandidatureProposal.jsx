@@ -139,52 +139,11 @@ const AddCandidatureProposal = () => {
     return <Typography variant="body1">Error: {versionsError?.message || addError?.message || engineersError?.message || pendingProposalsError?.message || engineersPendingProposalsError?.message || candidatureError?.message}</Typography>;
   }
 
-  if (!managerId) {
-    return <Typography variant="body1">Manager ID not available.</Typography>;
-  }
-
-  if (
-    versionsLoading ||
-    addLoading ||
-    engineersLoading ||
-    candidatureLoading ||
-    managersPendingProposalsLoading ||
-    engineersPendingProposalsLoading ||
-    issuingRequestsLoading
-  ) {
-    return (
-      <CenteredLayout>
-        <LoadableCurtain text="Add Candidature Proposal" />
-      </CenteredLayout>
-    );
-  }
-
-  if (
-    versionsError ||
-    addError ||
-    engineersError ||
-    managersPendingProposalsError ||
-    engineersPendingProposalsError ||
-    candidatureError ||
-    issuingRequestsError
-  ) {
-    return (
-      <Typography variant="body1">
-        Error:{" "}
-        {versionsError?.message ||
-          addError?.message ||
-          engineersError?.message ||
-          pendingProposalsError?.message ||
-          engineersPendingProposalsError?.message ||
-          candidatureError?.message}
-      </Typography>
-    );
-  }
-
   const handleFormSubmit = async (data) => {
+    console.log(data);
     try {
       const selectedBadge = versionsData?.badges_versions_last.find(
-        (version) => version.id === parseInt(data.selectedBadgeVersion)
+        (version) => version.id === parseInt(data.selectedBadgeId)
       );
       const badgeId = selectedBadge?.id;
       const badgeVersion = selectedBadge?.created_at;
@@ -322,10 +281,10 @@ const AddCandidatureProposal = () => {
         )}
 
         <Grid item xs={12}>
-          <FormControl variant="outlined" fullWidth error={!!errors.selectedBadgeVersion}>
+          <FormControl variant="outlined" fullWidth error={!!errors.selectedBadgeId}>
             <InputLabel id="badgeVersion-label">Select a Badge Version</InputLabel>
             <Controller
-              name="selectedBadgeVersion"
+              name="selectedBadgeId"
               control={control}
               defaultValue=""
               rules={{ required: "Please select a badge version." }}
@@ -339,7 +298,7 @@ const AddCandidatureProposal = () => {
                 </Select>
               )}
             />
-            {errors.selectedBadgeVersion && <FormHelperText error>{errors.selectedBadgeVersion.message}</FormHelperText>}
+            {errors.selectedBadgeId && <FormHelperText error>{errors.selectedBadgeId.message}</FormHelperText>}
           </FormControl>
         </Grid>
 
