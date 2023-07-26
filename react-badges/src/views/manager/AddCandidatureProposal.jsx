@@ -280,8 +280,6 @@ const AddCandidatureProposal = () => {
     }
   };
 
-
-
   return (
     <Container
       component="main"

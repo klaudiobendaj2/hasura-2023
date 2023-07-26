@@ -1,29 +1,18 @@
 import React, { useContext, useEffect } from "react";
-
 import { useMutation } from "@apollo/client";
-
 import { AuthContext } from "../../state/with-auth";
-
 import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
-
 import { GET_ENGINEERS } from "../../state/queries-mutations.graphql";
-
 import { useNavigate } from "react-router-dom";
-
 import LoadableCurtain from "../../components/LoadableCurtain";
-
 import CenteredLayout from "../../layouts/CenteredLayout";
-
 import ButtonComponent from "../../components/ButtonComponent";
 
 const AssociatedEngineers = () => {
   const { managerId } = useContext(AuthContext);
-
   const navigate = useNavigate();
-
   const [getEngineersByManager, { loading, error, data }] = useMutation(
     GET_ENGINEERS,
-
     { variables: { managerId } }
   );
 
@@ -33,17 +22,12 @@ const AssociatedEngineers = () => {
 
   const handleProposalClick = (engineerId) => {
     console.log("Proposal corresponding for engineer with id: ", engineerId);
-
     navigate(`/managers/AddCandidatureProposal/${engineerId}`);
   };
-
   const engineerImageMap = {
     1: "1.jpg",
-
     4: "4.jpg",
-
     7: "7.jpg",
-
     8: "8.jpg"
   };
 
@@ -61,7 +45,6 @@ const AssociatedEngineers = () => {
       <Typography variant="h2" align="center" padding="30px" fontFamily="monosp" fontWeight="bold">
         List of Engineers
       </Typography>
-
       <Grid container rowSpacing={4} columnSpacing={2} justifyContent="center">
         {data &&
           data.get_engineers_by_manager.map((engineer) => (
@@ -69,9 +52,7 @@ const AssociatedEngineers = () => {
               <Card
                 sx={{
                   width: "90%",
-
                   marginLeft: "20px",
-
                   boxShadow:
                     "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
                 }}
@@ -79,11 +60,8 @@ const AssociatedEngineers = () => {
                 <CardContent
                   sx={{
                     display: "flex",
-
                     flexDirection: "column",
-
                     justifyContent: "center",
-
                     alignItems: "center"
                   }}
                 >
@@ -92,21 +70,17 @@ const AssociatedEngineers = () => {
                     alt={engineer.name}
                     sx={{ width: 100, height: 100, marginBottom: "50px" }}
                   />
-
                   <Typography variant="h5" component="h2" sx={{ marginBottom: "10px" }}>
                     {engineer.name}
                   </Typography>
-
                   <Typography color="textSecondary" sx={{ mb: 1 }}>
                     Roles: {engineer.roles.join(", ")}
                   </Typography>
-
                   <ButtonComponent
                     content={"Add Proposal"}
                     sx={{ fontSize: "10px" }}
                     variant="contained"
-                    handleClick={() => handleProposalClick(engineer.id, engineer.name)}
-                    id={engineer.id}
+                    handleClick={() => handleProposalClick(engineer.id)}
                   />
                 </CardContent>
               </Card>
