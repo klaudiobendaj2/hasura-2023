@@ -6,10 +6,12 @@ import {
   INSERT_CANDIDATURE_PROPOSAL,
   GET_ENGINEERS,
   GET_BADGE_CANDIDATURE_REQUESTS,
-  GET_PENDING_PROPOSALS
+  GET_PENDING_PROPOSALS,
+  GET_ENGINEERS_PENDING_PROPOSALS,
+  GET_ISSUING_REQUESTS_FOR_ENGINEERS
 } from "../../state/queries-mutations.graphql";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import Swal from "sweetalert2";
+import SwalComponent from "../../components/SwalComponent";
 import {
   Typography,
   TextField,
@@ -45,12 +47,23 @@ const AddCandidatureProposal = () => {
       variables: { managerId }
     }
   );
-  const [getPendingProposals, { loading: pendingProposalsLoading, error: pendingProposalsError, data: pendingProposalsData }] =
-    useMutation(GET_PENDING_PROPOSALS, {
-      variables: {
-        managerId: managerId
-      }
-    });
+  const [
+    getEngineersPendingProposals,
+    { loading: engineersPendingProposalsLoading, error: engineersPendingProposalsError, data: engineersPendingProposalsData }
+  ] = useMutation(GET_ENGINEERS_PENDING_PROPOSALS, {
+    variables: {
+      managerId: managerId
+    }
+  });
+
+  const [
+    getManagersPendingProposals,
+    { loading: managersPendingProposalsLoading, error: managersPendingProposalsError, data: managersPendingProposalsData }
+  ] = useMutation(GET_PENDING_PROPOSALS, {
+    variables: {
+      managerId: managerId
+    }
+  });
 
   const {
     loading: candidatureLoading,
@@ -62,10 +75,25 @@ const AddCandidatureProposal = () => {
     }
   });
 
+  const {
+    loading: issuingRequestsLoading,
+    error: issuingRequestsError,
+    data: issuingRequestsData
+  } = useQuery(GET_ISSUING_REQUESTS_FOR_ENGINEERS, {
+    variables: {
+      managerId: managerId
+    }
+  });
+
   useEffect(() => {
     getEngineersByManager();
-    getPendingProposals();
-  }, [getEngineersByManager, getPendingProposals]);
+    getManagersPendingProposals();
+    getEngineersPendingProposals();
+  }, [getEngineersByManager, getManagersPendingProposals, getEngineersPendingProposals]);
+
+  console.log("pending:", engineersPendingProposalsData);
+  console.log("PENDINDDATA", managersPendingProposalsData);
+  console.log(("issuing requests:", issuingRequestsData));
 
   const navigate = useNavigate();
 
@@ -81,16 +109,7 @@ const AddCandidatureProposal = () => {
         const validEngineer = engineersData.get_engineers_by_manager.find((engineer) => engineer.id === parseInt(engineerId));
         if (!validEngineer) {
           setEngineerExists(false);
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "This engineer doesn't exist.",
-            showConfirmButton: false,
-            timer: 1500,
-            customClass: {
-              container: "custom-swal-container"
-            }
-          }).then(() => {
+          SwalComponent("This engineer doesn't exist.", "error", "2500").then(() => {
             navigate("/managers/AssociatedEngineers");
           });
         } else {
@@ -103,6 +122,48 @@ const AddCandidatureProposal = () => {
     }
   }, [engineerId, engineersData, setValue, pathname]);
 
+  if (!managerId) {
+    return <Typography variant="body1">Manager ID not available.</Typography>;
+  }
+
+  if (
+    versionsLoading ||
+    addLoading ||
+    engineersLoading ||
+    candidatureLoading ||
+    managersPendingProposalsLoading ||
+    engineersPendingProposalsLoading ||
+    issuingRequestsLoading
+  ) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Add Candidature Proposal" />
+      </CenteredLayout>
+    );
+  }
+
+  if (
+    versionsError ||
+    addError ||
+    engineersError ||
+    managersPendingProposalsError ||
+    engineersPendingProposalsError ||
+    candidatureError ||
+    issuingRequestsError
+  ) {
+    return (
+      <Typography variant="body1">
+        Error:{" "}
+        {versionsError?.message ||
+          addError?.message ||
+          engineersError?.message ||
+          pendingProposalsError?.message ||
+          engineersPendingProposalsError?.message ||
+          candidatureError?.message}
+      </Typography>
+    );
+  }
+
   const handleFormSubmit = async (data) => {
     try {
       const selectedBadge = versionsData?.badges_versions_last.find(
@@ -112,18 +173,58 @@ const AddCandidatureProposal = () => {
       const badgeVersion = selectedBadge?.created_at;
       const engineerValue = data.selectedEngineer || parseInt(engineerId);
 
-      const existingProposal = pendingProposalsData.get_managers_pending_proposals_for_engineers.some(
+      const existingManagerProposal = managersPendingProposalsData?.get_managers_pending_proposals_for_engineers.some(
         (proposal) => proposal.badge_version === badgeVersion && proposal.engineer === engineerValue
       );
 
-      if (existingProposal) {
-        console.error("This combo exists on the manager proposals");
+      if (existingManagerProposal) {
+        console.error("There is already a pending proposal for this badge.");
+        SwalComponent("There is already a pending proposal for this badge.", "error", "2500").then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
       } else if (
         candidatureRequestData?.badge_candidature_request.some(
-          (request) => request.badge_version === badgeVersion && request.engineer_id === engineerValue
+          (request) =>
+            request.badge_version === badgeVersion && request.engineer_id === engineerValue && request.is_issued === false
         )
       ) {
-        console.error("A proposal for this badge version to this engineer already exists.");
+        console.error("This proposal is accepted and ongoing.");
+        SwalComponent("This proposal is accepted and ongoing.", "error", "2500").then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
+      } else if (
+        engineersPendingProposalsData?.get_engineers_pending_proposals_for_managers.some(
+          (proposal) => proposal.badge_version === badgeVersion && proposal.created_by === engineerValue
+        )
+      ) {
+        console.error("The engineer has already applied for this badge.");
+        SwalComponent("The engineer has already applied for this badge.", "error", "2500").then(() => {
+          navigate("/managers/CandidatureProposals");
+        });
+      } else if (
+        issuingRequestsData?.issuing_requests.some(
+          (request) =>
+            request.badge_candidature_request.badge_version === badgeVersion &&
+            request.badge_candidature_request.engineer_id === engineerValue &&
+            request.is_approved === true
+        )
+      ) {
+        console.error("The engineer has already acclaimed the badge.");
+        SwalComponent("The engineer has already acclaimed the badge.", "error", "2500").then(() => {
+          navigate("/managers/IssuingRequest");
+        });
+      } else if (
+        issuingRequestsData?.issuing_requests.some(
+          (request) =>
+            request.badge_candidature_request.badge_version === badgeVersion &&
+            request.badge_candidature_request.engineer_id === engineerValue &&
+            request.is_approved === null
+        )
+      ) {
+        console.error("The engineer has an issue request.");
+        SwalComponent("The engineer has an issue request.", "error", "2500").then(() => {
+          navigate("/managers/IssuingRequest");
+        });
       } else {
         await addCandidatureProposal({
           variables: {
@@ -142,16 +243,7 @@ const AddCandidatureProposal = () => {
           proposalDescription: data.proposalDescription,
           createdBy: managerId
         });
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Proposal sent successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-          customClass: {
-            container: "custom-swal-container"
-          }
-        }).then(() => {
+        SwalComponent("Proposal sent successfully!", "success", "2500").then(() => {
           navigate("/managers/ManagerCandidatureProposals");
         });
       }
@@ -159,23 +251,6 @@ const AddCandidatureProposal = () => {
       console.error("Error adding candidature proposal:", error);
     }
   };
-
-  if (!managerId) {
-    return <Typography variant="body1">Manager ID not available.</Typography>;
-  }
-
-  if (versionsLoading || addLoading || engineersLoading || candidatureLoading) {
-    return (
-      <CenteredLayout>
-        <LoadableCurtain text="Add Candidature Proposal" />
-      </CenteredLayout>
-    );
-  }
-
-  if (versionsError || addError) {
-    return <Typography variant="body1">Error: {versionsError?.message || addError?.message}</Typography>;
-  }
-
   return (
     <Container
       component="main"

@@ -11,6 +11,7 @@ import {
 } from "../../state/queries-mutations.graphql";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
+import SwalComponent from "../../components/SwalComponent";
 
 const CandidatureProposals = () => {
   const [open, setOpen] = useState(false);
@@ -73,6 +74,11 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
+    SwalComponent(
+      "The proposal was approved!",
+      "success",
+      "2500",
+    );
     setTextAreaValue("");
     await getPendingProposals();
   };
@@ -87,6 +93,11 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
+    SwalComponent(
+      "The proposal was not approved!",
+      "",
+      "2500",
+    );
     setTextAreaValue("");
     await getPendingProposals();
     handleClose();

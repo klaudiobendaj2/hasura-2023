@@ -60,6 +60,7 @@ const AssociatedEngineers = () => {
             <Grid item key={engineer.id} xs={12} sm={3}>
               <Card sx={{
                   width: "90%",
+                  height:"300px",
                   marginLeft: "20px",
                   boxShadow: "4px 6px 8px -4px rgba(25, 118, 210, 0.4), 2px 6px 7px 2px rgba(25, 118, 210, 0.16), 2px 3px 12px 2px rgba(25, 118, 210, 0.14)"
                 }}>
@@ -68,7 +69,8 @@ const AssociatedEngineers = () => {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
+                    height:"100%"
                   }}
                 >
                   <Avatar
@@ -87,16 +89,15 @@ const AssociatedEngineers = () => {
                     color="textSecondary"
                     sx={{ mb: 1, marginBottom: "10px" }}
                   >
-                    Roles: {engineer.roles.join("/")}
+                    Roles: {engineer.roles.join(", ")}
                   </Typography>
                   <ButtonComponent
                     content={"Add Proposal"}
                     sx={{fontSize:"10px"}}
                     variant="contained"
                     handleClick={() =>
-                      handleProposalClick(engineer.id, engineer.name)
+                      handleProposalClick(engineer.id)
                     }
-                    id={engineer.id}
                   />
                 </CardContent>
               </Card>
