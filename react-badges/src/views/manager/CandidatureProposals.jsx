@@ -14,14 +14,11 @@ import LoadableCurtain from "../../components/LoadableCurtain";
 import SwalComponent from "../../components/SwalComponent";
 
 const CandidatureProposals = () => {
-  const [open, setOpen] = useState(false);
   const [showPendingProposals, setShowPendingProposals] = useState(true);
   const [textAreaValue, setTextAreaValue] = useState("");
   const [isApprovedFilter, setIsApprovedFilter] = useState(true);
   const { managerId } = useContext(AuthContext);
   const currentTimestamp = new Date().toISOString();
-  const handleClose = () => setOpen(false);
-
   const handleShowPending = () => {
     setShowPendingProposals(true);
   };
@@ -56,6 +53,11 @@ const CandidatureProposals = () => {
     APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER
   );
 
+  const getTextAreaValue = (item) => {
+    console.log(item);
+    setTextAreaValue(item);
+  };
+
   useEffect(() => {
     getPendingProposals();
   }, [showPendingProposals]);
@@ -83,6 +85,7 @@ const CandidatureProposals = () => {
     await getPendingProposals();
   };
 
+
   const onDisapproveClick = async (proposalId) => {
     await managerResponse({
       variables: {
@@ -100,11 +103,7 @@ const CandidatureProposals = () => {
     );
     setTextAreaValue("");
     await getPendingProposals();
-    handleClose();
-  };
-
-  const getTextAreaValue = (item) => {
-    setTextAreaValue(item);
+    // handleClose();
   };
 
   if (loading) {
@@ -114,16 +113,20 @@ const CandidatureProposals = () => {
       </CenteredLayout>
     );
   }
-  if (pendingLoading) return <div>Loading</div>;
+  if (pendingLoading) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Pending Proposals" />
+      </CenteredLayout>
+    );
+  }
   if (loading2) return <div>Loading...</div>;
-
   if (error) return <div>Error...{error}</div>;
   if (pendingError) return <div>Error...{error}</div>;
   if (error2) return <div>Error...{error}</div>;
 
   const candidatures = data?.engineer_to_manager_badge_candidature_proposals || [];
   const pendingProposals = pendingData?.get_engineers_pending_proposals_for_managers || [];
-
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>

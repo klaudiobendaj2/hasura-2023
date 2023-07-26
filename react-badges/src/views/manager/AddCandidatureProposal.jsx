@@ -121,6 +121,23 @@ const AddCandidatureProposal = () => {
       setEngineerExists(true);
     }
   }, [engineerId, engineersData, setValue, pathname]);
+  
+
+  if (!managerId) {
+    return <Typography variant="body1">Manager ID not available.</Typography>;
+  }
+
+  if (versionsLoading || addLoading || engineersLoading || candidatureLoading || managersPendingProposalsLoading || engineersPendingProposalsLoading || issuingRequestsLoading) {
+    return (
+      <CenteredLayout>
+        <LoadableCurtain text="Add Candidature Proposal" />
+      </CenteredLayout>
+    );
+  }
+
+  if (versionsError || addError || engineersError || managersPendingProposalsError || engineersPendingProposalsError || candidatureError || issuingRequestsError ) {
+    return <Typography variant="body1">Error: {versionsError?.message || addError?.message || engineersError?.message || pendingProposalsError?.message || engineersPendingProposalsError?.message || candidatureError?.message}</Typography>;
+  }
 
   if (!managerId) {
     return <Typography variant="body1">Manager ID not available.</Typography>;
