@@ -226,6 +226,7 @@ export const GET_BADGE_CANDIDATURE_REQUESTS = gql`
     badge_version
     engineer_id
     badge_id
+    is_issued
   }
 }
 `;
@@ -234,6 +235,18 @@ mutation GetPendingProposals($managerId: Int!) {
   get_managers_pending_proposals_for_engineers(args: {managerid: $managerId}) {
     badge_version
     engineer
+  }
+}
+`;
+
+export const GET_ISSUING_REQUESTS_FOR_ENGINEERS = gql`
+query GetIssuingRequests($managerId: Int!) {
+  issuing_requests(where: {badge_candidature_request: {manager_id: {_eq: $managerId}}}) {
+    badge_candidature_request {
+      badge_version
+      engineer_id
+    }
+    is_approved
   }
 }
 `;
