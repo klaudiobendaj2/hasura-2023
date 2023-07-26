@@ -168,7 +168,9 @@ const AddCandidatureProposal = () => {
           customClass: {
             container: "custom-swal-container"
           }
-        })
+        }).then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
       } else if (
         candidatureRequestData?.badge_candidature_request.some(
           (request) => request.badge_version === badgeVersion && request.engineer_id === engineerValue && request.is_issued === false
@@ -184,7 +186,9 @@ const AddCandidatureProposal = () => {
           customClass: {
             container: "custom-swal-container"
           }
-        })
+        }).then(() => {
+          navigate("/managers/ManagerCandidatureProposals");
+        });
       } else if (
         engineersPendingProposalsData?.get_engineers_pending_proposals_for_managers.some(
           (proposal) => proposal.badge_version === badgeVersion && proposal.created_by === engineerValue
@@ -200,7 +204,9 @@ const AddCandidatureProposal = () => {
           customClass: {
             container: "custom-swal-container"
           }
-        })
+        }).then(() => {
+          navigate("/managers/CandidatureProposals");
+        });
       } else if (
         issuingRequestsData?.issuing_requests.some(
           (request) => request.badge_candidature_request.badge_version === badgeVersion && request.badge_candidature_request.engineer_id === engineerValue && request.is_approved === true
@@ -216,7 +222,9 @@ const AddCandidatureProposal = () => {
           customClass: {
             container: "custom-swal-container"
           }
-        })
+        }).then(() => {
+          navigate("/managers/IssuingRequest");
+        });
       } else if(
         issuingRequestsData?.issuing_requests.some(
           (request) => request.badge_candidature_request.badge_version === badgeVersion && request.badge_candidature_request.engineer_id === engineerValue && request.is_approved === null
@@ -233,6 +241,8 @@ const AddCandidatureProposal = () => {
           customClass: {
             container: "custom-swal-container"
           }
+        }).then(() => {
+          navigate("/managers/IssuingRequest");
         });
       } else{
         await addCandidatureProposal({
