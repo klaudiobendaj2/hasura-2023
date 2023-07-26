@@ -117,12 +117,12 @@ const ManagerCandidatureProposals = () => {
                   <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0 ? (
                       item.engineer_badge_candidature_proposal_responses[0].is_approved ? (
-                        <BlockIcon fontSize="large" />
+                        <BlockIcon fontSize="medium" />
                       ) : (
                         item.engineer_badge_candidature_proposal_responses[0].disapproval_motivation
                       )
                     ) : (
-                      <BlockIcon fontSize="large" />
+                      <BlockIcon fontSize="medium" />
                     )}
                   </TableCell>
                 </TableRow>

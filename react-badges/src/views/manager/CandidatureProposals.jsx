@@ -52,6 +52,11 @@ const CandidatureProposals = () => {
     APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER
   );
 
+  const getTextAreaValue = (item) => {
+    console.log(item);
+    setTextAreaValue(item);
+  };
+
   useEffect(() => {
     getPendingProposals();
   }, [showPendingProposals]);
@@ -74,6 +79,7 @@ const CandidatureProposals = () => {
     await getPendingProposals();
   };
 
+
   const onDisapproveClick = async (proposalId) => {
     await managerResponse({
       variables: {
@@ -84,13 +90,9 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
-    setTextAreaValue("");
+    // setTextAreaValue("");
     await getPendingProposals();
     // handleClose();
-  };
-
-  const getTextAreaValue = (item) => {
-    setTextAreaValue(item);
   };
 
   if (loading) {

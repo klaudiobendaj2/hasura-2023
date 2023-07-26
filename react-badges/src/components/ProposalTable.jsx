@@ -23,7 +23,6 @@ const ProposalTable = ({
   );
   const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   return (
     <>
       <TableContainer component={Paper}>
@@ -72,12 +71,12 @@ const ProposalTable = ({
                         </Box>
                       </TableCell>
                       <ModalComponent
-                        handleClose={handleClose}
                         textAreaValue={textAreaValue}
                         getTextAreaValue={getTextAreaValue}
                         open={open}
                         onDisapproveClick={onDisapproveClick}
                         itemId={item.id}
+                        setOpen={setOpen}
                       />
                     </>
                   }
