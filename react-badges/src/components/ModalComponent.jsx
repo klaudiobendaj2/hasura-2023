@@ -34,12 +34,6 @@ const ModalComponent = ({ setOpen, open, onDisapproveClick, itemId }) => {
     onDisapproveClick(itemId, motivation);
   };
 
-  useEffect(() => {
-    if (!open) {
-      reset();
-    }
-  }, [open]);
-
   const handleClose = () => {
     reset({ motivation: "" });
     setOpen(false);

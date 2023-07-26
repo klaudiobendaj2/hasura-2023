@@ -35,11 +35,7 @@ const ApprovalRejectionIssues = () => {
       });
       console.log(`Engineer's id:`, id);
       getExistingIssues();
-      SwalComponent(
-        "The issue request was approved!",
-        "success",
-        "2500",
-      );
+      SwalComponent("The issue request was approved!", "success", "2500");
       const updatedIssueRequests = issueRequests.map((issue) => {
         if (issue.id === id) {
           return { ...issue, showRejectionTextArea: false };
@@ -54,6 +50,7 @@ const ApprovalRejectionIssues = () => {
   const handleRejectionClick = (id) => {
     setSelectedRequestId(id);
     const updatedIssueRequests = issueRequests.map((issue) => {
+      console.log(issue);
       if (issue.id === id) {
         return { ...issue, showRejectionTextArea: true };
       }
@@ -62,11 +59,7 @@ const ApprovalRejectionIssues = () => {
     setIssueRequests(updatedIssueRequests);
   };
   const handleRejectionSubmit = async (data) => {
-    SwalComponent(
-      "The issue request was not approved!",
-      "",
-      "2500",
-    );
+    SwalComponent("The issue request was not approved!", "", "2500");
     try {
       await rejectIssuingRequest({
         variables: {

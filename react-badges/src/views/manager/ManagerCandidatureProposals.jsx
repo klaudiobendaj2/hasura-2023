@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { AuthContext } from "../../state/with-auth";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box } from "@mui/material";
@@ -9,13 +9,6 @@ import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import CancelIcon from "@mui/icons-material/Cancel";
-import MoodBadIcon from "@mui/icons-material/MoodBad";
-import BlockIcon from "@mui/icons-material/Block";
-import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
@@ -31,24 +24,20 @@ const ManagerCandidatureProposals = () => {
 
   useEffect(() => {
     refetch();
-  },[data])
+  }, [data]);
 
   const onButtonClick = () => {
     navigate("/managers/AddCandidatureProposal");
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value));
     setPage(0);
   };
-
-  useEffect(() => {
-    refetch();
-  }, [data]);
 
   if (loading) {
     return (

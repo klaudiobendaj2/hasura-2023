@@ -12,7 +12,7 @@ const ProposalTable = ({ showPendingProposals, pendingProposals, candidatures, o
   const hasApprovedCandidature = candidatures.map(
     (candidature) => candidature.manager_badge_candidature_proposal_responses[0]?.is_approved
   );
-  const areAllCandidaturesApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
+  const areAllCandidaturesDisApproved = hasApprovedCandidature.every((isApproved) => isApproved === false);
   const handleOpen = () => setOpen(true);
   return (
     <>
@@ -27,7 +27,7 @@ const ProposalTable = ({ showPendingProposals, pendingProposals, candidatures, o
               <TableCell align={showPendingProposals ? "center" : "center"}>
                 {showPendingProposals ? "Actions" : "Status"}
               </TableCell>
-              {!showPendingProposals && areAllCandidaturesApproved && <TableCell>Disapproval Motivation</TableCell>}
+              {!showPendingProposals && areAllCandidaturesDisApproved && <TableCell>Disapproval Motivation</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,17 +56,12 @@ const ProposalTable = ({ showPendingProposals, pendingProposals, candidatures, o
                           <ButtonComponent
                             variant="contained"
                             color="error"
-                            handleClick={() => handleOpen(item.id)}
+                            handleClick={handleOpen}
                             content={<CloseOutlinedIcon />}
                           />
                         </Box>
                       </TableCell>
-                      <ModalComponent
-                        open={open}
-                        onDisapproveClick={onDisapproveClick}
-                        itemId={item.id}
-                        setOpen={setOpen}
-                      />
+                      <ModalComponent open={open} onDisapproveClick={onDisapproveClick} itemId={item.id} setOpen={setOpen} />
                     </>
                   }
                 />
