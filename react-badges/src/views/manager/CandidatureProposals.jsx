@@ -15,7 +15,6 @@ import SwalComponent from "../../components/SwalComponent";
 
 const CandidatureProposals = () => {
   const [showPendingProposals, setShowPendingProposals] = useState(true);
-  const [textAreaValue, setTextAreaValue] = useState("");
   const [isApprovedFilter, setIsApprovedFilter] = useState(true);
   const { managerId } = useContext(AuthContext);
   const currentTimestamp = new Date().toISOString();
@@ -53,10 +52,6 @@ const CandidatureProposals = () => {
     APPROVE_DISAPPROVE_ENGINEER_CANDIDATURE_PROPOSAL_BY_MANAGER
   );
 
-  const getTextAreaValue = (item) => {
-    setTextAreaValue(item);
-  };
-
   useEffect(() => {
     getPendingProposals();
   }, [showPendingProposals]);
@@ -75,32 +70,21 @@ const CandidatureProposals = () => {
         created_at: currentTimestamp
       }
     });
-    SwalComponent(
-      "The proposal was approved!",
-      "success",
-      "2500",
-    );
-    setTextAreaValue("");
+    SwalComponent("The proposal was approved!", "success", "2500");
     await getPendingProposals();
   };
 
-
-  const onDisapproveClick = async (proposalId) => {
+  const onDisapproveClick = async (proposalId, motivation) => {
     await managerResponse({
       variables: {
         proposal_id: proposalId,
         is_approved: false,
-        disapproval_motivation: textAreaValue,
+        disapproval_motivation: motivation,
         created_by: managerId,
         created_at: currentTimestamp
       }
     });
-    SwalComponent(
-      "The proposal was not approved!",
-      "",
-      "2500",
-    );
-    setTextAreaValue("");
+    SwalComponent("The proposal was not approved!", "", "2500");
     await getPendingProposals();
   };
 
@@ -147,8 +131,6 @@ const CandidatureProposals = () => {
           <ProposalTable
             showPendingProposals={showPendingProposals}
             pendingProposals={pendingProposals}
-            textAreaValue={textAreaValue}
-            getTextAreaValue={getTextAreaValue}
             candidatures={candidatures}
             onApproveClick={onApproveClick}
             onDisapproveClick={onDisapproveClick}
