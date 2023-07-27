@@ -151,6 +151,7 @@ export const GET_ENGINEERS_PENDING_PROPOSALS = gql`
 mutation PendingProposals($managerId: Int!) {
   get_engineers_pending_proposals_for_managers(args: {managerid: $managerId}) {
   id
+    badge_id
     badge_version
     created_by
     proposal_description
@@ -233,6 +234,7 @@ export const GET_BADGE_CANDIDATURE_REQUESTS = gql`
 export const GET_PENDING_PROPOSALS = gql`
 mutation GetPendingProposals($managerId: Int!) {
   get_managers_pending_proposals_for_engineers(args: {managerid: $managerId}) {
+    badge_id
     badge_version
     engineer
   }
@@ -243,6 +245,7 @@ export const GET_ISSUING_REQUESTS_FOR_ENGINEERS = gql`
 query GetIssuingRequests($managerId: Int!) {
   issuing_requests(where: {badge_candidature_request: {manager_id: {_eq: $managerId}}}) {
     badge_candidature_request {
+      badge_id
       badge_version
       engineer_id
     }

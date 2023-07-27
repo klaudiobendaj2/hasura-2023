@@ -21,7 +21,6 @@ const AssociatedEngineers = () => {
   }, [getEngineersByManager]);
 
   const handleProposalClick = (engineerId) => {
-    console.log("Proposal corresponding for engineer with id: ", engineerId);
     navigate(`/managers/AddCandidatureProposal/${engineerId}`);
   };
   const engineerImageMap = {
