@@ -1,7 +1,6 @@
 import { TableCell, TableRow } from "@mui/material";
 
 const TableRowComponent = ({ sx, component, scope, align, item, additionalCell }) => {
-  console.log(item.id);
   return (
     <TableRow sx={sx}>
       <TableCell component={component} scope={scope}>
