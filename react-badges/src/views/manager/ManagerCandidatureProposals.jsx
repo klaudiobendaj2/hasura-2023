@@ -10,6 +10,12 @@ import TablePagination from "@mui/material/TablePagination";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
 
+const dateOptions = {
+  day: "2-digit",
+  month: "short",
+  year: "numeric"
+};
+
 const ManagerCandidatureProposals = () => {
   const { managerId } = useContext(AuthContext);
   const { loading, error, data, refetch } = useQuery(GET_CANDIDATURE_PROPOSALS_BY_MANAGER, {
@@ -87,7 +93,7 @@ const ManagerCandidatureProposals = () => {
                   <TableCell component="th" scope="row">
                     {item.userByEngineer.name}
                   </TableCell>
-                  <TableCell>{item.badge_version}</TableCell>
+                  <TableCell>{new Date(item.badge_version).toLocaleDateString(undefined, dateOptions)}</TableCell>
                   <TableCell>{item.proposal_description}</TableCell>
                   <TableCell>
                     {item.engineer_badge_candidature_proposal_responses.length > 0 ? (

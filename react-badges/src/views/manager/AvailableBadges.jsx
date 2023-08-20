@@ -9,6 +9,12 @@ import ButtonComponent from "../../components/ButtonComponent";
 import CenteredLayout from "../../layouts/CenteredLayout";
 import LoadableCurtain from "../../components/LoadableCurtain";
 
+const dateOptions = {
+  day: "2-digit",
+  month: "short",
+  year: "numeric"
+};
+
 const BadgeList = () => {
   const [showAll, setShowAll] = useState(false);
   const { loading, error, data } = useQuery(GET_BADGES);
@@ -65,7 +71,7 @@ const BadgeList = () => {
                 {badge.description}
               </Typography>
               <Typography marginLeft="50px" color="text.secondary">
-                <strong>Version: </strong> {badge.created_at}
+                <strong>Version: </strong> {new Date(badge.created_at).toLocaleDateString(undefined, dateOptions)}
               </Typography>
             </CardContent>
           </StyledCard>
